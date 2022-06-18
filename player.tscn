@@ -1,0 +1,48 @@
+[gd_scene load_steps=5 format=3 uid="uid://cgf57o8e6dhjj"]
+
+[ext_resource type="Script" path="res://player.gd" id="1_l318w"]
+[ext_resource type="Script" path="res://cam_rig.gd" id="2_3hpx8"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_i65uo"]
+radius = 0.25
+height = 1.5
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_3vj2d"]
+radius = 0.25
+height = 1.5
+radial_segments = 12
+rings = 6
+
+[node name="player" type="RigidDynamicBody3D"]
+axis_lock_angular_x = true
+axis_lock_angular_y = true
+axis_lock_angular_z = true
+script = ExtResource( "1_l318w" )
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+shape = SubResource( "CapsuleShape3D_i65uo" )
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+mesh = SubResource( "CapsuleMesh_3vj2d" )
+
+[node name="cam_rig" type="Node" parent="."]
+script = ExtResource( "2_3hpx8" )
+
+[node name="cam_yaw" type="Node3D" parent="cam_rig"]
+
+[node name="cam_pitch" type="Node3D" parent="cam_rig/cam_yaw"]
+
+[node name="Camera3D" type="Camera3D" parent="cam_rig/cam_yaw/cam_pitch"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.38606, 3.18746)
+
+[node name="debug" type="VBoxContainer" parent="."]
+offset_left = 24.0
+offset_top = 18.0
+offset_right = 153.0
+offset_bottom = 66.0
+
+[node name="data_1" type="Label" parent="debug"]
+offset_right = 129.0
+offset_bottom = 23.0

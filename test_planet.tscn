@@ -1,0 +1,53 @@
+[gd_scene load_steps=8 format=3 uid="uid://bj36wdqxs2ift"]
+
+[ext_resource type="PackedScene" uid="uid://cgf57o8e6dhjj" path="res://player.tscn" id="1_l3gqg"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_wpsya"]
+radius = 351.916
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_g6fgn"]
+
+[sub_resource type="Sky" id="Sky_g6wgk"]
+sky_material = SubResource( "ProceduralSkyMaterial_g6fgn" )
+
+[sub_resource type="Environment" id="Environment_5c71a"]
+background_mode = 2
+sky = SubResource( "Sky_g6wgk" )
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_820fs"]
+radius = 200.0
+
+[sub_resource type="SphereMesh" id="SphereMesh_w3dpg"]
+radius = 1.0
+height = 2.0
+radial_segments = 256
+rings = 128
+
+[node name="test_planet" type="StaticBody3D"]
+
+[node name="gravity" type="Area3D" parent="."]
+priority = 1.0
+gravity_space_override = 2
+gravity_point = true
+gravity_point_center = Vector3(0, 0, 0)
+gravity_direction = Vector3(0, 0, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="gravity"]
+shape = SubResource( "SphereShape3D_wpsya" )
+
+[node name="player" parent="." instance=ExtResource( "1_l3gqg" )]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 200.25, 0)
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.496792, 0.867869, 0, -0.867869, 0.496792, 0, 0, 0)
+shadow_enabled = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource( "Environment_5c71a" )
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource( "SphereShape3D_820fs" )
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(200, 0, 0, 0, 200, 0, 0, 0, 200, 0, 0, 0)
+mesh = SubResource( "SphereMesh_w3dpg" )
