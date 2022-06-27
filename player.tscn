@@ -1,7 +1,11 @@
-[gd_scene load_steps=5 format=3 uid="uid://cgf57o8e6dhjj"]
+[gd_scene load_steps=8 format=3 uid="uid://cgf57o8e6dhjj"]
 
 [ext_resource type="Script" path="res://player.gd" id="1_l318w"]
 [ext_resource type="Script" path="res://cam_rig.gd" id="2_3hpx8"]
+[ext_resource type="Script" path="res://ui/modal.gd" id="3_kpror"]
+[ext_resource type="Script" path="res://ui/spawner.gd" id="4_x3gwk"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_3ggmr"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_i65uo"]
 radius = 0.25
@@ -14,9 +18,10 @@ radial_segments = 12
 rings = 6
 
 [node name="player" type="RigidDynamicBody3D"]
-axis_lock_angular_x = true
-axis_lock_angular_y = true
-axis_lock_angular_z = true
+mass = 40.0
+center_of_mass_mode = 1
+physics_material_override = SubResource( "PhysicsMaterial_3ggmr" )
+continuous_cd = true
 script = ExtResource( "1_l318w" )
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
@@ -30,19 +35,71 @@ mesh = SubResource( "CapsuleMesh_3vj2d" )
 [node name="cam_rig" type="Node" parent="."]
 script = ExtResource( "2_3hpx8" )
 
-[node name="cam_yaw" type="Node3D" parent="cam_rig"]
+[node name="cam_pos" type="Node3D" parent="cam_rig"]
 
-[node name="cam_pitch" type="Node3D" parent="cam_rig/cam_yaw"]
+[node name="cam_yaw" type="Node3D" parent="cam_rig/cam_pos"]
 
-[node name="Camera3D" type="Camera3D" parent="cam_rig/cam_yaw/cam_pitch"]
+[node name="cam_pitch" type="Node3D" parent="cam_rig/cam_pos/cam_yaw"]
+
+[node name="Camera3D" type="Camera3D" parent="cam_rig/cam_pos/cam_yaw/cam_pitch"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.38606, 3.18746)
+cull_mask = 1023
 
-[node name="debug" type="VBoxContainer" parent="."]
-offset_left = 24.0
-offset_top = 18.0
-offset_right = 153.0
-offset_bottom = 66.0
+[node name="ui" type="Control" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( "3_kpror" )
 
-[node name="data_1" type="Label" parent="debug"]
+[node name="gameing" type="Label" parent="ui"]
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -40.0
+offset_top = 34.0
+offset_right = 41.0
+offset_bottom = 60.0
+grow_horizontal = 2
+text = "Test Mode"
+metadata/_edit_layout_mode = 1
+
+[node name="debug" type="VBoxContainer" parent="ui/gameing"]
+offset_left = -448.0
+offset_top = -16.0
+offset_right = -319.0
+offset_bottom = 34.0
+
+[node name="data_1" type="Label" parent="ui/gameing/debug"]
 offset_right = 129.0
 offset_bottom = 23.0
+
+[node name="data_2" type="Label" parent="ui/gameing/debug"]
+offset_top = 27.0
+offset_right = 129.0
+offset_bottom = 50.0
+
+[node name="spawner" type="Panel" parent="ui"]
+anchor_left = 1.0
+anchor_top = 0.078
+anchor_right = 1.0
+anchor_bottom = 0.891
+offset_left = -256.0
+offset_top = 0.200001
+offset_right = -26.0
+offset_bottom = 0.399963
+grow_horizontal = 0
+grow_vertical = 2
+script = ExtResource( "4_x3gwk" )
+metadata/_edit_layout_mode = 1
+metadata/_edit_use_custom_anchors = true
+
+[node name="Label" type="Label" parent="ui/spawner"]
+offset_right = 230.0
+offset_bottom = 26.0
+text = "Spawn entities"
+
+[node name="spawn_list" type="VBoxContainer" parent="ui/spawner"]
+offset_top = 29.0
+offset_right = 230.0
+offset_bottom = 488.0
+metadata/_edit_layout_mode = 1
+
+[connection signal="spawn" from="ui/spawner" to="." method="_on_spawner_spawn"]
