@@ -1,6 +1,5 @@
 extends Node
 
-@onready var player: RigidDynamicBody3D = get_parent()
 @onready var pos :Node3D = $cam_pos
 @onready var yaw:Node3D = $cam_pos/cam_yaw
 @onready var pitch:Node3D = $cam_pos/cam_yaw/cam_pitch
@@ -32,16 +31,18 @@ var first_person := false:
 			else:
 				tween.tween_property(pitch, "transform:origin", pitch_pos, ZOOM_SWITCH_TIME)
 				tween.tween_property(camera, "transform:origin", cam_pos, ZOOM_SWITCH_TIME)
-			
+
+var enabled := true
 
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
 func _input(event):
-	if event is InputEventMouseMotion:
+	if enabled and event is InputEventMouseMotion:
 		mouse_accum += event.relative
 
 func _process(delta):
+	var player: Node3D = get_parent()
 	# Global movement
 	pos.global_transform.origin = player.global_transform.origin
 	var up := pos.global_transform.basis.y

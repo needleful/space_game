@@ -1,40 +1,65 @@
 extends Panel
 
-signal spawn(path: PackedScene)
+signal spawn(item: PackedScene)
+
+enum Mode {
+	SCENES,
+	SCRIPTS
+}
 
 @export var directory := "entities"
-
-@onready var spawn_list:VBoxContainer = $spawn_list
+@export var expand_folder_depth := 0
+@export var mode := Mode.SCENES
+@onready var spawn_list:VBoxContainer = $scroll/spawn_list
 
 var spawnable : Dictionary
 
-func show():
-	super.show()
-	var dir := Directory.new()
-	dir.change_dir(directory)
-	
-	var new_entities: Array[String] = []
-	for file in dir.get_files():
-		file = directory + "/" + file
-		if !(file in spawnable):
-			var scene := ResourceLoader.load(file) as PackedScene
-			if scene:
-				spawnable[file] = scene
-				new_entities.append(file)
+func _enter_tree():
+	var _x = connect("visibility_changed", self._on_visibility_changed)
+
+func _on_visibility_changed():
+	var type_hint: String
+	if mode == Mode.SCENES:
+		type_hint = "PackedScene"
+	elif mode == Mode.SCRIPTS:
+		type_hint = "Script"
+
 	for button in spawn_list.get_children():
 		if button is Button:
 			var file = button.text
-			if !ResourceLoader.exists(file, "PackedScene"):
+			if !ResourceLoader.exists(file, type_hint):
 				spawnable.erase(file)
 				button.queue_free()
 		else:
 			button.queue_free()
-	for e in new_entities:
-		var b := Button.new()
-		b.text = e
-		b.connect("pressed", self._on_spawn_pressed, [b])
-		spawn_list.add_child(b)
+	process_folder(directory, expand_folder_depth)
 	
+
+func process_folder(path: String, expand: int):
+	var dir := DirAccess.open(path)
+
+	for file in dir.get_files():
+		file = path + "/" + file
+		if !(file in spawnable):
+			var item: Resource
+			if mode == Mode.SCENES:
+				item = ResourceLoader.load(file) as PackedScene
+			elif mode == Mode.SCRIPTS:
+				item = ResourceLoader.load(file) as Script
+			if item:
+				spawnable[file] = item
+				var b := Button.new()
+				b.text = file
+				b.connect("pressed", _on_spawn_pressed.bind(b))
+				spawn_list.add_child(b)
+
+	if expand > 0:
+		for subdir in dir.get_directories():
+			var l := Label.new()
+			l.text = subdir
+			spawn_list.add_child(l)
+			process_folder(path + "/" + subdir, expand - 1)
+
 	if spawn_list.get_child_count() > 0:
 		spawn_list.get_child(0).grab_focus()
 

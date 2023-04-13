@@ -1,6 +1,13 @@
-extends RigidDynamicBody3D
+extends RigidBody3D
 
 @onready var cam_rig:Node = $cam_rig
+
+@onready var interaction_cast: RayCast3D = $cam_rig/cam_pos/cam_yaw/cam_pitch/Camera3D/item_cast
+@onready var interaction_prompt: Label = $ui/gameing/prompt
+
+@onready var tool_cast :RayCast3D = $cam_rig/cam_pos/cam_yaw/cam_pitch/Camera3D/tool_cast
+
+@onready var ui := $ui
 
 var sensitivity := Vector2(1.0, 1.0)
 
@@ -8,13 +15,34 @@ const ACCEL_GROUND := 35.0
 const MAX_RUN_SPEED := 4.5
 const VEL_JUMP := 5.0
 
-const GRAVITY_ROT_SPEED := 40.0
+const GRAVITY_ROT_SPEED_FACTOR := 1.0
+const GRAVITY_ROT_SPEED_MAX := 10.0
 
-@onready var ui := $ui
+## Physics interactions
+# Force in newtons
+const GRAB_MAX_FORCE := 700.0
+# Force as a function of distance
+const GRAB_FORCE_DIST := 40.0
+const GRAB_DAMP_FACTOR := 10000.0
+# Currently held object, or null if not grabbing
+var held_object: RigidBody3D
+# percentage of interaction_cast away from player
+var grab_cast:float
+# local offset on the item where to apply the forces
+var grab_offset: Vector3
+
+var grabbed_linear_damp: float
+var grabbed_angular_damp: float
+var toggle_grab := false
+var ground_normal : Vector3
+var ground : Node
+
+func _ready():
+	cam_rig.first_person = true
 
 func _input(event):
 	if event.is_action_pressed("ui_toggle_spawner"):
-		if ui.mode != 1:
+		if ui.mode == 0:
 			ui.mode = 1
 		else:
 			ui.mode = 0
@@ -24,6 +52,40 @@ func _input(event):
 			$MeshInstance3D.layers = 1>>11
 		else:
 			$MeshInstance3D.layers = 1
+	elif ui.mode == 1:
+		if event.is_action_pressed("ui_right"):
+			ui.spawner.current_tab += 1
+		elif event.is_action_pressed("ui_left"):
+			ui.spawner.current_tab -= 1
+	elif event.is_action_pressed("phys_grab"):
+		# Grab the object
+		if held_object == null and interaction_cast.is_colliding():
+			var i = interaction_cast.get_collider()
+			if i is RigidBody3D:
+				held_object = i
+				
+				grabbed_angular_damp = held_object.angular_damp
+				grabbed_linear_damp = held_object.linear_damp
+				held_object.angular_damp = GRAB_DAMP_FACTOR/(i.mass*i.mass + 1)
+				held_object.linear_damp = 10/(abs(i.mass) + 1)
+				var p = interaction_cast.get_collision_point()
+				var dist = interaction_cast.target_position.length()
+				var cDist = (interaction_cast.global_transform.origin - p).length()
+				grab_cast = cDist/dist
+				grab_offset = i.global_transform.affine_inverse()*p
+		elif toggle_grab and held_object:
+			held_object.angular_damp = grabbed_angular_damp
+			held_object.linear_damp = grabbed_linear_damp
+			held_object = null
+	elif !toggle_grab and held_object and event.is_action_released("phys_grab"):
+		held_object.angular_damp = grabbed_angular_damp
+		held_object.linear_damp = grabbed_linear_damp
+		held_object = null
+	elif event.is_action_pressed("fire") and tool_cast.can_fire():
+		tool_cast.fire(
+			tool_cast.get_collision_point(),
+			tool_cast.get_collision_normal(),
+			tool_cast.get_collider())
 
 func _physics_process(_delta):
 	var input := Input.get_vector("mv_left", "mv_right", "mv_forward", "mv_back")
@@ -32,8 +94,14 @@ func _physics_process(_delta):
 	else:
 		physics_material_override.friction = 0.1
 	var b:Basis = cam_rig.yaw.global_transform.basis
-	if Input.is_action_just_pressed("mv_jump"):
-		apply_central_impulse(mass*VEL_JUMP*b.y)
+	if ground and Input.is_action_just_pressed("mv_jump"):
+		var jump_force := mass*VEL_JUMP*b.y
+		apply_central_impulse(jump_force)
+		if ground is RigidBody3D:
+			ground.apply_impulse(
+				-jump_force,
+				ground.global_transform.affine_inverse() * global_transform.origin)
+		ground = null
 	var dir := (b.x*input.x + b.z*input.y)
 	# As speed in the desired direction approaches max_run_speed, reduce the force
 	if linear_velocity != Vector3.ZERO:
@@ -44,10 +112,43 @@ func _physics_process(_delta):
 		apply_central_force((charge + steer)*ACCEL_GROUND*mass)
 	else:
 		apply_central_force(dir*ACCEL_GROUND*mass)
+	if held_object:
+		var target_pos: Vector3 = interaction_cast.global_transform*(grab_cast*interaction_cast.target_position)
+		var grab_pos = held_object.global_transform*grab_offset
+		var grab_delta = target_pos - grab_pos
+		
+		var grab_force:float = clamp(
+			grab_delta.length_squared()*GRAB_FORCE_DIST*held_object.mass*held_object.mass,
+			0, GRAB_MAX_FORCE)
+		var object_force := grab_delta.normalized()*grab_force
+		
+		var vel_delta := linear_velocity - held_object.linear_velocity
+		var vel_force:float = clamp(
+			0.5*vel_delta.length_squared()*held_object.mass*held_object.mass,
+			0, GRAB_MAX_FORCE)
+		var object_velocity_force := vel_force*vel_delta.normalized()
+		
+		held_object.apply_force(object_force, grab_offset)
+		held_object.apply_central_force(object_velocity_force)
+		
+		apply_central_force(-object_force - object_velocity_force)
+	elif interaction_cast.is_colliding():
+		var col := interaction_cast.get_collider()
+		if "prompt" in col:
+			interaction_prompt.text = col.prompt
+			interaction_prompt.show()
+		else:
+			interaction_prompt.hide()
+	else:
+		interaction_prompt.hide()
 
 func _integrate_forces(state: PhysicsDirectBodyState3D):
 	var up := global_transform.basis.y
-	var desired_up := -PhysicsServer3D.body_get_gravity(get_rid()).normalized()
+	var gravity := state.total_gravity
+	if gravity.length_squared() < 0.01:
+		state.angular_velocity *= 0.99
+		return
+	var desired_up := -gravity.normalized()
 	$ui/gameing/debug/data_1.text = "{%f, %f, %f}" % [desired_up.x, desired_up.y, desired_up.z]
 	$ui/gameing/debug/data_2.text = "{%f, %f, %f}" % [linear_velocity.x, linear_velocity.y, linear_velocity.z]
 	
@@ -57,15 +158,15 @@ func _integrate_forces(state: PhysicsDirectBodyState3D):
 		angle = up.angle_to(desired_up)
 		if angle > 0.001:
 			axis = up.cross(desired_up).normalized()
-	state.angular_velocity = GRAVITY_ROT_SPEED*axis*angle
+	state.angular_velocity = min(
+		GRAVITY_ROT_SPEED_FACTOR * gravity.length_squared(),
+		GRAVITY_ROT_SPEED_MAX) * axis * angle
 
-func _on_spawner_spawn(resource: PackedScene):
-	var r = resource.instantiate()
-	get_tree().current_scene.add_child(r)
-	if r is Node3D:
-		var location :Vector3 = (
-			global_transform.origin 
-			- cam_rig.yaw.global_transform.basis.z*2
-			+ cam_rig.yaw.global_transform.basis.y*2)
-		r.global_transform.origin = location
-	
+	ground_normal = Vector3.ZERO
+	ground = null
+	for i in range(state.get_contact_count()):
+		var n = state.get_contact_local_normal(i)
+		if n.dot(gravity) < ground_normal.dot(gravity):
+			ground = state.get_contact_collider_object(i)
+			ground_normal = n
+	$ui/gameing/debug/data_3.text = "Contacts: " + str(state.get_contact_count())

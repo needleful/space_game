@@ -1,6 +1,50 @@
-[gd_scene load_steps=13 format=3 uid="uid://bj36wdqxs2ift"]
+[gd_scene load_steps=18 format=3 uid="uid://bj36wdqxs2ift"]
 
 [ext_resource type="PackedScene" uid="uid://cgf57o8e6dhjj" path="res://player.tscn" id="1_l3gqg"]
+[ext_resource type="Shader" path="res://materials/atmosphere.gdshader" id="2_kmcch"]
+
+[sub_resource type="Sky" id="Sky_g6wgk"]
+
+[sub_resource type="Environment" id="Environment_5c71a"]
+background_mode = 2
+sky = SubResource("Sky_g6wgk")
+ambient_light_sky_contribution = 0.73
+sdfgi_enabled = true
+sdfgi_y_scale = 2
+glow_enabled = true
+glow_intensity = 0.56
+glow_strength = 0.84
+
+[sub_resource type="SphereMesh" id="SphereMesh_nditr"]
+radius = 400.0
+height = 800.0
+
+[sub_resource type="Gradient" id="Gradient_lmdph"]
+offsets = PackedFloat32Array(0.145038, 0.366412, 0.572519, 0.740458)
+colors = PackedColorArray(0, 0, 0, 1, 0.0723031, 0.0141293, 0.000468393, 1, 0.0873215, 0.0775126, 0.308856, 1, 0.160784, 0.498039, 1, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_vt7w6"]
+gradient = SubResource("Gradient_lmdph")
+fill_from = Vector2(0, 0.016129)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_fri3r"]
+render_priority = 0
+shader = ExtResource("2_kmcch")
+shader_parameter/brightness = 6.0
+shader_parameter/max_depth = 800.0
+shader_parameter/light_gradient = SubResource("GradientTexture2D_vt7w6")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ld7kn"]
+render_priority = 1
+next_pass = SubResource("ShaderMaterial_fri3r")
+depth_draw_mode = 2
+albedo_color = Color(0.15, 1, 1.2, 1)
+rim = 0.3
+subsurf_scatter_strength = 0.3
+backlight = Color(0.419608, 0.231373, 0.0823529, 1)
+distance_fade_mode = 2
+distance_fade_min_distance = 50.0
+distance_fade_max_distance = 300.0
 
 [sub_resource type="SphereMesh" id="SphereMesh_w3dpg"]
 radius = 1.0
@@ -13,15 +57,6 @@ points = PackedVector3Array(-0.992709, -0.120595, 0, -0.859778, -0.120595, 0.496
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_wpsya"]
 radius = 400.0
-
-[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_g6fgn"]
-
-[sub_resource type="Sky" id="Sky_g6wgk"]
-sky_material = SubResource( "ProceduralSkyMaterial_g6fgn" )
-
-[sub_resource type="Environment" id="Environment_5c71a"]
-background_mode = 2
-sky = SubResource( "Sky_g6wgk" )
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_winds"]
 size = Vector3(4, 8, 6)
@@ -41,15 +76,114 @@ radius = 172.38
 
 [node name="universe" type="Node3D"]
 
+[node name="sun" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
+shadow_enabled = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_5c71a")
+
 [node name="test_planet" type="StaticBody3D" parent="."]
+
+[node name="atmos" type="MeshInstance3D" parent="test_planet"]
+layers = 2
+mesh = SubResource("SphereMesh_nditr")
+skeleton = NodePath("../..")
+surface_material_override/0 = SubResource("StandardMaterial3D_ld7kn")
+
+[node name="noon_probe" type="ReflectionProbe" parent="test_planet"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 217.06, 0)
+max_distance = 2000.0
+size = Vector3(266.328, 275.44, 220.482)
+enable_shadows = true
+ambient_mode = 0
+ambient_color_energy = 0.0
+
+[node name="afternoon_probe" type="ReflectionProbe" parent="test_planet"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 60.6353, 168.073)
+max_distance = 2000.0
+size = Vector3(266.328, 260.348, 220.482)
+origin_offset = Vector3(-2.80664, 34.2695, 18.5195)
+enable_shadows = true
+ambient_mode = 0
+ambient_color_energy = 0.0
+
+[node name="night_probe" type="ReflectionProbe" parent="test_planet"]
+transform = Transform3D(1, 0, 0, 0, -1, 8.74228e-08, 0, -8.74228e-08, -1, 0, -142.561, 10.887)
+max_distance = 2000.0
+size = Vector3(290.06, 275.44, 305.492)
+origin_offset = Vector3(0, 76.6699, 11.1934)
+enable_shadows = true
+ambient_mode = 0
+ambient_color_energy = 0.0
+
+[node name="night_probe2" type="ReflectionProbe" parent="test_planet"]
+transform = Transform3D(0.5, 0.866025, -7.57104e-08, 0.866025, -0.5, 4.37114e-08, 0, -8.74228e-08, -1, 151.045, -108.21, 10.887)
+max_distance = 2000.0
+size = Vector3(290.06, 275.44, 305.492)
+enable_shadows = true
+ambient_mode = 0
+ambient_color_energy = 0.0
+
+[node name="night_probe3" type="ReflectionProbe" parent="test_planet"]
+transform = Transform3D(0.704064, -0.710136, 6.20821e-08, -0.710136, -0.704064, 6.15513e-08, 0, -8.74228e-08, -1, -151.396, -134.455, 10.887)
+max_distance = 2000.0
+size = Vector3(290.06, 243.432, 305.492)
+origin_offset = Vector3(0, 28.7188, 0)
+enable_shadows = true
+ambient_mode = 0
+ambient_color_energy = 0.0
+
+[node name="night_probe4" type="ReflectionProbe" parent="test_planet"]
+transform = Transform3D(-0.503714, -0.863871, 7.5522e-08, -0.863871, 0.503714, -4.4036e-08, 0, -8.74228e-08, -1, -179.414, 107.387, 10.887)
+max_distance = 2000.0
+size = Vector3(290.06, 209.336, 305.492)
+enable_shadows = true
+ambient_mode = 0
+ambient_color_energy = 0.0
+
+[node name="night_probe5" type="ReflectionProbe" parent="test_planet"]
+transform = Transform3D(2.2018e-08, 1.25184e-07, 1, -0.674985, 0.737831, -7.75026e-08, -0.737831, -0.674985, 1.00743e-07, 7.32209, 138.989, -136.175)
+max_distance = 2000.0
+size = Vector3(290.06, 243.432, 305.492)
+origin_offset = Vector3(0, 8.82227, 0)
+enable_shadows = true
+ambient_mode = 0
+ambient_color_energy = 0.0
+
+[node name="night_probe6" type="ReflectionProbe" parent="test_planet"]
+transform = Transform3D(0.737831, 0.674985, -1.44454e-07, -0.674985, 0.737831, -7.75026e-08, 5.42697e-08, 1.54688e-07, 1, 161.083, 138.989, -23.0133)
+max_distance = 2000.0
+size = Vector3(290.06, 243.432, 305.492)
+origin_offset = Vector3(0, 8.82227, 0)
+enable_shadows = true
+ambient_mode = 0
+ambient_color_energy = 0.0
+
+[node name="noon_probe4" type="ReflectionProbe" parent="test_planet"]
+transform = Transform3D(1, 0, 0, 0, -0.707107, -0.707107, 0, 0.707107, -0.707107, 0, -96.6897, 165.913)
+max_distance = 2000.0
+size = Vector3(266.328, 275.44, 220.482)
+enable_shadows = true
+ambient_mode = 0
+ambient_color_energy = 0.0
+
+[node name="noon_probe5" type="ReflectionProbe" parent="test_planet"]
+transform = Transform3D(1, 0, 0, 0, -0.707107, 0.707107, 0, -0.707107, -0.707107, 0, -91.3552, -134.395)
+max_distance = 2000.0
+size = Vector3(266.328, 275.44, 220.482)
+origin_offset = Vector3(0, 47.0938, 0)
+enable_shadows = true
+ambient_mode = 0
+ambient_color_energy = 0.0
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="test_planet"]
 transform = Transform3D(200, 0, 0, 0, 200, 0, 0, 0, 200, 0, 0, 0)
-mesh = SubResource( "SphereMesh_w3dpg" )
+mesh = SubResource("SphereMesh_w3dpg")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="test_planet"]
 transform = Transform3D(200, 0, 0, 0, 200, 0, 0, 0, 200, 0, 0, 0)
-shape = SubResource( "ConvexPolygonShape3D_jadlu" )
+shape = SubResource("ConvexPolygonShape3D_jadlu")
 
 [node name="gravity" type="Area3D" parent="test_planet"]
 priority = 1.0
@@ -60,96 +194,89 @@ gravity_direction = Vector3(0, 0, 0)
 gravity = 15.0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="test_planet/gravity"]
-shape = SubResource( "SphereShape3D_wpsya" )
-
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="test_planet"]
-transform = Transform3D(1, 0, 0, 0, 0.496792, 0.867869, 0, -0.867869, 0.496792, 0, 0, 0)
-shadow_enabled = true
-
-[node name="WorldEnvironment" type="WorldEnvironment" parent="test_planet"]
-environment = SubResource( "Environment_5c71a" )
+shape = SubResource("SphereShape3D_wpsya")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="test_planet"]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 202.486)
 metadata/_edit_group_ = true
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="test_planet/StaticBody3D"]
-shape = SubResource( "BoxShape3D_winds" )
+shape = SubResource("BoxShape3D_winds")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="test_planet/StaticBody3D/CollisionShape3D"]
-mesh = SubResource( "BoxMesh_qlwd2" )
+mesh = SubResource("BoxMesh_qlwd2")
 
 [node name="StaticBody3D2" type="StaticBody3D" parent="test_planet"]
 transform = Transform3D(1, 0, 0, 0, -0.866025, 0.5, 0, -0.5, -0.866025, 0, 187.071, 81.5409)
 metadata/_edit_group_ = true
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="test_planet/StaticBody3D2"]
-shape = SubResource( "BoxShape3D_winds" )
+shape = SubResource("BoxShape3D_winds")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="test_planet/StaticBody3D2/CollisionShape3D"]
-mesh = SubResource( "BoxMesh_qlwd2" )
+mesh = SubResource("BoxMesh_qlwd2")
 
 [node name="StaticBody3D3" type="StaticBody3D" parent="test_planet"]
 transform = Transform3D(1, 0, 0, 0, -1, -8.9407e-08, 0, 8.9407e-08, -1, 0, 202.602, 13.5781)
 metadata/_edit_group_ = true
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="test_planet/StaticBody3D3"]
-shape = SubResource( "BoxShape3D_winds" )
+shape = SubResource("BoxShape3D_winds")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="test_planet/StaticBody3D3/CollisionShape3D"]
-mesh = SubResource( "BoxMesh_qlwd2" )
+mesh = SubResource("BoxMesh_qlwd2")
 
 [node name="StaticBody3D4" type="StaticBody3D" parent="test_planet"]
 transform = Transform3D(1, 0, 0, 0, -0.585198, 0.81089, 0, -0.81089, -0.585198, -17.7433, 193.917, 43.2186)
 metadata/_edit_group_ = true
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="test_planet/StaticBody3D4"]
-shape = SubResource( "BoxShape3D_winds" )
+shape = SubResource("BoxShape3D_winds")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="test_planet/StaticBody3D4/CollisionShape3D"]
-mesh = SubResource( "BoxMesh_qlwd2" )
+mesh = SubResource("BoxMesh_qlwd2")
 
 [node name="StaticBody3D5" type="StaticBody3D" parent="test_planet"]
 transform = Transform3D(1, 0, 0, 0, -0.585198, 0.81089, 0, -0.81089, -0.585198, -17.7433, 201.859, 64.3834)
 metadata/_edit_group_ = true
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="test_planet/StaticBody3D5"]
-shape = SubResource( "BoxShape3D_winds" )
+shape = SubResource("BoxShape3D_winds")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="test_planet/StaticBody3D5/CollisionShape3D"]
-mesh = SubResource( "BoxMesh_qlwd2" )
+mesh = SubResource("BoxMesh_qlwd2")
 
 [node name="StaticBody3D6" type="StaticBody3D" parent="test_planet"]
 transform = Transform3D(1, 0, 0, 0, 0.0209248, 0.999781, 0, -0.999781, 0.0209248, -17.7433, 203.81, 105.345)
 metadata/_edit_group_ = true
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="test_planet/StaticBody3D6"]
-shape = SubResource( "BoxShape3D_winds" )
+shape = SubResource("BoxShape3D_winds")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="test_planet/StaticBody3D6/CollisionShape3D"]
-mesh = SubResource( "BoxMesh_qlwd2" )
+mesh = SubResource("BoxMesh_qlwd2")
 
 [node name="StaticBody3D7" type="StaticBody3D" parent="test_planet"]
 transform = Transform3D(1, 0, 0, 0, -0.831945, 0.554859, 0, -0.554859, -0.831945, -17.7433, 207.794, 114.013)
 metadata/_edit_group_ = true
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="test_planet/StaticBody3D7"]
-shape = SubResource( "BoxShape3D_winds" )
+shape = SubResource("BoxShape3D_winds")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="test_planet/StaticBody3D7/CollisionShape3D"]
-mesh = SubResource( "BoxMesh_qlwd2" )
+mesh = SubResource("BoxMesh_qlwd2")
 
-[node name="player" parent="." instance=ExtResource( "1_l3gqg" )]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 200.445, 0)
+[node name="player" parent="." instance=ExtResource("1_l3gqg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 200.445, -0.939588)
 
 [node name="planetoid" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 384.854, 548.044)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="planetoid"]
-mesh = SubResource( "SphereMesh_qssiu" )
+mesh = SubResource("SphereMesh_qssiu")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="planetoid"]
-shape = SubResource( "SphereShape3D_tbrwi" )
+shape = SubResource("SphereShape3D_tbrwi")
 
 [node name="Area3D" type="Area3D" parent="planetoid"]
 priority = 1.0
@@ -160,4 +287,29 @@ gravity_direction = Vector3(0, 0, 0)
 gravity = 4.0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="planetoid/Area3D"]
-shape = SubResource( "SphereShape3D_hgh6j" )
+shape = SubResource("SphereShape3D_hgh6j")
+
+[node name="planetoid2" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -522.341, -682.213, 134.271)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="planetoid2"]
+mesh = SubResource("SphereMesh_qssiu")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="planetoid2"]
+shape = SubResource("SphereShape3D_tbrwi")
+
+[node name="Area3D" type="Area3D" parent="planetoid2"]
+priority = 1.0
+gravity_space_override = 2
+gravity_point = true
+gravity_point_center = Vector3(0, 0, 0)
+gravity_direction = Vector3(0, 0, 0)
+gravity = 4.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="planetoid2/Area3D"]
+shape = SubResource("SphereShape3D_hgh6j")
+
+[node name="LightmapGI" type="LightmapGI" parent="."]
+
+[node name="LightmapProbe" type="LightmapProbe" parent="LightmapGI"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.5088, 197.895, 36.8933)
