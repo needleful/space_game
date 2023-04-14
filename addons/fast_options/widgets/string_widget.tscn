@@ -1,0 +1,13 @@
+[gd_scene load_steps=2 format=3 uid="uid://01k1r7xql3ac"]
+
+[ext_resource type="Script" path="res://addons/fast_options/widgets/string_widget.gd" id="1_1os4g"]
+
+[node name="string_widget" type="OptionButton"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("1_1os4g")
+
+[connection signal="item_selected" from="." to="." method="_on_item_selected"]

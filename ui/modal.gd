@@ -40,10 +40,14 @@ func _on_entity_spawn(resource: PackedScene):
 	var r = resource.instantiate()
 	get_tree().current_scene.add_child(r)
 	if r is Node3D:
-		var item_transform := player.global_transform
-		item_transform = item_transform.translated(
-			item_transform.basis.z*2 
-			+ item_transform.basis.y*2)
+		var ibasis := player.global_transform.basis
+		var cast_point: Vector3
+		if player.placement_cast.is_colliding():
+			cast_point = player.placement_cast.get_collision_point() + ibasis.y
+		else:
+			var t:Transform3D = player.placement_cast.global_transform
+			cast_point = t.origin + t.basis*player.placement_cast.target_position + ibasis.y
+		var item_transform := Transform3D(ibasis, cast_point)
 		r.global_transform = item_transform
 
 func _on_tool_spawn(tool_script: Script):

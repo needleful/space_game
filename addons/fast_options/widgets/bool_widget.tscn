@@ -1,0 +1,21 @@
+[gd_scene load_steps=2 format=3 uid="uid://dgxqkspgxvp7m"]
+
+[ext_resource type="Script" path="res://addons/fast_options/widgets/bool_widget.gd" id="1_7o3ih"]
+
+[node name="bool_option" type="HBoxContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+size_flags_horizontal = 3
+script = ExtResource("1_7o3ih")
+
+[node name="name" type="Label" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "name"
+
+[node name="value" type="CheckBox" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[connection signal="pressed" from="value" to="." method="_on_value_pressed"]

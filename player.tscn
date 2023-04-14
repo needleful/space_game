@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://cgf57o8e6dhjj"]
+[gd_scene load_steps=13 format=3 uid="uid://cgf57o8e6dhjj"]
 
 [ext_resource type="Script" path="res://player.gd" id="1_l318w"]
 [ext_resource type="Script" path="res://cam_rig.gd" id="2_3hpx8"]
@@ -7,6 +7,8 @@
 [ext_resource type="Script" path="res://ui/ui_mode.gd" id="4_1xhtu"]
 [ext_resource type="Script" path="res://ui/spawner.gd" id="4_x3gwk"]
 [ext_resource type="Texture2D" uid="uid://bevpj5ww678ek" path="res://ui/crosshair-ref.png" id="4_yr5fy"]
+[ext_resource type="Theme" uid="uid://bntdbgkf7koit" path="res://ui/ui_theme.tres" id="5_jxvnj"]
+[ext_resource type="Script" path="res://ui/tool_options.gd" id="8_0kvrs"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_3ggmr"]
 
@@ -27,6 +29,7 @@ physics_material_override = SubResource("PhysicsMaterial_3ggmr")
 continuous_cd = true
 max_contacts_reported = 4
 contact_monitor = true
+freeze_mode = 1
 script = ExtResource("1_l318w")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
@@ -53,13 +56,20 @@ fov = 85.0
 near = 0.2
 far = 10000.0
 
-[node name="item_cast" type="RayCast3D" parent="cam_rig/cam_pos/cam_yaw/cam_pitch/Camera3D"]
-target_position = Vector3(0, 0, -8)
+[node name="grab_cast" type="RayCast3D" parent="cam_rig/cam_pos/cam_yaw/cam_pitch/Camera3D"]
+target_position = Vector3(0, 0, -2)
 collision_mask = 4
+
+[node name="interaction_cast" type="RayCast3D" parent="cam_rig/cam_pos/cam_yaw/cam_pitch/Camera3D"]
+target_position = Vector3(0, 0, -2.3)
+collision_mask = 8
+
+[node name="placement_cast" type="RayCast3D" parent="cam_rig/cam_pos/cam_yaw/cam_pitch/Camera3D"]
+target_position = Vector3(0, 0, -8)
+collision_mask = 13
 
 [node name="tool_cast" type="RayCast3D" parent="cam_rig/cam_pos/cam_yaw/cam_pitch/Camera3D"]
 target_position = Vector3(0, 0, -40)
-collision_mask = 5
 script = ExtResource("3_wep7e")
 
 [node name="reticle" type="Control" parent="."]
@@ -83,6 +93,9 @@ layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("5_jxvnj")
 script = ExtResource("3_kpror")
 
 [node name="gameing" type="Control" parent="ui"]
@@ -136,15 +149,15 @@ text = "Prompt"
 metadata/_edit_layout_mode = 1
 
 [node name="spawner" type="TabContainer" parent="ui"]
-visible = false
-layout_mode = 0
-anchor_left = 1.0
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.682
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-offset_left = -468.0
+offset_left = -7.44006
 offset_top = -455.0
-offset_right = -24.0
+offset_right = -42.0
 offset_bottom = 455.0
 grow_horizontal = 0
 grow_vertical = 2
@@ -152,21 +165,28 @@ script = ExtResource("4_1xhtu")
 metadata/_edit_layout_mode = 1
 
 [node name="Entities" type="Panel" parent="ui/spawner"]
+visible = false
 layout_mode = 2
 script = ExtResource("4_x3gwk")
 metadata/_edit_layout_mode = 1
 metadata/_edit_use_custom_anchors = true
 
-[node name="scroll" type="ScrollContainer" parent="ui/spawner/Entities"]
-layout_mode = 0
+[node name="margin" type="MarginContainer" parent="ui/spawner/Entities"]
+layout_mode = 1
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="scroll" type="ScrollContainer" parent="ui/spawner/Entities/margin"]
+layout_mode = 2
 metadata/_edit_layout_mode = 1
 
-[node name="spawn_list" type="VBoxContainer" parent="ui/spawner/Entities/scroll"]
+[node name="spawn_list" type="VBoxContainer" parent="ui/spawner/Entities/margin/scroll"]
 layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 metadata/_edit_layout_mode = 1
 
 [node name="Tools" type="Panel" parent="ui/spawner"]
@@ -179,16 +199,50 @@ mode = 1
 metadata/_edit_layout_mode = 1
 metadata/_edit_use_custom_anchors = true
 
-[node name="scroll" type="ScrollContainer" parent="ui/spawner/Tools"]
-layout_mode = 0
+[node name="margin" type="MarginContainer" parent="ui/spawner/Tools"]
+layout_mode = 1
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="scroll" type="ScrollContainer" parent="ui/spawner/Tools/margin"]
+layout_mode = 2
 metadata/_edit_layout_mode = 1
 
-[node name="spawn_list" type="VBoxContainer" parent="ui/spawner/Tools/scroll"]
+[node name="spawn_list" type="VBoxContainer" parent="ui/spawner/Tools/margin/scroll"]
 layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+metadata/_edit_layout_mode = 1
+
+[node name="Options" type="Panel" parent="ui/spawner" node_paths=PackedStringArray("tool")]
+layout_mode = 2
+script = ExtResource("8_0kvrs")
+tool = NodePath("../../../cam_rig/cam_pos/cam_yaw/cam_pitch/Camera3D/tool_cast")
+metadata/_edit_layout_mode = 1
+metadata/_edit_use_custom_anchors = true
+
+[node name="margin" type="MarginContainer" parent="ui/spawner/Options"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="scroll" type="ScrollContainer" parent="ui/spawner/Options/margin"]
+layout_mode = 2
+metadata/_edit_layout_mode = 1
+
+[node name="widgets" type="GridContainer" parent="ui/spawner/Options/margin/scroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/h_separation = 20
+theme_override_constants/v_separation = 8
+columns = 2
 metadata/_edit_layout_mode = 1
 
 [connection signal="spawn" from="ui/spawner/Entities" to="ui" method="_on_entity_spawn"]

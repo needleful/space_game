@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://c58pvjcrncb4w"]
+[gd_scene load_steps=7 format=3 uid="uid://c58pvjcrncb4w"]
 
 [ext_resource type="Script" path="res://entities/vehicle.gd" id="1_6q7r1"]
 
@@ -8,23 +8,43 @@ roughness = 0.03
 
 [sub_resource type="BoxMesh" id="BoxMesh_bry5l"]
 material = SubResource("StandardMaterial3D_stgmd")
+size = Vector3(0.445, 0.459, 0.11)
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_osq8l"]
+points = PackedVector3Array(-0.2225, -0.2295, -0.055, -0.2225, -0.2295, 0.055, -0.2225, 0.2295, -0.055, 0.2225, -0.2295, -0.055, 0.2225, -0.2295, 0.055, -0.2225, 0.2295, 0.055, 0.2225, 0.2295, -0.055, 0.2225, 0.2295, 0.055)
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_xgdcl"]
+points = PackedVector3Array(-0.2225, -0.2295, -0.055, -0.2225, -0.2295, 0.055, -0.2225, 0.2295, -0.055, 0.2225, -0.2295, -0.055, 0.2225, -0.2295, 0.055, -0.2225, 0.2295, 0.055, 0.2225, 0.2295, -0.055, 0.2225, 0.2295, 0.055)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_ymynf"]
-size = Vector3(0.456164, 0.62242, 0.531824)
+size = Vector3(0.456164, 0.493969, 0.531824)
 
 [node name="seat_test" type="RigidBody3D"]
 collision_layer = 5
 mass = 10.0
-script = ExtResource("1_6q7r1")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.486349, 0, 0, 0, 0.477399, 0, 0, 0, 0.213305, 0, 0.221828, 0)
-mesh = SubResource("BoxMesh_bry5l")
-
-[node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.486349, 0, 0, 0, -2.08678e-08, -0.213305, 0, 0.477399, -9.32386e-09, 0, -0.0725785, 0.180146)
+transform = Transform3D(1, 0, 0, 0, 0.988902, 0.148569, 0, -0.148569, 0.988902, 0, 0.221828, 0)
 mesh = SubResource("BoxMesh_bry5l")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.13702, 0.155672)
+transform = Transform3D(1, 0, 0, 0, 0.988902, 0.148569, 0, -0.148569, 0.988902, 0, 0.221828, 0)
+shape = SubResource("ConvexPolygonShape3D_osq8l")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, -0.0725785, 0.180146)
+mesh = SubResource("BoxMesh_bry5l")
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, -0.0725785, 0.180146)
+shape = SubResource("ConvexPolygonShape3D_xgdcl")
+
+[node name="prompt_zone" type="CharacterBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.153234, 0)
+collision_layer = 8
+collision_mask = 0
+script = ExtResource("1_6q7r1")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="prompt_zone"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0307318, 0.155672)
 shape = SubResource("BoxShape3D_ymynf")

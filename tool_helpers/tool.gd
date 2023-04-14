@@ -1,7 +1,7 @@
 extends RayCast3D
 class_name Tool
 
-@export var tool_name := ""
+var tool_name := ""
 
 func activate(player):
 	player.ui.tool_prompt = tool_name

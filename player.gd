@@ -2,10 +2,12 @@ extends RigidBody3D
 
 @onready var cam_rig:Node = $cam_rig
 
-@onready var interaction_cast: RayCast3D = $cam_rig/cam_pos/cam_yaw/cam_pitch/Camera3D/item_cast
+@onready var grab_cast: RayCast3D = $cam_rig/cam_pos/cam_yaw/cam_pitch/Camera3D/grab_cast
+@onready var interaction_cast: RayCast3D = $cam_rig/cam_pos/cam_yaw/cam_pitch/Camera3D/interaction_cast
 @onready var interaction_prompt: Label = $ui/gameing/prompt
 
 @onready var tool_cast :RayCast3D = $cam_rig/cam_pos/cam_yaw/cam_pitch/Camera3D/tool_cast
+@onready var placement_cast: RayCast3D = $cam_rig/cam_pos/cam_yaw/cam_pitch/Camera3D/placement_cast
 
 @onready var ui := $ui
 
@@ -26,16 +28,17 @@ const GRAB_FORCE_DIST := 40.0
 const GRAB_DAMP_FACTOR := 10000.0
 # Currently held object, or null if not grabbing
 var held_object: RigidBody3D
-# percentage of interaction_cast away from player
-var grab_cast:float
+# percentage of grab_cast away from player
+var grab_distance:float
 # local offset on the item where to apply the forces
 var grab_offset: Vector3
 
 var grabbed_linear_damp: float
 var grabbed_angular_damp: float
 var toggle_grab := false
-var ground_normal : Vector3
-var ground : Node
+var ground_normal : Vector3 = Vector3.UP
+var ground : Node = null
+var vehicle: Node = null
 
 func _ready():
 	cam_rig.first_person = true
@@ -59,8 +62,8 @@ func _input(event):
 			ui.spawner.current_tab -= 1
 	elif event.is_action_pressed("phys_grab"):
 		# Grab the object
-		if held_object == null and interaction_cast.is_colliding():
-			var i = interaction_cast.get_collider()
+		if held_object == null and grab_cast.is_colliding():
+			var i = grab_cast.get_collider()
 			if i is RigidBody3D:
 				held_object = i
 				
@@ -68,10 +71,10 @@ func _input(event):
 				grabbed_linear_damp = held_object.linear_damp
 				held_object.angular_damp = GRAB_DAMP_FACTOR/(i.mass*i.mass + 1)
 				held_object.linear_damp = 10/(abs(i.mass) + 1)
-				var p = interaction_cast.get_collision_point()
-				var dist = interaction_cast.target_position.length()
-				var cDist = (interaction_cast.global_transform.origin - p).length()
-				grab_cast = cDist/dist
+				var p = grab_cast.get_collision_point()
+				var dist = grab_cast.target_position.length()
+				var cDist = (grab_cast.global_transform.origin - p).length()
+				grab_distance = cDist/dist
 				grab_offset = i.global_transform.affine_inverse()*p
 		elif toggle_grab and held_object:
 			held_object.angular_damp = grabbed_angular_damp
@@ -86,6 +89,10 @@ func _input(event):
 			tool_cast.get_collision_point(),
 			tool_cast.get_collision_normal(),
 			tool_cast.get_collider())
+	elif event.is_action_pressed("interact") and interaction_cast.is_colliding():
+		interaction_cast.get_collider().use(interaction_cast.get_collision_point(), self)
+	elif event.is_action_pressed("exit") and vehicle:
+		vehicle.exit()
 
 func _physics_process(_delta):
 	var input := Input.get_vector("mv_left", "mv_right", "mv_forward", "mv_back")
@@ -113,7 +120,7 @@ func _physics_process(_delta):
 	else:
 		apply_central_force(dir*ACCEL_GROUND*mass)
 	if held_object:
-		var target_pos: Vector3 = interaction_cast.global_transform*(grab_cast*interaction_cast.target_position)
+		var target_pos: Vector3 = grab_cast.global_transform*(grab_distance*grab_cast.target_position)
 		var grab_pos = held_object.global_transform*grab_offset
 		var grab_delta = target_pos - grab_pos
 		
@@ -132,13 +139,9 @@ func _physics_process(_delta):
 		held_object.apply_central_force(object_velocity_force)
 		
 		apply_central_force(-object_force - object_velocity_force)
-	elif interaction_cast.is_colliding():
-		var col := interaction_cast.get_collider()
-		if "prompt" in col:
-			interaction_prompt.text = col.prompt
-			interaction_prompt.show()
-		else:
-			interaction_prompt.hide()
+	if interaction_cast.is_colliding():
+		interaction_prompt.text = interaction_cast.get_collider().prompt
+		interaction_prompt.show()
 	else:
 		interaction_prompt.hide()
 

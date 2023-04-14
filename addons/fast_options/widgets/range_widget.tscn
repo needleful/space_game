@@ -1,0 +1,21 @@
+[gd_scene load_steps=2 format=3 uid="uid://dq57pk54jmlsv"]
+
+[ext_resource type="Script" path="res://addons/fast_options/widgets/range_widget.gd" id="1_g2y8e"]
+
+[node name="range_widget" type="HBoxContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+size_flags_horizontal = 3
+script = ExtResource("1_g2y8e")
+
+[node name="label" type="Label" parent="."]
+layout_mode = 2
+text = "Value"
+
+[node name="slider" type="HSlider" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+
+[connection signal="value_changed" from="slider" to="." method="_on_value_changed"]

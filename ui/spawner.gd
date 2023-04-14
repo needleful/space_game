@@ -10,11 +10,11 @@ enum Mode {
 @export var directory := "entities"
 @export var expand_folder_depth := 0
 @export var mode := Mode.SCENES
-@onready var spawn_list:VBoxContainer = $scroll/spawn_list
+@onready var spawn_list:VBoxContainer = $margin/scroll/spawn_list
 
 var spawnable : Dictionary
 
-func _enter_tree():
+func _ready():
 	var _x = connect("visibility_changed", self._on_visibility_changed)
 
 func _on_visibility_changed():
