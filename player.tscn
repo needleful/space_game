@@ -54,7 +54,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.38606, 3.18746)
 cull_mask = 1023
 fov = 85.0
 near = 0.2
-far = 10000.0
+far = 20000.0
 
 [node name="grab_cast" type="RayCast3D" parent="cam_rig/cam_pos/cam_yaw/cam_pitch/Camera3D"]
 target_position = Vector3(0, 0, -2)
@@ -165,7 +165,6 @@ script = ExtResource("4_1xhtu")
 metadata/_edit_layout_mode = 1
 
 [node name="Entities" type="Panel" parent="ui/spawner"]
-visible = false
 layout_mode = 2
 script = ExtResource("4_x3gwk")
 metadata/_edit_layout_mode = 1
@@ -218,6 +217,7 @@ size_flags_vertical = 3
 metadata/_edit_layout_mode = 1
 
 [node name="Options" type="Panel" parent="ui/spawner" node_paths=PackedStringArray("tool")]
+visible = false
 layout_mode = 2
 script = ExtResource("8_0kvrs")
 tool = NodePath("../../../cam_rig/cam_pos/cam_yaw/cam_pitch/Camera3D/tool_cast")

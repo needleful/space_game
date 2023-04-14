@@ -1,25 +1,46 @@
-[gd_scene load_steps=10 format=3 uid="uid://bj36wdqxs2ift"]
+[gd_scene load_steps=16 format=3 uid="uid://bj36wdqxs2ift"]
 
+[ext_resource type="Script" path="res://planets/sun.gd" id="1_67nxn"]
 [ext_resource type="PackedScene" uid="uid://bvxydk23561hu" path="res://planets/earth.tscn" id="1_h7xsv"]
 [ext_resource type="PackedScene" uid="uid://cgf57o8e6dhjj" path="res://player.tscn" id="1_l3gqg"]
+[ext_resource type="Shader" path="res://materials/stars.gdshader" id="1_m8dpk"]
 
 [sub_resource type="SphereMesh" id="SphereMesh_yahx1"]
-radius = 300.0
-height = 600.0
+radius = 600.0
+height = 1200.0
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_628ck"]
 shading_mode = 0
 albedo_color = Color(3, 4, 1.5, 1)
 
-[sub_resource type="Sky" id="Sky_g6wgk"]
+[sub_resource type="Gradient" id="Gradient_ytunb"]
+offsets = PackedFloat32Array(0.520833, 1)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_twji0"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_pwesj"]
+seamless = true
+color_ramp = SubResource("Gradient_ytunb")
+noise = SubResource("FastNoiseLite_twji0")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_86ody"]
+shader = ExtResource("1_m8dpk")
+shader_parameter/scale1 = 20.0
+shader_parameter/scale2 = 7.0
+shader_parameter/noise = SubResource("NoiseTexture2D_pwesj")
+
+[sub_resource type="Sky" id="Sky_p7kks"]
+sky_material = SubResource("ShaderMaterial_86ody")
 
 [sub_resource type="Environment" id="Environment_5c71a"]
 background_mode = 2
-sky = SubResource("Sky_g6wgk")
+sky = SubResource("Sky_p7kks")
 ambient_light_source = 1
 ambient_light_sky_contribution = 0.73
 reflected_light_source = 1
-sdfgi_y_scale = 2
+ssr_enabled = true
+ssil_enabled = true
+sdfgi_read_sky_light = false
 glow_enabled = true
 glow_intensity = 0.56
 glow_strength = 0.84
@@ -43,6 +64,7 @@ directional_shadow_split_1 = 0.01
 directional_shadow_split_2 = 0.04
 directional_shadow_split_3 = 0.25
 directional_shadow_max_distance = 400.0
+script = ExtResource("1_67nxn")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="sun"]
 cast_shadow = 0
@@ -56,7 +78,7 @@ environment = SubResource("Environment_5c71a")
 [node name="earth" parent="." instance=ExtResource("1_h7xsv")]
 
 [node name="player" parent="." instance=ExtResource("1_l3gqg")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 200.149, -0.939588)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 200.269, -0.939588)
 
 [node name="planetoid" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 384.854, 548.044)
