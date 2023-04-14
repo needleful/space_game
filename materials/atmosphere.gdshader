@@ -1,11 +1,9 @@
 shader_type spatial;
-render_mode blend_add, cull_front, world_vertex_coords, unshaded, depth_draw_never, depth_test_disabled;
+render_mode blend_add, cull_front, world_vertex_coords, unshaded, depth_draw_never;
 
 global uniform vec3 sun_position;
 uniform sampler2D raleigh;
 uniform float outer_radius = 400.0;
-uniform float inner_radius = 200.0;
-uniform sampler2D depth_tex : hint_depth_texture;
 
 varying vec3 world_normal;
 varying vec3 world_position;
@@ -42,20 +40,13 @@ void fragment() {
 		CAMERA_POSITION_WORLD,
 		normalize(world_position - CAMERA_POSITION_WORLD)
 	);
-	float depth = textureLod(depth_tex, SCREEN_UV, 0.0).r;
-	vec4 upos = INV_PROJECTION_MATRIX * vec4(SCREEN_UV * 2.0 - 1.0, depth, 1.0);
-	vec3 pixel_position = upos.xyz / upos.w;
 	
 	float d = 2.0*outer_radius;
 	
-	float dist = min(intersect.y, length(pixel_position));
+	float dist = intersect.y;
 	float pass_through = (dist - intersect.x)/d;
 	float density = (intersect.y - intersect.x)/d;
 	
-	float s = 0.0;
-	if (dot(-world_normal, sun_direction) < 0.0) {
-		s = ((intersect.y - intersect.x) - inner_radius*2.0)/d;
-	}
-
+	float s = clamp(0.5 + 0.5*dot(-world_normal, sun_direction), 0.01, 0.99);
 	ALBEDO = texture(raleigh, vec2(s, 0)).rgb*intersect.z*pass_through*density;
 }
