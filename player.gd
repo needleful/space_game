@@ -1,4 +1,5 @@
 extends RigidBody3D
+class_name PlayerBody3D
 
 @onready var cam_rig:Node = $cam_rig
 
@@ -22,9 +23,10 @@ const GRAVITY_ROT_SPEED_MAX := 10.0
 
 ## Physics interactions
 # Force in newtons
-const GRAB_MAX_FORCE := 700.0
+const GRAB_MAX_FORCE := 900.0
 # Force as a function of distance
-const GRAB_FORCE_DIST := 40.0
+const GRAB_FORCE_DIST := 50.0
+const GRAB_FORCE_VEL := 2.0
 const GRAB_DAMP_FACTOR := 10000.0
 # Currently held object, or null if not grabbing
 var held_object: RigidBody3D
@@ -39,6 +41,7 @@ var toggle_grab := false
 var ground_normal : Vector3 = Vector3.UP
 var ground : Node = null
 var vehicle: Node = null
+var air_pressure := 0.0
 
 func _ready():
 	cam_rig.first_person = true
@@ -125,13 +128,13 @@ func _physics_process(_delta):
 		var grab_delta = target_pos - grab_pos
 		
 		var grab_force:float = clamp(
-			grab_delta.length_squared()*GRAB_FORCE_DIST*held_object.mass*held_object.mass,
+			GRAB_FORCE_DIST*grab_delta.length_squared()*held_object.mass*held_object.mass,
 			0, GRAB_MAX_FORCE)
 		var object_force := grab_delta.normalized()*grab_force
 		
 		var vel_delta := linear_velocity - held_object.linear_velocity
 		var vel_force:float = clamp(
-			0.5*vel_delta.length_squared()*held_object.mass*held_object.mass,
+			GRAB_FORCE_VEL*vel_delta.length_squared()*held_object.mass*held_object.mass,
 			0, GRAB_MAX_FORCE)
 		var object_velocity_force := vel_force*vel_delta.normalized()
 		
@@ -154,6 +157,7 @@ func _integrate_forces(state: PhysicsDirectBodyState3D):
 	var desired_up := -gravity.normalized()
 	$ui/gameing/debug/data_1.text = "{%f, %f, %f}" % [desired_up.x, desired_up.y, desired_up.z]
 	$ui/gameing/debug/data_2.text = "{%f, %f, %f}" % [linear_velocity.x, linear_velocity.y, linear_velocity.z]
+	$ui/gameing/debug/data_3.text = "Atmospheres: %.03f" % air_pressure
 	
 	var angle := 0.0
 	var axis := Vector3.ZERO
@@ -172,4 +176,3 @@ func _integrate_forces(state: PhysicsDirectBodyState3D):
 		if n.dot(gravity) < ground_normal.dot(gravity):
 			ground = state.get_contact_collider_object(i)
 			ground_normal = n
-	$ui/gameing/debug/data_3.text = "Contacts: " + str(state.get_contact_count())

@@ -1,34 +1,41 @@
-[gd_scene load_steps=9 format=3 uid="uid://bvxydk23561hu"]
+[gd_scene load_steps=11 format=3 uid="uid://bvxydk23561hu"]
 
 [ext_resource type="PackedScene" uid="uid://db6ptpcriul0a" path="res://_glb/planets/earth.glb" id="1_2064q"]
-[ext_resource type="Shader" path="res://materials/atmosphere.gdshader" id="2_2gn6c"]
+[ext_resource type="Texture2D" uid="uid://cxolb2dcgpaqo" path="res://materials/textures_ambientcg/Asphalt027C_1K_Color.jpg" id="2_g6fam"]
+[ext_resource type="Texture2D" uid="uid://dx4y67u37yunq" path="res://materials/textures_ambientcg/Concrete044A_1K_Color.jpg" id="3_iufmh"]
+[ext_resource type="Script" path="res://scripts/atmosphere.gd" id="3_j25p1"]
+[ext_resource type="Material" uid="uid://cqun8vjx2veow" path="res://planets/earth_atmosphere.material" id="4_sjtke"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fwh5w"]
+albedo_texture = ExtResource("2_g6fam")
+uv1_scale = Vector3(0.1, 0.1, 0.1)
+uv1_triplanar = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_4l1wu"]
+albedo_texture = ExtResource("3_iufmh")
+uv1_scale = Vector3(0.2, 0.2, 0.2)
+uv1_triplanar = true
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_ywovg"]
 radius = 178.623
 
 [sub_resource type="SphereMesh" id="SphereMesh_x0agt"]
-radius = 400.0
+radius = 425.0
 height = 800.0
-
-[sub_resource type="Gradient" id="Gradient_nk4dk"]
-offsets = PackedFloat32Array(0.0625, 0.2375, 0.39375, 0.61875, 1)
-colors = PackedColorArray(0, 0, 0, 1, 0.292608, 0.0694786, 0.225664, 1, 1, 0.552941, 0.105882, 1, 0.266667, 1, 1.93725, 1, 1, 1.2, 5, 1)
-
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_raso0"]
-gradient = SubResource("Gradient_nk4dk")
-use_hdr = true
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_fri3r"]
-render_priority = 0
-shader = ExtResource("2_2gn6c")
-shader_parameter/outer_radius = 400.0
-shader_parameter/raleigh = SubResource("GradientTexture1D_raso0")
+radial_segments = 32
+rings = 16
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_f0bv5"]
 custom_solver_bias = 1.0
 radius = 915.125
 
 [node name="earth" instance=ExtResource("1_2064q")]
+
+[node name="earth" parent="." index="0"]
+surface_material_override/0 = SubResource("StandardMaterial3D_fwh5w")
+
+[node name="construction" parent="earth" index="0"]
+surface_material_override/0 = SubResource("StandardMaterial3D_4l1wu")
 
 [node name="CollisionShape3D2" type="CollisionShape3D" parent="earth/StaticBody3D" index="1"]
 shape = SubResource("SphereShape3D_ywovg")
@@ -39,115 +46,11 @@ cast_shadow = 0
 gi_mode = 0
 mesh = SubResource("SphereMesh_x0agt")
 skeleton = NodePath("../..")
-surface_material_override/0 = SubResource("ShaderMaterial_fri3r")
+surface_material_override/0 = ExtResource("4_sjtke")
 
-[node name="noon_probe" type="ReflectionProbe" parent="." index="2"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 217.06, 0)
-layers = 3
-max_distance = 2000.0
-size = Vector3(266.328, 275.44, 220.482)
-enable_shadows = true
-cull_mask = 1048571
-ambient_mode = 0
-ambient_color_energy = 0.0
-
-[node name="afternoon_probe" type="ReflectionProbe" parent="." index="3"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 60.6353, 168.073)
-layers = 3
-max_distance = 2000.0
-size = Vector3(266.328, 260.348, 220.482)
-origin_offset = Vector3(-2.80664, 34.2695, 18.5195)
-enable_shadows = true
-cull_mask = 1048571
-ambient_mode = 0
-ambient_color_energy = 0.0
-
-[node name="night_probe" type="ReflectionProbe" parent="." index="4"]
-transform = Transform3D(1, 0, 0, 0, -1, 8.74228e-08, 0, -8.74228e-08, -1, 0, -142.561, 10.887)
-layers = 3
-max_distance = 2000.0
-size = Vector3(290.06, 275.44, 305.492)
-origin_offset = Vector3(0, 76.6699, 11.1934)
-enable_shadows = true
-cull_mask = 1048571
-ambient_mode = 0
-ambient_color_energy = 0.0
-
-[node name="night_probe2" type="ReflectionProbe" parent="." index="5"]
-transform = Transform3D(0.5, 0.866025, -7.57104e-08, 0.866025, -0.5, 4.37114e-08, 0, -8.74228e-08, -1, 151.045, -108.21, 10.887)
-layers = 3
-max_distance = 2000.0
-size = Vector3(290.06, 275.44, 305.492)
-enable_shadows = true
-cull_mask = 1048571
-ambient_mode = 0
-ambient_color_energy = 0.0
-
-[node name="night_probe3" type="ReflectionProbe" parent="." index="6"]
-transform = Transform3D(0.704064, -0.710136, 6.20821e-08, -0.710136, -0.704064, 6.15513e-08, 0, -8.74228e-08, -1, -151.396, -134.455, 10.887)
-layers = 3
-max_distance = 2000.0
-size = Vector3(290.06, 243.432, 305.492)
-origin_offset = Vector3(0, 28.7188, 0)
-enable_shadows = true
-cull_mask = 1048571
-ambient_mode = 0
-ambient_color_energy = 0.0
-
-[node name="night_probe4" type="ReflectionProbe" parent="." index="7"]
-transform = Transform3D(-0.503714, -0.863871, 7.5522e-08, -0.863871, 0.503714, -4.40361e-08, 0, -8.74228e-08, -1, -179.414, 107.387, 10.887)
-layers = 3
-max_distance = 2000.0
-size = Vector3(290.06, 209.336, 305.492)
-enable_shadows = true
-cull_mask = 1048571
-ambient_mode = 0
-ambient_color_energy = 0.0
-
-[node name="night_probe5" type="ReflectionProbe" parent="." index="8"]
-transform = Transform3D(2.2018e-08, 1.25184e-07, 1, -0.674985, 0.737831, -7.75029e-08, -0.737831, -0.674985, 1.00743e-07, 7.32209, 138.989, -136.175)
-layers = 3
-max_distance = 2000.0
-size = Vector3(290.06, 243.432, 305.492)
-origin_offset = Vector3(0, 8.82227, 0)
-enable_shadows = true
-cull_mask = 1048571
-ambient_mode = 0
-ambient_color_energy = 0.0
-
-[node name="night_probe6" type="ReflectionProbe" parent="." index="9"]
-transform = Transform3D(0.737831, 0.674985, -1.44454e-07, -0.674985, 0.737831, -7.75024e-08, 5.42697e-08, 1.54688e-07, 1, 161.083, 138.989, -23.0133)
-layers = 3
-max_distance = 2000.0
-size = Vector3(290.06, 243.432, 305.492)
-origin_offset = Vector3(0, 8.82227, 0)
-enable_shadows = true
-cull_mask = 1048571
-ambient_mode = 0
-ambient_color_energy = 0.0
-
-[node name="noon_probe4" type="ReflectionProbe" parent="." index="10"]
-transform = Transform3D(1, 0, 0, 0, -0.707107, -0.707107, 0, 0.707107, -0.707107, 0, -96.6897, 165.913)
-layers = 3
-max_distance = 2000.0
-size = Vector3(266.328, 275.44, 220.482)
-enable_shadows = true
-cull_mask = 1048571
-ambient_mode = 0
-ambient_color_energy = 0.0
-
-[node name="noon_probe5" type="ReflectionProbe" parent="." index="11"]
-transform = Transform3D(1, 0, 0, 0, -0.707107, 0.707107, 0, -0.707107, -0.707107, 0, -91.3552, -134.395)
-layers = 3
-max_distance = 2000.0
-size = Vector3(266.328, 275.44, 220.482)
-origin_offset = Vector3(0, 47.0938, 0)
-enable_shadows = true
-cull_mask = 1048571
-ambient_mode = 0
-ambient_color_energy = 0.0
-
-[node name="gravity" type="Area3D" parent="." index="12"]
+[node name="gravity" type="Area3D" parent="." index="2"]
+collision_layer = 0
+collision_mask = 6
 priority = 1.0
 gravity_space_override = 2
 gravity_point = true
@@ -155,8 +58,8 @@ gravity_point_unit_distance = 200.0
 gravity_point_center = Vector3(0, 0, 0)
 gravity_direction = Vector3(0, 0, 0)
 gravity = 15.0
-linear_damp_space_override = 2
 angular_damp_space_override = 2
+script = ExtResource("3_j25p1")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="gravity" index="0"]
 shape = SubResource("SphereShape3D_f0bv5")

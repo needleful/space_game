@@ -37,13 +37,12 @@ background_mode = 2
 sky = SubResource("Sky_p7kks")
 ambient_light_source = 1
 ambient_light_sky_contribution = 0.73
+ambient_light_energy = 0.0
 reflected_light_source = 1
-ssr_enabled = true
-ssil_enabled = true
-sdfgi_read_sky_light = false
 glow_enabled = true
 glow_intensity = 0.56
 glow_strength = 0.84
+adjustment_brightness = 0.46
 
 [sub_resource type="SphereMesh" id="SphereMesh_qssiu"]
 radius = 50.0
@@ -62,8 +61,8 @@ transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 471
 shadow_enabled = true
 directional_shadow_split_1 = 0.01
 directional_shadow_split_2 = 0.04
-directional_shadow_split_3 = 0.25
-directional_shadow_max_distance = 400.0
+directional_shadow_split_3 = 0.1
+directional_shadow_max_distance = 1000.0
 script = ExtResource("1_67nxn")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="sun"]
@@ -75,10 +74,11 @@ surface_material_override/0 = SubResource("StandardMaterial3D_628ck")
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_5c71a")
 
-[node name="earth" parent="." instance=ExtResource("1_h7xsv")]
-
 [node name="player" parent="." instance=ExtResource("1_l3gqg")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 200.269, -0.939588)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.268997, -0.939588)
+
+[node name="earth" parent="." instance=ExtResource("1_h7xsv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -200, 0)
 
 [node name="planetoid" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 384.854, 548.044)
