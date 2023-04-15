@@ -8,11 +8,13 @@ uniform float outer_radius = 400.0;
 varying vec3 world_normal;
 varying vec3 world_position;
 varying vec3 sun_direction;
+varying float shadow;
 
 void vertex() {
 	world_normal = NORMAL;
 	world_position = VERTEX;
 	sun_direction = normalize(world_position - sun_position);
+	shadow = clamp(0.5 + 0.5*dot(-world_normal, sun_direction), 0.01, 0.99);
 }
 
 // Stolen from Sebastian Lague's Coding Adventure series, the Atmosphere episode
@@ -42,11 +44,9 @@ void fragment() {
 	);
 	
 	float d = 2.0*outer_radius;
+
+	float pass_through = (intersect.y - intersect.x)/d;
+	float density = pass_through*(pass_through + 0.5);
 	
-	float dist = intersect.y;
-	float pass_through = (dist - intersect.x)/d;
-	float density = (intersect.y - intersect.x)/d;
-	
-	float s = clamp(0.5 + 0.5*dot(-world_normal, sun_direction), 0.01, 0.99);
-	ALBEDO = texture(raleigh, vec2(s, 0)).rgb*intersect.z*pass_through*density;
+	ALBEDO = texture(raleigh, vec2(shadow, 0)).rgb*intersect.z*pass_through*density;
 }
