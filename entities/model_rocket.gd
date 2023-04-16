@@ -6,8 +6,9 @@ var on_activated:Callable = activate
 
 var air_pressure := 0.0
 
-const power := 500.0
+const power := 750.0
 const time := 2.0
+const spent_time := 5.0
 const self_righting_torque := 12.0
 
 var target_bearing := Vector3.UP
@@ -23,7 +24,7 @@ func activate():
 	particles.emitting = true
 	target_bearing = global_transform.basis.y
 	var timer := get_tree().create_timer(time)
-	timer.connect("timeout", _on_timeout)
+	timer.connect("timeout", _on_timeout, CONNECT_ONE_SHOT)
 
 func _physics_process(_delta):
 	var p := get_parent() as RigidBody3D
@@ -35,3 +36,8 @@ func _on_timeout():
 	set_physics_process(false)
 	particles.emitting = false
 	spent = true
+	var timer := get_tree().create_timer(time)
+	timer.connect("timeout", _on_recharge, CONNECT_ONE_SHOT)
+
+func _on_recharge():
+	spent = false

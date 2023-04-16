@@ -14,7 +14,8 @@ func can_fire():
 		return false
 	elif !queued_object:
 		return get_collider() is RigidBody3D
-	return true
+	else:
+		return get_collider() != queued_object
 
 func cancel():
 	queued_object = null

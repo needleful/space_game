@@ -28,7 +28,7 @@ func fire(_pos, _normal, object: CollisionObject3D):
 		queued_object = object
 	elif !queued_object.is_connected(activated, get_collider().on_activated):
 		var res = queued_object.connect(activated, object.on_activated)
-		if res != OK:
+		if res == OK:
 			print("Connected %s to %s" % [object.name, queued_object.name] )
 		else:
 			print_debug("Failed to connect %s to %s: Code %d" % [
