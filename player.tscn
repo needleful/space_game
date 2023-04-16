@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://cgf57o8e6dhjj"]
+[gd_scene load_steps=14 format=3 uid="uid://cgf57o8e6dhjj"]
 
 [ext_resource type="Script" path="res://player.gd" id="1_l318w"]
 [ext_resource type="Script" path="res://cam_rig.gd" id="2_3hpx8"]
@@ -9,6 +9,7 @@
 [ext_resource type="Texture2D" uid="uid://bevpj5ww678ek" path="res://ui/crosshair-ref.png" id="4_yr5fy"]
 [ext_resource type="Theme" uid="uid://bntdbgkf7koit" path="res://ui/ui_theme.tres" id="5_jxvnj"]
 [ext_resource type="Script" path="res://ui/tool_options.gd" id="8_0kvrs"]
+[ext_resource type="Script" path="res://ui/debug_console.gd" id="10_kyocl"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_3ggmr"]
 
@@ -30,6 +31,7 @@ physics_material_override = SubResource("PhysicsMaterial_3ggmr")
 continuous_cd = true
 max_contacts_reported = 4
 contact_monitor = true
+can_sleep = false
 freeze_mode = 1
 script = ExtResource("1_l318w")
 
@@ -73,23 +75,8 @@ collision_mask = 13
 target_position = Vector3(0, 0, -40)
 script = ExtResource("3_wep7e")
 
-[node name="reticle" type="Control" parent="."]
-layout_mode = 3
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-grow_horizontal = 2
-grow_vertical = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
-
-[node name="Crosshair-ref" type="Sprite2D" parent="reticle"]
-rotation = 0.785398
-texture = ExtResource("4_yr5fy")
-
 [node name="ui" type="Control" parent="."]
+process_mode = 3
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -105,6 +92,22 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 script = ExtResource("4_1xhtu")
 show_cursor = false
+
+[node name="reticle" type="Control" parent="ui/gameing"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="Crosshair-ref" type="Sprite2D" parent="ui/gameing/reticle"]
+rotation = 0.785398
+texture = ExtResource("4_yr5fy")
 
 [node name="debug" type="VBoxContainer" parent="ui/gameing"]
 layout_mode = 0
@@ -150,6 +153,7 @@ text = "Prompt"
 metadata/_edit_layout_mode = 1
 
 [node name="spawner" type="TabContainer" parent="ui"]
+visible = false
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.682
@@ -246,5 +250,37 @@ theme_override_constants/v_separation = 8
 columns = 2
 metadata/_edit_layout_mode = 1
 
+[node name="debug_console" type="VBoxContainer" parent="ui"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_bottom = -18.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("10_kyocl")
+
+[node name="Panel" type="Panel" parent="ui/debug_console"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="RichTextLabel" type="RichTextLabel" parent="ui/debug_console/Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+focus_mode = 2
+bbcode_enabled = true
+context_menu_enabled = true
+selection_enabled = true
+
+[node name="LineEdit" type="LineEdit" parent="ui/debug_console"]
+layout_mode = 2
+placeholder_text = "type a command here"
+caret_blink = true
+
 [connection signal="spawn" from="ui/spawner/Entities" to="ui" method="_on_entity_spawn"]
 [connection signal="spawn" from="ui/spawner/Tools" to="ui" method="_on_tool_spawn"]
+[connection signal="text_submitted" from="ui/debug_console/LineEdit" to="ui/debug_console" method="_on_line_edit_text_submitted"]

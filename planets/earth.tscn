@@ -28,10 +28,11 @@ rings = 16
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_f0bv5"]
 custom_solver_bias = 1.0
-radius = 915.125
+radius = 400.0
 
 [node name="earth" node_paths=PackedStringArray("active_only") instance=ExtResource("1_2064q")]
 script = ExtResource("2_i2t5h")
+gravitation = 9.8
 active_only = [NodePath("earth/construction/StaticBody3D"), NodePath("earth/StaticBody3D")]
 
 [node name="earth" parent="." index="0"]
@@ -51,18 +52,23 @@ mesh = SubResource("SphereMesh_x0agt")
 skeleton = NodePath("../..")
 surface_material_override/0 = ExtResource("4_sjtke")
 
-[node name="gravity" type="Area3D" parent="." index="2"]
+[node name="atmosphere" type="Area3D" parent="." index="2"]
 collision_layer = 0
 collision_mask = 6
-priority = 1.0
 gravity_space_override = 2
 gravity_point = true
 gravity_point_unit_distance = 200.0
 gravity_point_center = Vector3(0, 0, 0)
 gravity_direction = Vector3(0, 0, 0)
 gravity = 15.0
+linear_damp_space_override = 2
 angular_damp_space_override = 2
 script = ExtResource("3_j25p1")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="gravity" index="0"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="atmosphere" index="0"]
 shape = SubResource("SphereShape3D_f0bv5")
+
+[node name="CSGBox3D" type="CSGBox3D" parent="." index="3"]
+transform = Transform3D(1, 0, 0, 0, 0.934658, 0.355547, 0, -0.355547, 0.934658, 0, 164.305, 88.9387)
+use_collision = true
+size = Vector3(55.5269, 67.636, 62.0835)

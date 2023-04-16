@@ -1,6 +1,8 @@
 extends Node3D
 class_name Planet
 
+@export var gravitation := 15.0
+@export var surface_radius := 200.0
 @export var active_only:Array[Node]
 
 var sealed_nodes := {}

@@ -1,4 +1,11 @@
 extends Control
+class_name UI
+
+enum Mode {
+	Gameing,
+	Spawner,
+	Console
+}
 
 @onready var player :Node3D = get_parent()
 @onready var cam_rig = player.get_node("cam_rig")
@@ -9,7 +16,7 @@ extends Control
 	set(val):
 		$gameing/tool.text = val
 
-@export var mode := 0:
+@export var mode := Mode.Gameing:
 	get:
 		return mode
 	set(value):
@@ -29,6 +36,20 @@ extends Control
 				if !m.show_cursor
 				else Input.MOUSE_MODE_VISIBLE
 				)
+
+func _input(event):
+	if event.is_action_pressed("ui_toggle_spawner"):
+		if mode == Mode.Gameing:
+			mode = Mode.Spawner
+		else:
+			mode = Mode.Gameing
+	elif event.is_action_pressed("debug_console"):
+		if mode == Mode.Gameing:
+			mode = Mode.Console
+			get_tree().paused = true
+		else:
+			mode = Mode.Gameing
+			get_tree().paused = false
 
 func _ready():
 	mode = mode

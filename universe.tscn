@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://bj36wdqxs2ift"]
+[gd_scene load_steps=19 format=3 uid="uid://bj36wdqxs2ift"]
 
 [ext_resource type="Script" path="res://planets/sun.gd" id="1_du7ao"]
 [ext_resource type="Script" path="res://universe.gd" id="1_umr58"]
@@ -51,9 +51,6 @@ glow_strength = 0.84
 radius = 50.0
 height = 100.0
 
-[sub_resource type="SphereShape3D" id="SphereShape3D_hgh6j"]
-radius = 359.231
-
 [sub_resource type="SphereShape3D" id="SphereShape3D_tbrwi"]
 radius = 50.0
 
@@ -93,24 +90,13 @@ environment = SubResource("Environment_5c71a")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -200, 0)
 
 [node name="planetoid2" type="Node3D" parent="." node_paths=PackedStringArray("active_only")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -522.341, -682.213, 134.271)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 703.896, -682.213, 627.481)
 script = ExtResource("5_i25xt")
+gravitation = 5.0
 active_only = [NodePath("StaticBody3D")]
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="planetoid2"]
 mesh = SubResource("SphereMesh_qssiu")
-
-[node name="Area3D" type="Area3D" parent="planetoid2"]
-priority = 1.0
-gravity_space_override = 2
-gravity_point = true
-gravity_point_unit_distance = 60.0
-gravity_point_center = Vector3(0, 0, 0)
-gravity_direction = Vector3(0, 0, 0)
-gravity = 4.0
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="planetoid2/Area3D"]
-shape = SubResource("SphereShape3D_hgh6j")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="planetoid2"]
 
@@ -118,7 +104,7 @@ shape = SubResource("SphereShape3D_hgh6j")
 shape = SubResource("SphereShape3D_tbrwi")
 
 [node name="moon1" parent="." instance=ExtResource("5_fy7xb")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -616.112, 473.504, -75.9969)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 288.16, 698.008, -640.19)
 
 [node name="venus" parent="." instance=ExtResource("6_85u24")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8041.48, 7188.82, 2907.58)
