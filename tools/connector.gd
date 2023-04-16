@@ -1,6 +1,7 @@
 extends Tool
 
 var queued_object: CollisionObject3D
+const activated = "activated"
 
 func _init():
 	tool_name = "Connector"
@@ -18,15 +19,15 @@ func can_fire():
 	if !is_colliding():
 		return false
 	if !queued_object:
-		return get_collider().has_signal("activated")
+		return get_collider().has_signal(activated)
 	else:
 		return "on_activated" in get_collider()
 
 func fire(_pos, _normal, object: CollisionObject3D):
 	if !queued_object:
 		queued_object = object
-	else:
-		var res = queued_object.connect("activated", object.on_activated)
+	elif !queued_object.is_connected(activated, get_collider().on_activated):
+		var res = queued_object.connect(activated, object.on_activated)
 		if res != OK:
 			print("Connected %s to %s" % [object.name, queued_object.name] )
 		else:

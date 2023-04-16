@@ -12,7 +12,7 @@ func fire(_position: Vector3, _normal: Vector3, _object: CollisionObject3D):
 	pass
 
 func can_fire() -> bool:
-	return is_colliding()
+	return false
 
 func cancel():
 	pass

@@ -1,6 +1,6 @@
 extends Tool
 
-var queued_object: CollisionObject3D
+var queued_object: RigidBody3D
 
 func _init():
 	tool_name = "Weld"
@@ -9,12 +9,19 @@ func activate(player):
 	super.activate(player)
 	queued_object = null
 
+func can_fire():
+	if !is_colliding():
+		return false
+	elif !queued_object:
+		return get_collider() is RigidBody3D
+	return true
+
 func cancel():
 	queued_object = null
 
 func fire(_pos, _normal, object: CollisionObject3D):
 	if !queued_object:
-		queued_object = object
+		queued_object = object as RigidBody3D
 		return
 	elif queued_object == object:
 		queued_object = null
@@ -22,22 +29,10 @@ func fire(_pos, _normal, object: CollisionObject3D):
 			object.center_of_mass_mode = RigidBody3D.CENTER_OF_MASS_MODE_AUTO
 		return
 
-	var large_object: CollisionObject3D
-	var small_object: RigidBody3D
-	if object is RigidBody3D:
-		small_object = object
-		large_object = queued_object
-	elif queued_object is RigidBody3D:
-		small_object = queued_object
-		large_object = object
-	else:
-		# Cannot weld non-rigid bodies to each other
-		queued_object = null
-		return
+	var large_object: CollisionObject3D = object
+	var small_object: RigidBody3D = queued_object
 	
-	# TODO: figure out a way to preserve interactions and physical properties
-	# of the child objects.
-	# This breaks everything, even chairs
+	#TODO: add a way to track welded objects so they can be split back apart
 	for c in small_object.get_children():
 		if c is Node3D:
 			var t = c.global_transform

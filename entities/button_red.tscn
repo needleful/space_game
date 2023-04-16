@@ -69,6 +69,7 @@ _data = {
 
 [node name="button_red" type="RigidBody3D"]
 collision_layer = 5
+mass = 0.3
 
 [node name="CollisionShape3D2" type="CollisionShape3D" parent="."]
 shape = SubResource("ConvexPolygonShape3D_vygn1")

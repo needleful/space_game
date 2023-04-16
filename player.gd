@@ -27,7 +27,7 @@ const GRAVITY_ROT_SPEED_MAX := 10.0
 # Force in newtons
 const GRAB_MAX_FORCE := 900.0
 # Force as a function of distance
-const GRAB_FORCE_DIST := 50.0
+const GRAB_FORCE_DIST := 250.0
 const GRAB_FORCE_VEL := 2.0
 const GRAB_DAMP_FACTOR := 10000.0
 # Currently held object, or null if not grabbing
@@ -139,13 +139,13 @@ func _physics_process(_delta):
 		var grab_delta = target_pos - grab_pos
 		
 		var grab_force:float = clamp(
-			GRAB_FORCE_DIST*grab_delta.length_squared()*held_object.mass*held_object.mass,
+			GRAB_FORCE_DIST*grab_delta.length_squared()*held_object.mass,
 			0, GRAB_MAX_FORCE)
 		var object_force := grab_delta.normalized()*grab_force
 		
 		var vel_delta := linear_velocity - held_object.linear_velocity
 		var vel_force:float = clamp(
-			GRAB_FORCE_VEL*vel_delta.length_squared()*held_object.mass*held_object.mass,
+			GRAB_FORCE_VEL*vel_delta.length_squared()*held_object.mass,
 			0, GRAB_MAX_FORCE)
 		var object_velocity_force := vel_force*vel_delta.normalized()
 		
