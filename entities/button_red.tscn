@@ -1,0 +1,104 @@
+[gd_scene load_steps=11 format=3 uid="uid://dqp8tcmb4ph3f"]
+
+[ext_resource type="Script" path="res://entities/button.gd" id="1_wx7dw"]
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_vygn1"]
+points = PackedVector3Array(0.0866025, 0.01, 0.05, 0, 0.01, 0.1, 0.0866025, -0.01, 0.05, 0.0865856, 0.01, -0.0500196, 0, -0.01, 0.1, -0.0866025, 0.01, 0.0499804, 0.0865856, -0.01, -0.0500196, 0, 0.01, -0.1, -0.0866025, -0.01, 0.0499804, -0.0866025, 0.01, -0.05, 0, -0.01, -0.1, -0.0866025, -0.01, -0.05)
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_f23hp"]
+points = PackedVector3Array(0.0606218, 0.02, 0.035, -3.72529e-09, 0.02, 0.07, 0.0606218, -0.02, 0.035, 0.0606099, 0.02, -0.0350137, -3.72529e-09, -0.02, 0.07, -0.0606218, 0.02, 0.0349863, 0.0606099, -0.02, -0.0350137, -3.72529e-09, 0.02, -0.07, -0.0606218, -0.02, 0.0349863, -0.0606218, 0.02, -0.035, -3.72529e-09, -0.02, -0.07, -0.0606218, -0.02, -0.035)
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_onboc"]
+height = 0.0585086
+radius = 0.0755362
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_hjqxd"]
+top_radius = 0.1
+bottom_radius = 0.1
+height = 0.02
+radial_segments = 6
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_wv8dy"]
+top_radius = 0.07
+bottom_radius = 0.07
+height = 0.04
+radial_segments = 6
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_01a2q"]
+albedo_color = Color(1, 0.141176, 0.282353, 1)
+metallic = 0.36
+roughness = 0.0
+clearcoat_roughness = 0.0
+
+[sub_resource type="Animation" id="Animation_da586"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("MeshInstance3D2:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0.0209178, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_4fdwa"]
+resource_name = "Activate"
+length = 0.6
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("MeshInstance3D2:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.6),
+"transitions": PackedFloat32Array(2, 0.366021, 1),
+"update": 0,
+"values": [Vector3(0, 0.0209178, 0), Vector3(0, -0.00332973, 0), Vector3(0, 0.0209178, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_bkymb"]
+_data = {
+"Activate": SubResource("Animation_4fdwa"),
+"RESET": SubResource("Animation_da586")
+}
+
+[node name="button_red" type="RigidBody3D"]
+collision_layer = 5
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="."]
+shape = SubResource("ConvexPolygonShape3D_vygn1")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0209178, 0)
+shape = SubResource("ConvexPolygonShape3D_f23hp")
+
+[node name="button" type="CharacterBody3D" parent="."]
+collision_layer = 40
+collision_mask = 0
+script = ExtResource("1_wx7dw")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="button"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0210509, 0)
+shape = SubResource("CylinderShape3D_onboc")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="button"]
+mesh = SubResource("CylinderMesh_hjqxd")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="button"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0209178, 0)
+mesh = SubResource("CylinderMesh_wv8dy")
+skeleton = NodePath("../..")
+surface_material_override/0 = SubResource("StandardMaterial3D_01a2q")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="button"]
+libraries = {
+"": SubResource("AnimationLibrary_bkymb")
+}
+
+[connection signal="activated" from="button" to="button/AnimationPlayer" method="play" binds= ["Activate"]]

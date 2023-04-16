@@ -23,6 +23,9 @@ func use(_position, player:RigidBody3D):
 	user = player
 	user_collision_layer = user.collision_layer
 	user.collision_layer = 0
+	var p = get_parent() as RigidBody3D
+	if p:
+		p.mass += user.mass
 
 func exit():
 	remove_child(user)
@@ -34,6 +37,7 @@ func exit():
 		global_transform.basis.z + global_transform.basis.y)
 	var p := get_parent()
 	if p is RigidBody3D:
+		p.mass -= user.mass
 		user.linear_velocity = p.linear_velocity
 	elif p is CharacterBody3D:
 		user.linear_velocity = p.velocity

@@ -54,7 +54,7 @@ surface_material_override/0 = ExtResource("4_sjtke")
 
 [node name="atmosphere" type="Area3D" parent="." index="2"]
 collision_layer = 0
-collision_mask = 6
+collision_mask = 22
 gravity_space_override = 2
 gravity_point = true
 gravity_point_unit_distance = 200.0

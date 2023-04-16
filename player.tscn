@@ -57,7 +57,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.38606, 3.18746)
 cull_mask = 1023
 fov = 85.0
 near = 0.2
-far = 20000.0
+far = 60000.0
 
 [node name="grab_cast" type="RayCast3D" parent="cam_rig/cam_pos/cam_yaw/cam_pitch/Camera3D"]
 target_position = Vector3(0, 0, -2)
@@ -109,12 +109,18 @@ size_flags_vertical = 4
 rotation = 0.785398
 texture = ExtResource("4_yr5fy")
 
+[node name="crosshair_usable" type="Sprite2D" parent="ui/gameing/reticle"]
+position = Vector2(0.174059, 0)
+rotation = 0.785398
+scale = Vector2(0.761448, 0.761448)
+texture = ExtResource("4_yr5fy")
+
 [node name="debug" type="VBoxContainer" parent="ui/gameing"]
 layout_mode = 0
-offset_left = 472.0
+offset_left = 141.0
 offset_top = 18.0
-offset_right = 601.0
-offset_bottom = 68.0
+offset_right = 395.0
+offset_bottom = 95.0
 
 [node name="data_1" type="Label" parent="ui/gameing/debug"]
 layout_mode = 2
@@ -251,6 +257,7 @@ columns = 2
 metadata/_edit_layout_mode = 1
 
 [node name="debug_console" type="VBoxContainer" parent="ui"]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0

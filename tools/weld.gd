@@ -9,6 +9,9 @@ func activate(player):
 	super.activate(player)
 	queued_object = null
 
+func cancel():
+	queued_object = null
+
 func fire(_pos, _normal, object: CollisionObject3D):
 	if !queued_object:
 		queued_object = object

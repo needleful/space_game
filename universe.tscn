@@ -90,7 +90,7 @@ environment = SubResource("Environment_5c71a")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -200, 0)
 
 [node name="planetoid2" type="Node3D" parent="." node_paths=PackedStringArray("active_only")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 703.896, -682.213, 627.481)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1740.73, -1071.07, 1015.08)
 script = ExtResource("5_i25xt")
 gravitation = 5.0
 active_only = [NodePath("StaticBody3D")]
@@ -104,7 +104,7 @@ mesh = SubResource("SphereMesh_qssiu")
 shape = SubResource("SphereShape3D_tbrwi")
 
 [node name="moon1" parent="." instance=ExtResource("5_fy7xb")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 288.16, 698.008, -640.19)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 288.16, 1367.99, -1543.22)
 
 [node name="venus" parent="." instance=ExtResource("6_85u24")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8041.48, 7188.82, 2907.58)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8041.48, 27471.4, 2907.58)

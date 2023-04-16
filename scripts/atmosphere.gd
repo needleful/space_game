@@ -11,5 +11,5 @@ func density_at_point(point: Vector3) -> float:
 
 func _physics_process(_delta):
 	for b in get_overlapping_bodies():
-		if b is PlayerBody3D:
+		if "air_pressure" in b:
 			b.air_pressure = density_at_point(b.global_transform.origin)

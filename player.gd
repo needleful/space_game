@@ -10,6 +10,8 @@ class_name PlayerBody3D
 @onready var tool_cast :RayCast3D = $cam_rig/cam_pos/cam_yaw/cam_pitch/Camera3D/tool_cast
 @onready var placement_cast: RayCast3D = $cam_rig/cam_pos/cam_yaw/cam_pitch/Camera3D/placement_cast
 
+@onready var usable_reticle: Node2D = $ui/gameing/reticle/crosshair_usable
+
 @onready var ui := $ui
 
 var sensitivity := Vector2(1.0, 1.0)
@@ -83,6 +85,8 @@ func _input(event):
 		held_object.angular_damp = grabbed_angular_damp
 		held_object.linear_damp = grabbed_linear_damp
 		held_object = null
+	elif event.is_action_pressed("tool_cancel"):
+		tool_cast.cancel()
 	elif !vehicle and event.is_action_pressed("fire") and tool_cast.can_fire():
 		tool_cast.fire(
 			tool_cast.get_collision_point(),
@@ -95,9 +99,11 @@ func _input(event):
 
 func _process(_delta):
 	var g = gravity/mass
-	$ui/gameing/debug/data_1.text = "{%f, %f, %f}" % [g.x, g.y, g.z]
+	$ui/gameing/debug/data_1.text = "Gravity: {%f}" % g.length()
 	$ui/gameing/debug/data_2.text = "{%f, %f, %f}" % [linear_velocity.x, linear_velocity.y, linear_velocity.z]
 	$ui/gameing/debug/data_3.text = "Atmospheres: %.03f" % air_pressure
+	
+	usable_reticle.visible = tool_cast.can_fire()
 
 func _physics_process(_delta):
 	var input := Input.get_vector("mv_left", "mv_right", "mv_forward", "mv_back")
