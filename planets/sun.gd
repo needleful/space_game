@@ -7,5 +7,6 @@ func _ready():
 
 func _process(_delta):
 	var l = player.global_transform.origin - global_transform.origin
-	l = Vector3(l.y, l.z, l.x)
-	global_transform = global_transform.looking_at(player.global_transform.origin, l.normalized())
+	l = Vector3(l.y, l.z, l.x).normalized()
+	if l.is_normalized():
+		global_transform = global_transform.looking_at(player.global_transform.origin, l)

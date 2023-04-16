@@ -42,7 +42,7 @@ var zoomed := false:
 		var tween = get_tree().create_tween()
 		tween.set_parallel(true)
 		tween.set_ease(Tween.EASE_OUT)
-		tween.tween_property(camera, "fov", default_fov if !zoomed else 20, ZOOM_SWITCH_TIME)
+		tween.tween_property(camera, "fov", default_fov if !zoomed else 20.0, ZOOM_SWITCH_TIME)
 
 var enabled := true
 

@@ -14,8 +14,8 @@ radius = 1000.0
 height = 2000.0
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_628ck"]
-shading_mode = 0
-albedo_color = Color(3.8, 4, 1.43529, 1)
+emission_enabled = true
+emission = Color(3, 4, 2, 1)
 
 [sub_resource type="Gradient" id="Gradient_ytunb"]
 offsets = PackedFloat32Array(0.520833, 1)

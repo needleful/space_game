@@ -25,22 +25,6 @@ const VEL_JUMP := 5.0
 const GRAVITY_ROT_SPEED_FACTOR := 1.0
 const GRAVITY_ROT_SPEED_MAX := 10.0
 
-## Physics interactions
-# Force in newtons
-const GRAB_MAX_FORCE := 900.0
-# Force as a function of distance
-const GRAB_FORCE_DIST := 250.0
-const GRAB_FORCE_VEL := 2.0
-const GRAB_DAMP_FACTOR := 10000.0
-# Currently held object, or null if not grabbing
-var held_object: RigidBody3D
-# percentage of grab_cast away from player
-var grab_distance:float
-# local offset on the item where to apply the forces
-var grab_offset: Vector3
-
-var grabbed_linear_damp: float
-var grabbed_angular_damp: float
 var toggle_grab := false
 var ground_normal : Vector3 = Vector3.UP
 var ground : Node = null
@@ -50,6 +34,7 @@ var gravity := Vector3.ZERO
 
 func _ready():
 	cam_rig.first_person = true
+	grab_cast.user = self
 
 func _input(event):
 	if event.is_action_pressed("cam_zoom_toggle"):
@@ -65,28 +50,12 @@ func _input(event):
 			ui.spawner.current_tab -= 1
 	elif event.is_action_pressed("phys_grab"):
 		# Grab the object
-		if held_object == null and grab_cast.is_colliding():
-			var i = grab_cast.get_collider()
-			if i is RigidBody3D:
-				held_object = i
-				
-				grabbed_angular_damp = held_object.angular_damp
-				grabbed_linear_damp = held_object.linear_damp
-				held_object.angular_damp = GRAB_DAMP_FACTOR/(i.mass*i.mass + 1)
-				held_object.linear_damp = 10/(abs(i.mass) + 1)
-				var p = grab_cast.get_collision_point()
-				var dist = grab_cast.target_position.length()
-				var cDist = (grab_cast.global_transform.origin - p).length()
-				grab_distance = cDist/dist
-				grab_offset = i.global_transform.affine_inverse()*p
-		elif toggle_grab and held_object:
-			held_object.angular_damp = grabbed_angular_damp
-			held_object.linear_damp = grabbed_linear_damp
-			held_object = null
-	elif !toggle_grab and held_object and event.is_action_released("phys_grab"):
-		held_object.angular_damp = grabbed_angular_damp
-		held_object.linear_damp = grabbed_linear_damp
-		held_object = null
+		if grab_cast.can_fire():
+			grab_cast.fire()
+		elif toggle_grab and grab_cast.held_object:
+			grab_cast.release()
+	elif !toggle_grab and grab_cast.held_object and event.is_action_released("phys_grab"):
+		grab_cast.release()
 	elif event.is_action_pressed("tool_cancel"):
 		tool_cast.cancel()
 	elif !vehicle and event.is_action_pressed("fire") and tool_cast.can_fire():
@@ -106,14 +75,14 @@ func _process(_delta):
 	$ui/gameing/debug/data_3.text = "Atmospheres: %.03f" % air_pressure
 	
 	usable_reticle.visible = tool_cast.can_fire()
-	if held_object:
+	if grab_cast.held_object:
 		can_grab_reticle.visible = false
 		grabbing_reticle.visible = true
 	else:
 		grabbing_reticle.visible = false
-		can_grab_reticle.visible = grab_cast.is_colliding()
+		can_grab_reticle.visible = grab_cast.can_fire()
 
-func _physics_process(_delta):
+func _physics_process(delta):
 	var input := Input.get_vector("mv_left", "mv_right", "mv_forward", "mv_back")
 	if input == Vector2.ZERO:
 		physics_material_override.friction = 1.0
@@ -141,27 +110,8 @@ func _physics_process(_delta):
 		mv = dir*ACCEL_GROUND*mass
 	apply_central_force(mv)
 	
-	if held_object:
-		var target_pos: Vector3 = grab_cast.global_transform*(grab_distance*grab_cast.target_position)
-		var grab_pos = held_object.global_transform*grab_offset
-		var grab_delta = target_pos - grab_pos
-		
-		var grab_force:float = clamp(
-			GRAB_FORCE_DIST*grab_delta.length_squared()*held_object.mass,
-			0, GRAB_MAX_FORCE)
-		var object_force := grab_delta.normalized()*grab_force
-		
-		var vel_delta := linear_velocity - held_object.linear_velocity
-		var vel_force:float = clamp(
-			GRAB_FORCE_VEL*vel_delta.length_squared()*held_object.mass,
-			0, GRAB_MAX_FORCE)
-		var object_velocity_force := vel_force*vel_delta.normalized()
-		
-		held_object.apply_force(object_force, grab_offset)
-		held_object.apply_central_force(object_velocity_force)
-		
-		var rea := -object_force - object_velocity_force
-		apply_central_force(rea)
+	if grab_cast.held_object:
+		grab_cast.update(delta)
 
 	if interaction_cast.is_colliding():
 		interaction_prompt.text = interaction_cast.get_collider().prompt
