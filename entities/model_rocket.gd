@@ -8,7 +8,6 @@ var air_pressure := 0.0
 
 const power := 750.0
 const time := 2.0
-const spent_time := 5.0
 const self_righting_torque := 12.0
 
 var target_bearing := Vector3.UP
@@ -36,8 +35,3 @@ func _on_timeout():
 	set_physics_process(false)
 	particles.emitting = false
 	spent = true
-	var timer := get_tree().create_timer(time)
-	timer.connect("timeout", _on_recharge, CONNECT_ONE_SHOT)
-
-func _on_recharge():
-	spent = false
