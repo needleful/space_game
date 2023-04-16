@@ -55,14 +55,13 @@ func update(delta):
 		* grab_delta.length()
 		* held_object.mass)
 	
-	var object_force := (
-		grab_delta * grab_force
-		+ force_dist_accum * held_object.mass * error_accum)
+	var object_force := ( grab_delta.normalized() * grab_force
+		+ force_dist_accum * error_accum * held_object.mass)
 
 	var vel_delta := user.linear_velocity - held_object.linear_velocity
 	var vel_force:float = (force_velocity
 		* vel_delta.length()
-		*	held_object.mass)
+		* held_object.mass)
 
 	object_force += vel_force*vel_delta.normalized()
 	
