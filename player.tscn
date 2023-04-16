@@ -87,9 +87,12 @@ theme = ExtResource("5_jxvnj")
 script = ExtResource("3_kpror")
 
 [node name="gameing" type="Control" parent="ui"]
-anchors_preset = 0
+layout_mode = 1
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 script = ExtResource("4_1xhtu")
 show_cursor = false
 
@@ -105,12 +108,30 @@ grow_vertical = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
+[node name="crosshair_grabbing" type="Line2D" parent="ui/gameing/reticle"]
+scale = Vector2(0.761448, 0.761448)
+points = PackedVector2Array(-27.579, 0, 27.579, 0)
+width = 2.0
+
+[node name="crosshair_grabbing2" type="Line2D" parent="ui/gameing/reticle/crosshair_grabbing"]
+position = Vector2(0, 1.96991)
+scale = Vector2(1, 0.984964)
+points = PackedVector2Array(-27.579, 0, 27.579, 0)
+width = 2.0
+default_color = Color(0, 0, 0, 1)
+
 [node name="Crosshair-ref" type="Sprite2D" parent="ui/gameing/reticle"]
 rotation = 0.785398
 texture = ExtResource("4_yr5fy")
 
 [node name="crosshair_usable" type="Sprite2D" parent="ui/gameing/reticle"]
 position = Vector2(0.174059, 0)
+rotation = 0.785398
+scale = Vector2(0.761448, 0.761448)
+texture = ExtResource("4_yr5fy")
+
+[node name="crosshair_grab" type="Sprite2D" parent="ui/gameing/reticle"]
+position = Vector2(0, -15)
 rotation = 0.785398
 scale = Vector2(0.761448, 0.761448)
 texture = ExtResource("4_yr5fy")

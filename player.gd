@@ -11,6 +11,8 @@ class_name PlayerBody3D
 @onready var placement_cast: RayCast3D = $cam_rig/cam_pos/cam_yaw/cam_pitch/Camera3D/placement_cast
 
 @onready var usable_reticle: Node2D = $ui/gameing/reticle/crosshair_usable
+@onready var can_grab_reticle: Node2D = $ui/gameing/reticle/crosshair_grab
+@onready var grabbing_reticle: Node2D = $ui/gameing/reticle/crosshair_grabbing
 
 @onready var ui := $ui
 
@@ -104,6 +106,12 @@ func _process(_delta):
 	$ui/gameing/debug/data_3.text = "Atmospheres: %.03f" % air_pressure
 	
 	usable_reticle.visible = tool_cast.can_fire()
+	if held_object:
+		can_grab_reticle.visible = false
+		grabbing_reticle.visible = true
+	else:
+		grabbing_reticle.visible = false
+		can_grab_reticle.visible = grab_cast.is_colliding()
 
 func _physics_process(_delta):
 	var input := Input.get_vector("mv_left", "mv_right", "mv_forward", "mv_back")

@@ -101,5 +101,3 @@ surface_material_override/0 = SubResource("StandardMaterial3D_01a2q")
 libraries = {
 "": SubResource("AnimationLibrary_bkymb")
 }
-
-[connection signal="activated" from="button" to="button/AnimationPlayer" method="play" binds= ["Activate"]]
