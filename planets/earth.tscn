@@ -1,7 +1,8 @@
-[gd_scene load_steps=11 format=3 uid="uid://bvxydk23561hu"]
+[gd_scene load_steps=12 format=3 uid="uid://bvxydk23561hu"]
 
 [ext_resource type="PackedScene" uid="uid://db6ptpcriul0a" path="res://_glb/planets/earth.glb" id="1_2064q"]
 [ext_resource type="Texture2D" uid="uid://cxolb2dcgpaqo" path="res://materials/textures_ambientcg/Asphalt027C_1K_Color.jpg" id="2_g6fam"]
+[ext_resource type="Script" path="res://planets/planet.gd" id="2_i2t5h"]
 [ext_resource type="Texture2D" uid="uid://dx4y67u37yunq" path="res://materials/textures_ambientcg/Concrete044A_1K_Color.jpg" id="3_iufmh"]
 [ext_resource type="Script" path="res://scripts/atmosphere.gd" id="3_j25p1"]
 [ext_resource type="Material" uid="uid://cqun8vjx2veow" path="res://planets/earth_atmosphere.material" id="4_sjtke"]
@@ -29,7 +30,9 @@ rings = 16
 custom_solver_bias = 1.0
 radius = 915.125
 
-[node name="earth" instance=ExtResource("1_2064q")]
+[node name="earth" node_paths=PackedStringArray("active_only") instance=ExtResource("1_2064q")]
+script = ExtResource("2_i2t5h")
+active_only = [NodePath("earth/construction/StaticBody3D"), NodePath("earth/StaticBody3D")]
 
 [node name="earth" parent="." index="0"]
 surface_material_override/0 = SubResource("StandardMaterial3D_fwh5w")

@@ -1,0 +1,30 @@
+[gd_scene load_steps=6 format=3 uid="uid://c8ui6a6yd65xy"]
+
+[ext_resource type="Script" path="res://entities/magic_carpet.gd" id="1_41vu3"]
+[ext_resource type="Script" path="res://entities/vehicle.gd" id="1_pru3v"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_4on5n"]
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_cqf4d"]
+points = PackedVector3Array(0.5, 0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, -0.5, 0.5, 0.5, -0.5, -0.5, -0.5, 0.5, -0.5, -0.5, -0.5, 0.5, -0.5, -0.5, -0.5)
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_3egej"]
+radius = 0.887798
+
+[node name="magic_carpet" type="CharacterBody3D"]
+script = ExtResource("1_41vu3")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_4on5n")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("ConvexPolygonShape3D_cqf4d")
+
+[node name="vehicle" type="CharacterBody3D" parent="."]
+collision_layer = 8
+collision_mask = 0
+script = ExtResource("1_pru3v")
+prompt = "Go for a Ride"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="vehicle"]
+shape = SubResource("SphereShape3D_3egej")

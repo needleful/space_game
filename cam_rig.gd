@@ -36,6 +36,8 @@ var enabled := true
 
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	if get_tree().current_scene.has_signal("origin_translated"):
+		var _x = get_tree().current_scene.connect("origin_translated", _on_origin_translated)
 
 func _input(event):
 	if enabled and event is InputEventMouseMotion:
@@ -70,4 +72,7 @@ func _process(delta):
 		pitch.rotation.x = PI/2.1
 	elif pitch.rotation.x < -PI/2.1:
 		pitch.rotation.x = -PI/2.1
-	
+
+func _on_origin_translated(translation: Vector3):
+	# eventually, in third person the camera may need thisn
+	print("Origin moved: ", translation)

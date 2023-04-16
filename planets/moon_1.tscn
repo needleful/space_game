@@ -1,0 +1,32 @@
+[gd_scene load_steps=6 format=3 uid="uid://cle4y361jqlsd"]
+
+[ext_resource type="PackedScene" uid="uid://d3fl72gse5ocv" path="res://_glb/planets/moon1.glb" id="1_5765b"]
+[ext_resource type="Texture2D" uid="uid://qous31l0hdjo" path="res://materials/textures_ambientcg/Rock026_1K_Color.jpg" id="2_h80cb"]
+[ext_resource type="Script" path="res://planets/planet.gd" id="2_pwsis"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_k7ghg"]
+albedo_texture = ExtResource("2_h80cb")
+uv1_scale = Vector3(0.1, 0.1, 0.1)
+uv1_triplanar = true
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_mf1l3"]
+radius = 359.231
+
+[node name="moon1" node_paths=PackedStringArray("active_only") instance=ExtResource("1_5765b")]
+script = ExtResource("2_pwsis")
+active_only = [NodePath("moon1/StaticBody3D")]
+
+[node name="moon1" parent="." index="0"]
+surface_material_override/0 = SubResource("StandardMaterial3D_k7ghg")
+
+[node name="gravity" type="Area3D" parent="." index="1"]
+priority = 1.0
+gravity_space_override = 2
+gravity_point = true
+gravity_point_unit_distance = 50.0
+gravity_point_center = Vector3(0, 0, 0)
+gravity_direction = Vector3(0, 0, 0)
+gravity = 4.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="gravity" index="0"]
+shape = SubResource("SphereShape3D_mf1l3")

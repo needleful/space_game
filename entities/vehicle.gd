@@ -32,5 +32,9 @@ func exit():
 	user.vehicle = null
 	user.global_transform = global_transform.translated(
 		global_transform.basis.z + global_transform.basis.y)
-	user.linear_velocity = get_parent().linear_velocity
+	var p := get_parent()
+	if p is RigidBody3D:
+		user.linear_velocity = p.linear_velocity
+	elif p is CharacterBody3D:
+		user.linear_velocity = p.velocity
 	user = null

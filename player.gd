@@ -87,7 +87,7 @@ func _input(event):
 		held_object.angular_damp = grabbed_angular_damp
 		held_object.linear_damp = grabbed_linear_damp
 		held_object = null
-	elif event.is_action_pressed("fire") and tool_cast.can_fire():
+	elif !vehicle and event.is_action_pressed("fire") and tool_cast.can_fire():
 		tool_cast.fire(
 			tool_cast.get_collision_point(),
 			tool_cast.get_collision_normal(),

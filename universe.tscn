@@ -1,0 +1,124 @@
+[gd_scene load_steps=20 format=3 uid="uid://bj36wdqxs2ift"]
+
+[ext_resource type="Script" path="res://planets/sun.gd" id="1_du7ao"]
+[ext_resource type="Script" path="res://universe.gd" id="1_umr58"]
+[ext_resource type="Shader" path="res://materials/stars.gdshader" id="2_xpnhv"]
+[ext_resource type="PackedScene" uid="uid://cgf57o8e6dhjj" path="res://player.tscn" id="3_cy13p"]
+[ext_resource type="PackedScene" uid="uid://bvxydk23561hu" path="res://planets/earth.tscn" id="4_k1ssn"]
+[ext_resource type="PackedScene" uid="uid://cle4y361jqlsd" path="res://planets/moon_1.tscn" id="5_fy7xb"]
+[ext_resource type="Script" path="res://planets/planet.gd" id="5_i25xt"]
+[ext_resource type="PackedScene" uid="uid://b5xnbldm735r3" path="res://planets/venus.tscn" id="6_85u24"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_yahx1"]
+radius = 1000.0
+height = 2000.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_628ck"]
+shading_mode = 0
+albedo_color = Color(3.8, 4, 1.43529, 1)
+
+[sub_resource type="Gradient" id="Gradient_ytunb"]
+offsets = PackedFloat32Array(0.520833, 1)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_twji0"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_pwesj"]
+seamless = true
+color_ramp = SubResource("Gradient_ytunb")
+noise = SubResource("FastNoiseLite_twji0")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_86ody"]
+shader = ExtResource("2_xpnhv")
+shader_parameter/scale1 = 20.0
+shader_parameter/scale2 = 7.0
+shader_parameter/noise = SubResource("NoiseTexture2D_pwesj")
+
+[sub_resource type="Sky" id="Sky_p7kks"]
+sky_material = SubResource("ShaderMaterial_86ody")
+
+[sub_resource type="Environment" id="Environment_5c71a"]
+background_mode = 2
+sky = SubResource("Sky_p7kks")
+ambient_light_source = 1
+ambient_light_sky_contribution = 0.73
+ambient_light_energy = 0.0
+reflected_light_source = 1
+glow_enabled = true
+glow_intensity = 0.56
+glow_strength = 0.84
+
+[sub_resource type="SphereMesh" id="SphereMesh_qssiu"]
+radius = 50.0
+height = 100.0
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_hgh6j"]
+radius = 359.231
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_tbrwi"]
+radius = 50.0
+
+[node name="universe" type="Node3D"]
+script = ExtResource("1_umr58")
+
+[node name="sun" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 18451.6, 0)
+cast_shadow = 0
+gi_mode = 0
+mesh = SubResource("SphereMesh_yahx1")
+skeleton = NodePath("dir_light")
+surface_material_override/0 = SubResource("StandardMaterial3D_628ck")
+
+[node name="dir_light" type="DirectionalLight3D" parent="sun" node_paths=PackedStringArray("player")]
+light_cull_mask = 4294967293
+shadow_enabled = true
+directional_shadow_split_1 = 0.01
+directional_shadow_split_2 = 0.04
+directional_shadow_split_3 = 0.1
+directional_shadow_max_distance = 1000.0
+script = ExtResource("1_du7ao")
+player = NodePath("../../player")
+
+[node name="omni_light" type="OmniLight3D" parent="sun"]
+layers = 2
+light_cull_mask = 4294967294
+omni_range = 200000.0
+omni_attenuation = 0.000252747
+
+[node name="player" parent="." instance=ExtResource("3_cy13p")]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_5c71a")
+
+[node name="earth" parent="." instance=ExtResource("4_k1ssn")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -200, 0)
+
+[node name="planetoid2" type="Node3D" parent="." node_paths=PackedStringArray("active_only")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -522.341, -682.213, 134.271)
+script = ExtResource("5_i25xt")
+active_only = [NodePath("StaticBody3D")]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="planetoid2"]
+mesh = SubResource("SphereMesh_qssiu")
+
+[node name="Area3D" type="Area3D" parent="planetoid2"]
+priority = 1.0
+gravity_space_override = 2
+gravity_point = true
+gravity_point_unit_distance = 60.0
+gravity_point_center = Vector3(0, 0, 0)
+gravity_direction = Vector3(0, 0, 0)
+gravity = 4.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="planetoid2/Area3D"]
+shape = SubResource("SphereShape3D_hgh6j")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="planetoid2"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="planetoid2/StaticBody3D"]
+shape = SubResource("SphereShape3D_tbrwi")
+
+[node name="moon1" parent="." instance=ExtResource("5_fy7xb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -616.112, 473.504, -75.9969)
+
+[node name="venus" parent="." instance=ExtResource("6_85u24")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8041.48, 7188.82, 2907.58)

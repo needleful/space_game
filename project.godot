@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="This Planet Sucks"
-run/main_scene="res://test_planet.tscn"
+run/main_scene="res://universe.tscn"
 config/features=PackedStringArray("4.1")
 config/icon="res://icon.png"
 
