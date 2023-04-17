@@ -63,10 +63,17 @@ script = ExtResource("2_3hpx8")
 
 [node name="Camera3D" type="Camera3D" parent="cam_rig/cam_pos/cam_yaw/cam_pitch"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.38606, 3.18746)
-cull_mask = 1023
+cull_mask = 1021
+current = true
 fov = 85.0
-near = 0.2
-far = 60000.0
+near = 0.1
+far = 1500.0
+
+[node name="CameraFar" type="Camera3D" parent="cam_rig/cam_pos/cam_yaw/cam_pitch/Camera3D"]
+cull_mask = 1048574
+fov = 85.0
+near = 2000.0
+far = 1e+07
 
 [node name="grab_cast" type="RayCast3D" parent="cam_rig/cam_pos/cam_yaw/cam_pitch/Camera3D"]
 target_position = Vector3(0, 0, -2)

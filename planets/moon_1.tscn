@@ -16,4 +16,5 @@ surface_radius = 55.0
 active_only = [NodePath("moon1/StaticBody3D")]
 
 [node name="moon1" parent="." index="0"]
+layers = 3
 surface_material_override/0 = SubResource("StandardMaterial3D_k7ghg")

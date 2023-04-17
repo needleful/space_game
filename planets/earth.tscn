@@ -35,7 +35,7 @@ surface_material_override/0 = SubResource("StandardMaterial3D_fwh5w")
 shape = SubResource("SphereShape3D_ywovg")
 
 [node name="atmos" type="MeshInstance3D" parent="." index="1"]
-layers = 2
+layers = 3
 cast_shadow = 0
 gi_mode = 0
 mesh = SubResource("SphereMesh_x0agt")
