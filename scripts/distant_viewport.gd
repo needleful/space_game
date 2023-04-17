@@ -13,5 +13,5 @@ func update_size():
 	var v := get_parent().get_viewport()
 	size = v.size
 
-func _on_universe_origin_translated(translation):
+func _on_universe_origin_translated(_translation):
 	$far_camera._process(0.1)

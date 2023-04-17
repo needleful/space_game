@@ -2,10 +2,10 @@
 
 var gradient: Gradient = load("res://scripts/star_gradient.res")
 const star_count := 8000
-const min_distance := 60000
-const distance_range := 2000
-const min_scale := 15.0
-const max_scale := 30.0
+const min_distance := 600000
+const distance_range := 20000
+const min_scale := 150.0
+const max_scale := 300.0
 
 func _run():
 	var star_mesh = get_scene().get_node("stars") as MultiMeshInstance3D
