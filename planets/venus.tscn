@@ -65,7 +65,7 @@ mesh = SubResource("SphereMesh_8tl5t")
 surface_material_override/0 = SubResource("ShaderMaterial_5gkwj")
 
 [node name="atmos_exterior" type="MeshInstance3D" parent="."]
-layers = 2
+layers = 6
 mesh = SubResource("SphereMesh_8tl5t")
 surface_material_override/0 = SubResource("StandardMaterial3D_fq8af")
 

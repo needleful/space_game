@@ -4,7 +4,6 @@ extends Node
 @onready var yaw:Node3D = $cam_pos/cam_yaw
 @onready var pitch:Node3D = $cam_pos/cam_yaw/cam_pitch
 @onready var camera:Camera3D = pitch.get_node("Camera3D")
-@onready var far_camera:Camera3D = camera.get_node("CameraFar")
 
 @onready var pitch_pos := pitch.transform.origin
 @onready var cam_pos:Vector3 = camera.transform.origin
@@ -44,7 +43,6 @@ var zoomed := false:
 		tween.set_parallel(true)
 		tween.set_ease(Tween.EASE_OUT)
 		tween.tween_property(camera, "fov", default_fov if !zoomed else 20.0, ZOOM_SWITCH_TIME)
-		tween.tween_property(far_camera, "fov", default_fov if !zoomed else 20.0, ZOOM_SWITCH_TIME)
 
 var enabled := true
 

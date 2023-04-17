@@ -29,6 +29,7 @@ script = ExtResource("2_i2t5h")
 active_only = [NodePath("earth/StaticBody3D"), NodePath("atmosphere")]
 
 [node name="earth" parent="." index="0"]
+layers = 3
 surface_material_override/0 = SubResource("StandardMaterial3D_fwh5w")
 
 [node name="CollisionShape3D2" type="CollisionShape3D" parent="earth/StaticBody3D" index="1"]
