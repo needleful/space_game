@@ -1,0 +1,202 @@
+[gd_scene load_steps=21 format=3 uid="uid://bpqtpfwxbxhd1"]
+
+[ext_resource type="Script" path="res://test/wind_tunnel.gd" id="1_v41tk"]
+[ext_resource type="PackedScene" uid="uid://c7ibjnhykagm0" path="res://entities/model_rocket.tscn" id="2_r5jnx"]
+[ext_resource type="PackedScene" uid="uid://cvhn3mqksstog" path="res://entities/platform_square.tscn" id="3_1pjwa"]
+[ext_resource type="PackedScene" uid="uid://cxb5g7nayr3ct" path="res://entities/lamp.tscn" id="4_m7eqb"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_ingqa"]
+height = 11.023
+radius = 6.23749
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_qe8rb"]
+emission_shape = 6
+emission_ring_axis = Vector3(0, 1, 0)
+emission_ring_height = 1.0
+emission_ring_radius = 5.0
+emission_ring_inner_radius = 1.0
+direction = Vector3(0, 1, 0)
+spread = 7.26
+gravity = Vector3(0, -0.1, 0)
+angular_velocity_min = -2.0
+angular_velocity_max = 2.0
+angle_min = -720.0
+angle_max = 418.1
+scale_min = 0.1
+scale_max = 0.2
+collision_mode = 1
+collision_friction = 0.0
+collision_bounce = 0.36
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_642qc"]
+cull_mode = 2
+
+[sub_resource type="QuadMesh" id="QuadMesh_2nwfs"]
+material = SubResource("StandardMaterial3D_642qc")
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_ywpel"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_c6qvy"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_as8c5"]
+radius = 0.2
+
+[sub_resource type="SphereMesh" id="SphereMesh_5bocq"]
+radius = 0.2
+height = 0.4
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_tsihb"]
+radius = 0.35
+
+[sub_resource type="SphereMesh" id="SphereMesh_a42p0"]
+radius = 0.35
+height = 0.7
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_vvius"]
+radius = 0.25
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_l47vh"]
+top_radius = 0.25
+bottom_radius = 0.25
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_bgt5o"]
+radius = 0.75
+
+[sub_resource type="SphereMesh" id="SphereMesh_gmac2"]
+radius = 0.75
+height = 1.5
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_qtsok"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_d5nm3"]
+
+[node name="wind_tunnel" type="Node3D"]
+
+[node name="CSGCylinder3D" type="CSGCylinder3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.19593, 0)
+use_collision = true
+flip_faces = true
+radius = 5.03081
+height = 10.8562
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.5, 0.866025, 0, -0.866025, 0.5, 0, 0, 0)
+shadow_enabled = true
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.946085, 0.323917, 0, -0.323917, 0.946085, 0, 9.583, 14.674)
+fov = 48.8
+
+[node name="Area3D" type="Area3D" parent="."]
+collision_layer = 0
+collision_mask = 4
+gravity_space_override = 2
+angular_damp_space_override = 2
+script = ExtResource("1_v41tk")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.21273, 0)
+shape = SubResource("CylinderShape3D_ingqa")
+
+[node name="GPUParticles3D" type="GPUParticles3D" parent="Area3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.361257, 0)
+amount = 200
+lifetime = 3.0
+visibility_aabb = AABB(-6.8575, -2.01728, -5.72677, 13.715, 16.1508, 11.4535)
+process_material = SubResource("ParticleProcessMaterial_qe8rb")
+draw_pass_1 = SubResource("QuadMesh_2nwfs")
+
+[node name="sphere" type="RigidBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.983399, 0)
+collision_layer = 5
+mass = 6.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="sphere"]
+shape = SubResource("SphereShape3D_ywpel")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="sphere/CollisionShape3D"]
+mesh = SubResource("SphereMesh_c6qvy")
+
+[node name="sphere2" type="RigidBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.590138, 0.9834, 1.22773)
+collision_layer = 5
+mass = 6.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="sphere2"]
+shape = SubResource("SphereShape3D_as8c5")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="sphere2/CollisionShape3D"]
+mesh = SubResource("SphereMesh_5bocq")
+
+[node name="sphere4" type="RigidBody3D" parent="."]
+transform = Transform3D(0.5, 0, -0.866025, 0, 1, 0, 0.866025, 0, 0.5, -0.929846, 0.9834, 0.371295)
+collision_layer = 5
+mass = 18.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="sphere4"]
+shape = SubResource("SphereShape3D_tsihb")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="sphere4/CollisionShape3D"]
+mesh = SubResource("SphereMesh_a42p0")
+
+[node name="CollisionShape3D4" type="CollisionShape3D" parent="sphere4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.110987, 0.438712, 0.134938)
+shape = SubResource("SphereShape3D_as8c5")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="sphere4/CollisionShape3D4"]
+mesh = SubResource("SphereMesh_5bocq")
+
+[node name="CollisionShape3D5" type="CollisionShape3D" parent="sphere4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.110987, 0.782467, 0.245458)
+shape = SubResource("SphereShape3D_as8c5")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="sphere4/CollisionShape3D5"]
+mesh = SubResource("SphereMesh_5bocq")
+
+[node name="HSlider" type="HSlider" parent="."]
+offset_left = 103.0
+offset_top = 110.0
+offset_right = 903.0
+offset_bottom = 126.0
+max_value = 50.0
+step = 0.1
+
+[node name="RigidBody3D" type="RigidBody3D" parent="."]
+transform = Transform3D(0.96806, 0.250718, 0, -0.250718, 0.96806, 0, 0, 0, 1, 1.39758, 1.94132, -0.738131)
+collision_layer = 5
+mass = 20.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RigidBody3D"]
+shape = SubResource("CylinderShape3D_vvius")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="RigidBody3D/CollisionShape3D"]
+mesh = SubResource("CylinderMesh_l47vh")
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="RigidBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.05087, 0)
+shape = SubResource("SphereShape3D_bgt5o")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="RigidBody3D/CollisionShape3D2"]
+mesh = SubResource("SphereMesh_gmac2")
+
+[node name="model_rocket" parent="." instance=ExtResource("2_r5jnx")]
+transform = Transform3D(-0.258819, 0.965926, 0, -0.965926, -0.258819, 0, 0, 0, 1, -0.695549, 0.0896081, 1.74412)
+
+[node name="RigidBody3D2" type="RigidBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.20763, 0.466379, 1.70693)
+collision_layer = 5
+mass = 12.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RigidBody3D2"]
+shape = SubResource("BoxShape3D_qtsok")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="RigidBody3D2/CollisionShape3D"]
+mesh = SubResource("BoxMesh_d5nm3")
+
+[node name="platform_square" parent="." instance=ExtResource("3_1pjwa")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.496088, 1.23488, 1.73516)
+
+[node name="lamp" parent="." instance=ExtResource("4_m7eqb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.14436, 0.424162, 1.14132)
+
+[connection signal="value_changed" from="HSlider" to="Area3D" method="_on_slider_value_changed"]

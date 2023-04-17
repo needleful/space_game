@@ -169,6 +169,10 @@ common/physics_ticks_per_second=144
 3d/default_linear_damp=0.0
 3d/default_angular_damp=0.0
 
+[rendering]
+
+anti_aliasing/quality/screen_space_aa=1
+
 [shader_globals]
 
 sun_position={

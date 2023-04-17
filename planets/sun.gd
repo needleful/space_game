@@ -2,8 +2,9 @@ extends DirectionalLight3D
 
 @export var player: Node3D
 
-func _ready():
-	RenderingServer.global_shader_parameter_set("sun_position", global_transform.origin)
+func _notification(what):
+	if what == NOTIFICATION_TRANSFORM_CHANGED:
+		RenderingServer.global_shader_parameter_set("sun_position", global_transform.origin)
 
 func _process(_delta):
 	var l = player.global_transform.origin - global_transform.origin

@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://c7ibjnhykagm0"]
+[gd_scene load_steps=14 format=3 uid="uid://c7ibjnhykagm0"]
 
 [ext_resource type="Script" path="res://entities/model_rocket.gd" id="1_slxnx"]
 
@@ -6,18 +6,20 @@
 radius = 0.075
 height = 1.0
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_tmxpu"]
+size = Vector3(0.05, 0.4, 0.4)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hl5tp"]
+albedo_color = Color(1, 0.278431, 0.372549, 1)
+metallic = 0.75
+roughness = 0.56
+
+[sub_resource type="BoxMesh" id="BoxMesh_ofjpy"]
+size = Vector3(0.05, 0.4, 0.4)
+
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_xw17r"]
 radius = 0.075
 height = 1.0
-
-[sub_resource type="CylinderMesh" id="CylinderMesh_jlw5e"]
-top_radius = 0.1
-bottom_radius = 0.2
-height = 0.3
-radial_segments = 5
-
-[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_i2ya3"]
-points = PackedVector3Array(-0.11756, -0.15, -0.161803, -0.190211, -0.15, 0.0617738, -0.10583, -0.0900059, -0.145654, 0.117523, -0.15, -0.161803, -0.17122, -0.0900059, 0.0556116, 1.49012e-08, -0.15, 0.2, -0.0705659, 0.0899765, -0.0970995, -0.0587987, 0.15, -0.0809147, 0.105793, -0.0900059, -0.145654, 0.190211, -0.15, 0.0617738, 1.49012e-08, 0.15, 0.099987, -0.0951056, 0.15, 0.0308916, -0.152191, -0.0300118, 0.0494139, 0.171183, -0.0900059, 0.0556116, 0.0951056, 0.15, 0.0308916, 0.0587614, 0.15, -0.0809147, 0.0705286, 0.0899765, -0.0970995)
 
 [sub_resource type="Gradient" id="Gradient_ichm3"]
 colors = PackedColorArray(2, 1.5, 0.7, 1, 0.776471, 0, 0, 1)
@@ -70,21 +72,29 @@ particles = NodePath("../GPUParticles3D")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0410441, 0)
 shape = SubResource("CapsuleShape3D_klbul")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.522192, 0)
-mesh = SubResource("CapsuleMesh_xw17r")
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.211396, 0)
+shape = SubResource("BoxShape3D_tmxpu")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="MeshInstance3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.363653, 0)
-mesh = SubResource("CylinderMesh_jlw5e")
+[node name="MeshInstance3D" type="MeshInstance3D" parent="CollisionShape3D2"]
+material_override = SubResource("StandardMaterial3D_hl5tp")
+mesh = SubResource("BoxMesh_ofjpy")
+
+[node name="CollisionShape3D3" type="CollisionShape3D" parent="."]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0.211396, 0)
+shape = SubResource("BoxShape3D_tmxpu")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="CollisionShape3D3"]
+material_override = SubResource("StandardMaterial3D_hl5tp")
+mesh = SubResource("BoxMesh_ofjpy")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.522192, 0)
 shape = SubResource("CapsuleShape3D_klbul")
 
-[node name="CollisionShape3D2" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.158539, 0)
-shape = SubResource("ConvexPolygonShape3D_i2ya3")
+[node name="MeshInstance3D" type="MeshInstance3D" parent="CollisionShape3D"]
+mesh = SubResource("CapsuleMesh_xw17r")
+skeleton = NodePath("../..")
 
 [node name="GPUParticles3D" type="GPUParticles3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, -1, 8.74228e-08, 0, -8.74228e-08, -1, 0, 0.0189068, 0)

@@ -9,5 +9,5 @@ void sky() {
 		+ texture(noise, scale1*EYEDIR.zx - scale2*EYEDIR.xz).r
 		+ texture(noise, -scale1*EYEDIR.yz + scale2*EYEDIR.xy).r;
 		
-	COLOR = vec3(pow(stars*0.7, 32.0));
+	COLOR = max(vec3(0.0), vec3(pow(stars*0.7, 32.0)));
 }

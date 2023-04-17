@@ -1,9 +1,9 @@
-[gd_scene load_steps=14 format=3 uid="uid://b5xnbldm735r3"]
+[gd_scene load_steps=14 format=3 uid="uid://lu2c3p1fat0k"]
 
 [ext_resource type="Texture2D" uid="uid://qous31l0hdjo" path="res://materials/textures_ambientcg/Rock026_1K_Color.jpg" id="1_4b40y"]
 [ext_resource type="Script" path="res://planets/planet.gd" id="1_alwco"]
 [ext_resource type="Shader" path="res://materials/foggy_atmosphere.gdshader" id="2_8ikkq"]
-[ext_resource type="Script" path="res://scripts/atmosphere.gd" id="4_bn2b4"]
+[ext_resource type="Script" path="res://planets/atmosphere.gd" id="4_bn2b4"]
 
 [sub_resource type="SphereMesh" id="SphereMesh_5qrfa"]
 radius = 200.0
@@ -54,7 +54,7 @@ data = PackedVector3Array(0, 200, 0, 0, 200, 0, 0, 199.094, 19.0112, 0, 200, 0, 
 [node name="venus" type="Node3D" node_paths=PackedStringArray("active_only")]
 script = ExtResource("1_alwco")
 gravitation = 20.0
-active_only = [NodePath("surface"), NodePath("StaticBody3D"), NodePath("atmos")]
+active_only = [NodePath("surface"), NodePath("StaticBody3D"), NodePath("atmos"), NodePath("atmosphere")]
 
 [node name="surface" type="MeshInstance3D" parent="."]
 mesh = SubResource("SphereMesh_5qrfa")
@@ -76,10 +76,8 @@ gravity_point_unit_distance = 200.0
 gravity_point_center = Vector3(0, 0, 0)
 gravity_direction = Vector3(0, 0, 0)
 gravity = 15.0
-linear_damp_space_override = 2
 linear_damp = 0.9
 angular_damp_space_override = 2
-angular_damp = 0.9
 script = ExtResource("4_bn2b4")
 atmospheres_at_surface = 6.0
 

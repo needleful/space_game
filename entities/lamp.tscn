@@ -3,8 +3,8 @@
 [sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_7njxo"]
 points = PackedVector3Array(-0.190211, -0.2, 0.0617738, -0.11756, -0.2, -0.161803, 1.49012e-08, -0.2, 0.2, -0.17122, -0.120008, 0.0556116, -0.10583, -0.120008, -0.145654, 0.117523, -0.2, -0.161803, 0.190211, -0.2, 0.0617738, 0.171183, -0.120008, 0.0556116, 0.0951056, 0.2, 0.0308916, 1.49012e-08, 0.2, 0.099987, -0.152191, -0.0400157, 0.0494139, -0.0705659, 0.119969, -0.0970995, -0.0951056, 0.2, 0.0308916, 0.105793, -0.120008, -0.145654, -0.0587987, 0.2, -0.0809147, 0.0705286, 0.119969, -0.0970995, 0.0587614, 0.2, -0.0809147)
 
-[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_vpwm0"]
-points = PackedVector3Array(0.1, 0.2, 0.15, -0.1, 0.2, 0.15, 0.1, -0.2, 0.15, 0.1, 0.2, -0.15, -0.1, 0.2, -0.15, -0.1, -0.2, 0.15, 0.1, -0.2, -0.15, -0.1, -0.2, -0.15)
+[sub_resource type="BoxShape3D" id="BoxShape3D_lfrkv"]
+size = Vector3(0.2, 0.4, 0.3)
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_ss510"]
 top_radius = 0.1
@@ -39,7 +39,7 @@ shape = SubResource("ConvexPolygonShape3D_7njxo")
 
 [node name="CollisionShape3D2" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0688769, 0)
-shape = SubResource("ConvexPolygonShape3D_vpwm0")
+shape = SubResource("BoxShape3D_lfrkv")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(-1, 8.74228e-08, 0, -8.74228e-08, -1, 0, 0, 0, 1, 0, 0, 0)
