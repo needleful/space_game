@@ -10,60 +10,55 @@ enum Mode {
 @export var directory := "entities"
 @export var expand_folder_depth := 0
 @export var mode := Mode.SCENES
-@onready var spawn_list:VBoxContainer = $margin/scroll/spawn_list
+@onready var spawn_list:Tree = $margin/scroll/spawn_list
+var default_icon = load("res://addons/fast_options/assets/node_icon.png")
 
-var spawnable : Dictionary
+# TODO: make this check for new props dynamically probably
+var stuff_loaded := false
+
+var spawnable : Array
 
 func _ready():
-	var _x = connect("visibility_changed", self._on_visibility_changed)
+	var _x = connect("visibility_changed", _on_visibility_changed)
+	_x = spawn_list.connect("item_selected", _on_spawn_pressed)
 
 func _on_visibility_changed():
-	var type_hint: String
-	if mode == Mode.SCENES:
-		type_hint = "PackedScene"
-	elif mode == Mode.SCRIPTS:
-		type_hint = "Script"
+	if !stuff_loaded:
+		var root_item = spawn_list.create_item()
+		root_item.set_text(0, name.capitalize())
+		root_item.set_selectable(0, false)
+		process_folder(directory, expand_folder_depth, root_item)
+		stuff_loaded = true
 
-	for button in spawn_list.get_children():
-		if button is Button:
-			var file = button.text
-			if !ResourceLoader.exists(file, type_hint):
-				spawnable.erase(file)
-				button.queue_free()
-		else:
-			button.queue_free()
-	process_folder(directory, expand_folder_depth)
-	
-
-func process_folder(path: String, expand: int):
+func process_folder(path: String, expand: int, parent: TreeItem):
 	var dir := DirAccess.open(path)
 
 	for file in dir.get_files():
+		var base_name = file
+		var dot_index = base_name.rfind(".")
+		if dot_index > 0:
+			base_name = base_name.substr(0, dot_index).capitalize()
+
 		file = path + "/" + file
-		if !(file in spawnable):
-			var item: Resource
-			if mode == Mode.SCENES:
-				item = ResourceLoader.load(file) as PackedScene
-			elif mode == Mode.SCRIPTS:
-				item = ResourceLoader.load(file) as Script
-			if item:
-				spawnable[file] = item
-				var b := Button.new()
-				b.text = file
-				b.connect("pressed", _on_spawn_pressed.bind(b))
-				spawn_list.add_child(b)
+		var item: Resource
+		if mode == Mode.SCENES:
+			item = ResourceLoader.load(file) as PackedScene
+		elif mode == Mode.SCRIPTS:
+			item = ResourceLoader.load(file) as Script
+		if item:
+			var file_item = spawn_list.create_item(parent)
+			spawnable.append(item)
+			file_item.set_text(0, base_name)
+			file_item.set_selectable(0, true)
+			file_item.set_metadata(0, spawnable.size() - 1)
 
 	if expand > 0:
 		for subdir in dir.get_directories():
-			var l := Label.new()
-			l.text = subdir
-			spawn_list.add_child(l)
-			process_folder(path + "/" + subdir, expand - 1)
+			var dir_tree = spawn_list.create_item(parent)
+			dir_tree.set_text(0, subdir.capitalize())
+			dir_tree.set_selectable(0, false)
+			process_folder(path + "/" + subdir, expand - 1, dir_tree)
 
-	if spawn_list.get_child_count() > 0:
-		spawn_list.get_child(0).grab_focus()
-
-func _on_spawn_pressed(source: Button):
-	if !(source.text in spawnable):
-		print_debug("Invalid spawnable path: ", source.text)
-	emit_signal("spawn", spawnable[source.text])
+func _on_spawn_pressed():
+	var item = spawn_list.get_selected()
+	emit_signal("spawn", spawnable[item.get_metadata(0)])

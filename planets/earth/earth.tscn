@@ -1,13 +1,13 @@
-[gd_scene load_steps=10 format=3 uid="uid://b82ehhlml641l"]
+[gd_scene load_steps=10 format=3 uid="uid://bk6osrnqt17ck"]
 
-[ext_resource type="PackedScene" uid="uid://db6ptpcriul0a" path="res://_glb/planets/earth.glb" id="1_2064q"]
-[ext_resource type="Texture2D" uid="uid://cxolb2dcgpaqo" path="res://materials/textures_ambientcg/Asphalt027C_1K_Color.jpg" id="2_g6fam"]
-[ext_resource type="Script" path="res://planets/planet.gd" id="2_i2t5h"]
-[ext_resource type="Script" path="res://planets/atmosphere.gd" id="3_j25p1"]
-[ext_resource type="Material" uid="uid://cqun8vjx2veow" path="res://planets/earth_atmosphere.material" id="4_sjtke"]
+[ext_resource type="PackedScene" uid="uid://db6ptpcriul0a" path="res://_glb/planets/earth.glb" id="1_issvk"]
+[ext_resource type="Script" path="res://planets/planet.gd" id="2_jbtl3"]
+[ext_resource type="Texture2D" uid="uid://cxolb2dcgpaqo" path="res://materials/textures_ambientcg/Asphalt027C_1K_Color.jpg" id="3_uajp8"]
+[ext_resource type="Material" uid="uid://cqun8vjx2veow" path="res://planets/earth_atmosphere.material" id="4_vvpsa"]
+[ext_resource type="Script" path="res://planets/atmosphere.gd" id="5_cq1dl"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fwh5w"]
-albedo_texture = ExtResource("2_g6fam")
+albedo_texture = ExtResource("3_uajp8")
 uv1_scale = Vector3(0.1, 0.1, 0.1)
 uv1_triplanar = true
 
@@ -24,8 +24,8 @@ rings = 16
 custom_solver_bias = 1.0
 radius = 400.0
 
-[node name="earth" node_paths=PackedStringArray("active_only") instance=ExtResource("1_2064q")]
-script = ExtResource("2_i2t5h")
+[node name="earth" node_paths=PackedStringArray("active_only") instance=ExtResource("1_issvk")]
+script = ExtResource("2_jbtl3")
 active_only = [NodePath("earth/StaticBody3D"), NodePath("atmosphere")]
 
 [node name="earth" parent="." index="0"]
@@ -41,7 +41,7 @@ cast_shadow = 0
 gi_mode = 0
 mesh = SubResource("SphereMesh_x0agt")
 skeleton = NodePath("../..")
-surface_material_override/0 = ExtResource("4_sjtke")
+surface_material_override/0 = ExtResource("4_vvpsa")
 
 [node name="atmosphere" type="Area3D" parent="." index="2"]
 collision_layer = 0
@@ -51,8 +51,8 @@ gravity_point_unit_distance = 200.0
 gravity_point_center = Vector3(0, 0, 0)
 gravity_direction = Vector3(0, 0, 0)
 gravity = 15.0
-angular_damp_space_override = 2
-script = ExtResource("3_j25p1")
+script = ExtResource("5_cq1dl")
+atmospheres_at_surface = 12.0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="atmosphere" index="0"]
 shape = SubResource("SphereShape3D_f0bv5")

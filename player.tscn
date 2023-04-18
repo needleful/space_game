@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://cgf57o8e6dhjj"]
+[gd_scene load_steps=18 format=3 uid="uid://cgf57o8e6dhjj"]
 
 [ext_resource type="Script" path="res://player.gd" id="1_l318w"]
 [ext_resource type="Script" path="res://cam_rig.gd" id="2_3hpx8"]
@@ -11,6 +11,7 @@
 [ext_resource type="Theme" uid="uid://bntdbgkf7koit" path="res://ui/ui_theme.tres" id="5_jxvnj"]
 [ext_resource type="Script" path="res://ui/tool_options.gd" id="8_0kvrs"]
 [ext_resource type="Script" path="res://ui/debug_console.gd" id="10_kyocl"]
+[ext_resource type="PackedScene" uid="uid://bm4wljocjky8b" path="res://ui/code_editor.tscn" id="12_rvdh6"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_3ggmr"]
 
@@ -66,8 +67,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.38606, 3.18746)
 cull_mask = 1021
 current = true
 fov = 85.0
-near = 0.2
-far = 3000.0
+far = 1800.0
 
 [node name="grab_cast" type="RayCast3D" parent="cam_rig/cam_pos/cam_yaw/cam_pitch/Camera3D"]
 target_position = Vector3(0, 0, -2)
@@ -93,6 +93,9 @@ collision_mask = 13
 [node name="tool_cast" type="RayCast3D" parent="cam_rig/cam_pos/cam_yaw/cam_pitch/Camera3D"]
 target_position = Vector3(0, 0, -40)
 script = ExtResource("3_wep7e")
+
+[node name="code_editor" parent="." instance=ExtResource("12_rvdh6")]
+visible = false
 
 [node name="ui" type="Control" parent="."]
 process_mode = 3
@@ -216,6 +219,7 @@ metadata/_edit_layout_mode = 1
 [node name="Entities" type="Panel" parent="ui/spawner"]
 layout_mode = 2
 script = ExtResource("4_x3gwk")
+expand_folder_depth = 1
 metadata/_edit_layout_mode = 1
 metadata/_edit_use_custom_anchors = true
 
@@ -231,7 +235,7 @@ grow_vertical = 2
 layout_mode = 2
 metadata/_edit_layout_mode = 1
 
-[node name="spawn_list" type="VBoxContainer" parent="ui/spawner/Entities/margin/scroll"]
+[node name="spawn_list" type="Tree" parent="ui/spawner/Entities/margin/scroll"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -259,7 +263,7 @@ grow_vertical = 2
 layout_mode = 2
 metadata/_edit_layout_mode = 1
 
-[node name="spawn_list" type="VBoxContainer" parent="ui/spawner/Tools/margin/scroll"]
+[node name="spawn_list" type="Tree" parent="ui/spawner/Tools/margin/scroll"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3

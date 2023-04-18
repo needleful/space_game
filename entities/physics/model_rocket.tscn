@@ -1,6 +1,6 @@
-[gd_scene load_steps=14 format=3 uid="uid://c7ibjnhykagm0"]
+[gd_scene load_steps=14 format=3]
 
-[ext_resource type="Script" path="res://entities/model_rocket.gd" id="1_slxnx"]
+[ext_resource type="Script" path="res://entities/physics/model_rocket.gd" id="1_slxnx"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_klbul"]
 radius = 0.075

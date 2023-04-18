@@ -1,9 +1,9 @@
-[gd_scene load_steps=21 format=3 uid="uid://bpqtpfwxbxhd1"]
+[gd_scene load_steps=21 format=3]
 
 [ext_resource type="Script" path="res://test/wind_tunnel.gd" id="1_v41tk"]
-[ext_resource type="PackedScene" uid="uid://c7ibjnhykagm0" path="res://entities/model_rocket.tscn" id="2_r5jnx"]
-[ext_resource type="PackedScene" uid="uid://cvhn3mqksstog" path="res://entities/platform_square.tscn" id="3_1pjwa"]
-[ext_resource type="PackedScene" uid="uid://cxb5g7nayr3ct" path="res://entities/lamp.tscn" id="4_m7eqb"]
+[ext_resource type="PackedScene" path="res://entities/physics/model_rocket.tscn" id="2_r5jnx"]
+[ext_resource type="PackedScene" uid="uid://cvhn3mqksstog" path="res://entities/props/platform_square.tscn" id="3_1pjwa"]
+[ext_resource type="PackedScene" uid="uid://cxb5g7nayr3ct" path="res://entities/props/lamp.tscn" id="4_m7eqb"]
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_ingqa"]
 height = 11.023

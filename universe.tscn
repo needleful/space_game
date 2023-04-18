@@ -1,4 +1,4 @@
-[gd_scene load_steps=30 format=3 uid="uid://cfabmiadkb0sk"]
+[gd_scene load_steps=30 format=3 uid="uid://brdjmllm44rta"]
 
 [ext_resource type="Script" path="res://planets/sun.gd" id="1_du7ao"]
 [ext_resource type="Script" path="res://universe.gd" id="1_umr58"]
@@ -6,8 +6,8 @@
 [ext_resource type="Script" path="res://far_camera.gd" id="2_vx2oy"]
 [ext_resource type="Shader" path="res://materials/far_background.gdshader" id="2_y2f2y"]
 [ext_resource type="PackedScene" uid="uid://cgf57o8e6dhjj" path="res://player.tscn" id="3_cy13p"]
-[ext_resource type="PackedScene" uid="uid://b82ehhlml641l" path="res://planets/earth.tscn" id="4_k1ssn"]
-[ext_resource type="PackedScene" uid="uid://cle4y361jqlsd" path="res://planets/moon_1.tscn" id="5_fy7xb"]
+[ext_resource type="PackedScene" uid="uid://bk6osrnqt17ck" path="res://planets/earth/earth.tscn" id="4_k1ssn"]
+[ext_resource type="PackedScene" uid="uid://cle4y361jqlsd" path="res://planets/earth/moon_1.tscn" id="5_fy7xb"]
 [ext_resource type="Script" path="res://planets/planet.gd" id="5_i25xt"]
 [ext_resource type="PackedScene" uid="uid://lu2c3p1fat0k" path="res://planets/venus.tscn" id="6_85u24"]
 [ext_resource type="Shader" path="res://materials/distant_buffer.gdshader" id="7_55mmi"]
@@ -111,7 +111,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15904.5, 1.38606, -22855.1)
 cull_mask = 2
 fov = 85.0
 near = 10.0
-far = 1e+06
+far = 4e+06
 script = ExtResource("2_vx2oy")
 
 [node name="far_plane" type="MeshInstance3D" parent="."]

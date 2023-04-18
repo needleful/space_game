@@ -1,6 +1,6 @@
-[gd_scene load_steps=11 format=3 uid="uid://dqp8tcmb4ph3f"]
+[gd_scene load_steps=11 format=3]
 
-[ext_resource type="Script" path="res://entities/button.gd" id="1_wx7dw"]
+[ext_resource type="Script" path="res://entities/interactive/button.gd" id="1_wx7dw"]
 
 [sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_vygn1"]
 points = PackedVector3Array(0.0866025, 0.01, 0.05, 0, 0.01, 0.1, 0.0866025, -0.01, 0.05, 0.0865856, 0.01, -0.0500196, 0, -0.01, 0.1, -0.0866025, 0.01, 0.0499804, 0.0865856, -0.01, -0.0500196, 0, 0.01, -0.1, -0.0866025, -0.01, 0.0499804, -0.0866025, 0.01, -0.05, 0, -0.01, -0.1, -0.0866025, -0.01, -0.05)

@@ -1,7 +1,7 @@
-[gd_scene load_steps=6 format=3 uid="uid://c8ui6a6yd65xy"]
+[gd_scene load_steps=6 format=3]
 
-[ext_resource type="Script" path="res://entities/magic_carpet.gd" id="1_41vu3"]
-[ext_resource type="Script" path="res://entities/vehicle.gd" id="1_pru3v"]
+[ext_resource type="Script" path="res://entities/vehicles/magic_carpet.gd" id="1_41vu3"]
+[ext_resource type="Script" path="res://entities/vehicles/vehicle.gd" id="1_pru3v"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_4on5n"]
 

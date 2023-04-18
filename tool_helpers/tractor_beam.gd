@@ -2,11 +2,11 @@ extends RayCast3D
 
 ## Physics interactions
 # Force in newtons
-var max_force := 2000.0
+var max_force := 1500.0
 # Force as a function of distance
-var force_distance := 800.0
+var force_distance := 600.0
 var force_velocity := 40.0
-var force_dist_accum := 800.0
+var force_dist_accum := 600.0
 var angular_damp := 0.5
 
 var held_object: RigidBody3D
