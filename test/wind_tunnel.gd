@@ -4,13 +4,15 @@ var vel := Vector3.UP
 #var air_angular_damp := 2.0
 var density := 1.0
 var drag_const := 0.4
+const min_velocity := 2.0
 
 func _physics_process(_delta):
-	for c in get_overlapping_bodies():
-		if c is RigidBody3D:
-			var change = vel - c.linear_velocity
-			var drag = 0.5*density*drag_const*change.length()*change
-			apply_drag(c, drag, vel.normalized())
+	for b in get_overlapping_bodies():
+		if b is RigidBody3D:
+			var change = vel - b.linear_velocity
+			if change.length_squared() > min_velocity*min_velocity:
+				var drag = 0.5*density*drag_const*change.length()*change
+				apply_drag(b, drag, change.normalized())
 			#c.angular_damp = air_angular_damp
 
 func apply_drag(body: RigidBody3D, drag: Vector3, dir: Vector3):

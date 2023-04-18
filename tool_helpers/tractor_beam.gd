@@ -36,7 +36,7 @@ func fire():
 	grab_distance = cDist/dist
 	grab_offset = held_object.global_transform.affine_inverse()*p
 	held_angular_damp = held_object.angular_damp
-	held_object.angular_damp = 400
+	held_object.angular_damp = held_object.mass*40
 
 func release():
 	if held_object:

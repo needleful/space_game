@@ -6,11 +6,11 @@
 [ext_resource type="Script" path="res://tool_helpers/tractor_beam.gd" id="3_nopqo"]
 [ext_resource type="Script" path="res://tool_helpers/tool.gd" id="3_wep7e"]
 [ext_resource type="Script" path="res://ui/ui_mode.gd" id="4_1xhtu"]
-[ext_resource type="Script" path="res://ui/spawner.gd" id="4_x3gwk"]
 [ext_resource type="Texture2D" uid="uid://bevpj5ww678ek" path="res://ui/crosshair-ref.png" id="4_yr5fy"]
 [ext_resource type="Theme" uid="uid://bntdbgkf7koit" path="res://ui/ui_theme.tres" id="5_jxvnj"]
 [ext_resource type="Script" path="res://ui/tool_options.gd" id="8_0kvrs"]
 [ext_resource type="Script" path="res://ui/debug_console.gd" id="10_kyocl"]
+[ext_resource type="PackedScene" uid="uid://blrrytc8d2j1m" path="res://ui/entities.tscn" id="10_l76aw"]
 [ext_resource type="PackedScene" uid="uid://bm4wljocjky8b" path="res://ui/code_editor.tscn" id="12_rvdh6"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_3ggmr"]
@@ -216,58 +216,15 @@ grow_vertical = 2
 script = ExtResource("4_1xhtu")
 metadata/_edit_layout_mode = 1
 
-[node name="Entities" type="Panel" parent="ui/spawner"]
+[node name="Entities" parent="ui/spawner" instance=ExtResource("10_l76aw")]
 layout_mode = 2
-script = ExtResource("4_x3gwk")
-expand_folder_depth = 1
-metadata/_edit_layout_mode = 1
-metadata/_edit_use_custom_anchors = true
 
-[node name="margin" type="MarginContainer" parent="ui/spawner/Entities"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="scroll" type="ScrollContainer" parent="ui/spawner/Entities/margin"]
-layout_mode = 2
-metadata/_edit_layout_mode = 1
-
-[node name="spawn_list" type="Tree" parent="ui/spawner/Entities/margin/scroll"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-metadata/_edit_layout_mode = 1
-
-[node name="Tools" type="Panel" parent="ui/spawner"]
+[node name="Tools" parent="ui/spawner" instance=ExtResource("10_l76aw")]
 visible = false
 layout_mode = 2
-script = ExtResource("4_x3gwk")
 directory = "tools"
 expand_folder_depth = 2
 mode = 1
-metadata/_edit_layout_mode = 1
-metadata/_edit_use_custom_anchors = true
-
-[node name="margin" type="MarginContainer" parent="ui/spawner/Tools"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="scroll" type="ScrollContainer" parent="ui/spawner/Tools/margin"]
-layout_mode = 2
-metadata/_edit_layout_mode = 1
-
-[node name="spawn_list" type="Tree" parent="ui/spawner/Tools/margin/scroll"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-metadata/_edit_layout_mode = 1
 
 [node name="Options" type="Panel" parent="ui/spawner" node_paths=PackedStringArray("tool")]
 visible = false

@@ -1,0 +1,27 @@
+[gd_scene load_steps=5 format=3 uid="uid://bw3blwff6m1f5"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_uh4by"]
+friction = 0.41
+rough = true
+bounce = 0.7
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_qcjvh"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_erdtw"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lg8pm"]
+albedo_color = Color(0.933333, 0.247059, 0.498039, 1)
+clearcoat_enabled = true
+clearcoat_roughness = 0.27
+
+[node name="beach_ball" type="RigidBody3D"]
+collision_layer = 5
+mass = 0.1
+physics_material_override = SubResource("PhysicsMaterial_uh4by")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape3D_qcjvh")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="CollisionShape3D"]
+mesh = SubResource("SphereMesh_erdtw")
+surface_material_override/0 = SubResource("StandardMaterial3D_lg8pm")

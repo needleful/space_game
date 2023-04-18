@@ -1,0 +1,19 @@
+[gd_scene load_steps=3 format=3 uid="uid://dpxakjpwld1d3"]
+
+[ext_resource type="Script" path="res://test/spawn_test.gd" id="1_wv58e"]
+[ext_resource type="PackedScene" uid="uid://blrrytc8d2j1m" path="res://ui/entities.tscn" id="1_yfobk"]
+
+[node name="spawn_test" type="Node3D"]
+script = ExtResource("1_wv58e")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.88037, 21.6043)
+
+[node name="Entities" parent="." instance=ExtResource("1_yfobk")]
+visible = false
+anchors_preset = 9
+anchor_right = 0.0
+offset_right = 496.0
+grow_horizontal = 1
+
+[connection signal="spawn" from="Entities" to="." method="_on_entities_spawn"]

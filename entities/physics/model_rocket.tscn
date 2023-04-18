@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3]
+[gd_scene load_steps=14 format=3 uid="uid://bwakn6mbahvff"]
 
 [ext_resource type="Script" path="res://entities/physics/model_rocket.gd" id="1_slxnx"]
 
@@ -20,6 +20,8 @@ size = Vector3(0.05, 0.4, 0.4)
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_xw17r"]
 radius = 0.075
 height = 1.0
+radial_segments = 12
+rings = 3
 
 [sub_resource type="Gradient" id="Gradient_ichm3"]
 colors = PackedColorArray(2, 1.5, 0.7, 1, 0.776471, 0, 0, 1)

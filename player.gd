@@ -93,9 +93,11 @@ func _physics_process(delta):
 		var jump_force := mass*VEL_JUMP*b.y
 		apply_central_impulse(jump_force)
 		if ground is RigidBody3D:
+			var pos := Vector3.ZERO
+			if ground.mass > 20.0:
+				pos = ground.global_transform.affine_inverse() * global_transform.origin
 			ground.apply_impulse(
-				-jump_force,
-				ground.global_transform.affine_inverse() * global_transform.origin)
+				-jump_force, pos)
 		ground = null
 	var dir := (b.x*input.x + b.z*input.y)
 	# As speed in the desired direction approaches max_run_speed, reduce the force
@@ -147,6 +149,9 @@ func _integrate_forces(state: PhysicsDirectBodyState3D):
 		if n.dot(gravity) < ground_normal.dot(gravity):
 			ground = state.get_contact_collider_object(i)
 			ground_normal = n
+
+func can_move():
+	return !freeze
 
 func get_gravity():
 	return gravity

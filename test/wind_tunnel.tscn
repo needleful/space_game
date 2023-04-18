@@ -1,7 +1,7 @@
-[gd_scene load_steps=21 format=3]
+[gd_scene load_steps=21 format=3 uid="uid://b3js78mrojcx3"]
 
 [ext_resource type="Script" path="res://test/wind_tunnel.gd" id="1_v41tk"]
-[ext_resource type="PackedScene" path="res://entities/physics/model_rocket.tscn" id="2_r5jnx"]
+[ext_resource type="PackedScene" uid="uid://bwakn6mbahvff" path="res://entities/physics/model_rocket.tscn" id="2_r5jnx"]
 [ext_resource type="PackedScene" uid="uid://cvhn3mqksstog" path="res://entities/props/platform_square.tscn" id="3_1pjwa"]
 [ext_resource type="PackedScene" uid="uid://cxb5g7nayr3ct" path="res://entities/props/lamp.tscn" id="4_m7eqb"]
 

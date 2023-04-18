@@ -52,7 +52,6 @@ gravity_point_center = Vector3(0, 0, 0)
 gravity_direction = Vector3(0, 0, 0)
 gravity = 15.0
 script = ExtResource("5_cq1dl")
-atmospheres_at_surface = 12.0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="atmosphere" index="0"]
 shape = SubResource("SphereShape3D_f0bv5")

@@ -20,7 +20,10 @@ var spawnable : Array
 
 func _ready():
 	var _x = connect("visibility_changed", _on_visibility_changed)
-	_x = spawn_list.connect("item_selected", _on_spawn_pressed)
+	_x = spawn_list.connect("item_activated", _on_spawn_pressed)
+	_x = spawn_list.connect("item_mouse_selected", _on_spawn_pressed)
+	if get_tree().current_scene == self:
+		_on_visibility_changed()
 
 func _on_visibility_changed():
 	if !stuff_loaded:
@@ -59,6 +62,6 @@ func process_folder(path: String, expand: int, parent: TreeItem):
 			dir_tree.set_selectable(0, false)
 			process_folder(path + "/" + subdir, expand - 1, dir_tree)
 
-func _on_spawn_pressed():
+func _on_spawn_pressed(_this = null, _that = null):
 	var item = spawn_list.get_selected()
 	emit_signal("spawn", spawnable[item.get_metadata(0)])
