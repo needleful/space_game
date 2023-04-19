@@ -8,6 +8,9 @@ var drag_const := 1.0
 var min_velocity := 0.1
 const angular_damp_factor := 0.5
 
+# Scratch space for 3D convex hull calculations
+var points2d := PackedVector2Array()
+
 func _ready():
 	connect("body_exited", _on_body_exited)
 
@@ -30,18 +33,17 @@ func _physics_process(_delta):
 			var u = -b.linear_velocity
 			if u.length_squared() > min_velocity*min_velocity:
 				apply_drag(b, u, d)
-			# TODO: somehow factor into drag?
-			# Also there's a bug with torque
-			var t = -b.angular_velocity*clamp(d*angular_damp_factor*b.mass, 0, 1)
-			if is_nan(t.length_squared()):
-				print_debug("Whoops!")
-				t = Vector3.ZERO
+			var t = -b.angular_velocity*min(d*angular_damp_factor*b.mass, 1)
 			b.apply_torque(t)
 
 # u: flow velocity
 # p: density
 func apply_drag(body: RigidBody3D, u: Vector3, p: float):
 	var dir := u.normalized()
+	# A basis with the X axis in the direction of our velocity
+	# other axes are arbitrary perpendicular vectors.
+	# This probably works.
+	var ubasis := Basis(dir, Vector3(dir.y, -dir.z, dir.x), Vector3(-dir.z, dir.x, -dir.y))
 	
 	for c in body.get_children():
 		var shape := c as CollisionShape3D
@@ -80,6 +82,36 @@ func apply_drag(body: RigidBody3D, u: Vector3, p: float):
 				var cz:float = abs(shape.global_transform.basis.z.dot(dir))
 				center = shape.transform.origin
 				area = w*h*cz + w*d*cy + h*d*cx
+			elif shape.shape is ConvexPolygonShape3D:
+				coeff = 0.9
+				# Get a basis to go from shape-local space to a space with U as the X axis
+				var iubasis := ubasis.inverse()*shape.global_transform.basis
+				var points3d:PackedVector3Array = shape.shape.points
+				points2d.resize(points3d.size())
+				for i in points3d.size():
+					var v := points3d[i]
+					var vu := iubasis*v
+					points2d[i] = Vector2(vu.y, vu.z)
+				points2d = Geometry2D.convex_hull(points2d)
+				area = 0.0
+				var center2d := Vector2.ZERO
+				var segsum := 0.0
+				for i in points2d.size():
+					var p1 := points2d[i]
+					var i2 := i+1
+					if i2 == points2d.size():
+						i2 = 0
+					var p2 := points2d[i2]
+					var l := (p1 - p2).length()
+					segsum += l
+					center2d += 0.5*l*(p1 - p2)
+					area += (p1.x*p2.y - p1.y*p2.x)
+				area /= 2.0
+				center2d /= segsum
+				center = (
+					shape.global_transform.basis.inverse()
+					* ubasis
+					* Vector3(0, center2d.x, center2d.y))
 
 			var drag = 0.5 * p * u * u.length() * coeff * area
 			body.apply_force(drag_const*drag, center)

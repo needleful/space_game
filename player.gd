@@ -126,7 +126,6 @@ func _physics_process(delta):
 
 func _integrate_forces(state: PhysicsDirectBodyState3D):
 	var up := global_transform.basis.y
-	
 	if gravity.length_squared() < 0.01:
 		state.angular_velocity *= 0.99
 		return
@@ -144,7 +143,7 @@ func _integrate_forces(state: PhysicsDirectBodyState3D):
 
 	ground_normal = Vector3.ZERO
 	ground = null
-	for i in range(state.get_contact_count()):
+	for i in state.get_contact_count():
 		var n = state.get_contact_local_normal(i)
 		if n.dot(gravity) < ground_normal.dot(gravity):
 			ground = state.get_contact_collider_object(i)

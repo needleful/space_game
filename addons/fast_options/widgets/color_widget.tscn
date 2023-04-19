@@ -2,66 +2,9 @@
 
 [ext_resource type="Script" path="res://addons/fast_options/widgets/color_widget.gd" id="1_vb4w2"]
 
-[node name="color_widget" type="HBoxContainer"]
+[node name="color_widget" type="ColorPickerButton"]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 size_flags_horizontal = 3
 script = ExtResource("1_vb4w2")
-
-[node name="name" type="Label" parent="."]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "Color Name"
-
-[node name="value" type="HBoxContainer" parent="."]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="preview" type="ColorRect" parent="value"]
-layout_mode = 2
-
-[node name="rgb" type="GridContainer" parent="value"]
-layout_mode = 2
-size_flags_horizontal = 3
-columns = 2
-
-[node name="redLabel" type="Label" parent="value/rgb"]
-layout_mode = 2
-text = "Red"
-
-[node name="redSlider" type="HSlider" parent="value/rgb"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 1
-max_value = 1.0
-step = 0.1
-value = 1.0
-
-[node name="greenLabel" type="Label" parent="value/rgb"]
-layout_mode = 2
-text = "Green"
-
-[node name="greenSlider" type="HSlider" parent="value/rgb"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 1
-max_value = 1.0
-step = 0.1
-value = 1.0
-
-[node name="blueLabel" type="Label" parent="value/rgb"]
-layout_mode = 2
-text = "Blue"
-
-[node name="blueSlider" type="HSlider" parent="value/rgb"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 1
-max_value = 1.0
-step = 0.1
-value = 1.0
-
-[connection signal="value_changed" from="value/rgb/redSlider" to="." method="_on_color_changed"]
-[connection signal="value_changed" from="value/rgb/greenSlider" to="." method="_on_color_changed"]
-[connection signal="value_changed" from="value/rgb/blueSlider" to="." method="_on_color_changed"]

@@ -17,7 +17,7 @@ func set_option_hint(option:Dictionary):
 			add_item(val)
 
 func set_option_value(val:String):
-	for i in range(item_count):
+	for i in item_count:
 		if val == get_item_text(i):
 			select(i)
 			break
