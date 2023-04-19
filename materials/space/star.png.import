@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://lyu5ipwawm7a"
-path.bptc="res://.godot/imported/stars.hdr-37b55dc0872bcd85592d8fad2804ed2c.bptc.ctex"
+uid="uid://b1oi3thwk473a"
+path.s3tc="res://.godot/imported/star.png-2750257f342f108eb35636ef8f8af3d4.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://materials/stars.hdr"
-dest_files=["res://.godot/imported/stars.hdr-37b55dc0872bcd85592d8fad2804ed2c.bptc.ctex"]
+source_file="res://materials/space/star.png"
+dest_files=["res://.godot/imported/star.png-2750257f342f108eb35636ef8f8af3d4.s3tc.ctex"]
 
 [params]
 

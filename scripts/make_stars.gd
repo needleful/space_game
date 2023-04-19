@@ -1,10 +1,10 @@
 @tool extends EditorScript
 
 var gradient: Gradient = load("res://scripts/star_gradient.res")
-const star_count := 8000
+const star_count := 50000
 const min_distance := 600000
 const distance_range := 20000
-const min_scale := 150.0
+const min_scale := 40.0
 const max_scale := 300.0
 
 func _run():
@@ -19,23 +19,25 @@ func _run():
 	while m.visible_instance_count < star_count:
 		var i := m.visible_instance_count
 		var scale := randf()
-		var transform := Transform3D().scaled(
-			lerp(min_scale, max_scale, scale)
-			* Vector3(1,1,1))
-			
-		#transform = transform.rotated(transform.origin.normalized(), 2*PI*randf())
+		scale *= scale*scale
+		var transform := Transform3D()
 		
 		var r := randf_range(min_distance, min_distance + distance_range)
 		var theta := randf()*PI*2
 		var phi := acos(1 - 2 * randf())
 		
-		transform.origin = r*Vector3(
+		var t = Vector3(
 			sin(phi) * cos(theta),
 			sin(phi) * sin(theta),
 			cos(phi) )
 		
+		transform = transform.looking_at(-t).scaled(
+			lerp(min_scale, max_scale, scale)
+			* Vector3(1,1,1))
+		transform.origin = r*t
 		m.set_instance_transform(i, transform)
-		m.set_instance_color(i, (0.1 + randf()/(1.0 + 3*scale))*gradient.sample(randf()))
+		var brightness := pow(randf(), 3)
+		m.set_instance_color(i, (0.1 + brightness)*gradient.sample(randf()))
 		m.visible_instance_count += 1
 
 func sqrtf(v: float):
