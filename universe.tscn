@@ -25,7 +25,7 @@ viewport_path = NodePath("far_viewport")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ripmg"]
 resource_local_to_scene = true
-render_priority = 0
+render_priority = -1
 shader = ExtResource("2_y2f2y")
 shader_parameter/gamma = 2.2
 shader_parameter/background = SubResource("ViewportTexture_jdhdr")

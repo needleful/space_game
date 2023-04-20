@@ -3,7 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://db6ptpcriul0a" path="res://_glb/planets/earth.glb" id="1_issvk"]
 [ext_resource type="Script" path="res://planets/planet.gd" id="2_jbtl3"]
 [ext_resource type="Texture2D" uid="uid://cxolb2dcgpaqo" path="res://materials/textures_ambientcg/Asphalt027C_1K_Color.jpg" id="3_uajp8"]
-[ext_resource type="Material" uid="uid://cqun8vjx2veow" path="res://planets/earth/earth_atmosphere.material" id="4_vvpsa"]
+[ext_resource type="Material" uid="uid://cqun8vjx2veow" path="res://planets/earth_atmosphere.material" id="4_vvpsa"]
 [ext_resource type="Script" path="res://planets/atmosphere.gd" id="5_cq1dl"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fwh5w"]
@@ -14,8 +14,9 @@ uv1_triplanar = true
 [sub_resource type="SphereShape3D" id="SphereShape3D_ywovg"]
 radius = 178.623
 
-[sub_resource type="QuadMesh" id="QuadMesh_3ox52"]
-size = Vector2(2, 2)
+[sub_resource type="SphereMesh" id="SphereMesh_dl1tn"]
+radius = 400.0
+height = 800.0
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_f0bv5"]
 custom_solver_bias = 1.0
@@ -33,11 +34,11 @@ surface_material_override/0 = SubResource("StandardMaterial3D_fwh5w")
 shape = SubResource("SphereShape3D_ywovg")
 
 [node name="atmos" type="MeshInstance3D" parent="." index="1"]
+layers = 3
 material_override = ExtResource("4_vvpsa")
 cast_shadow = 0
-extra_cull_margin = 600.0
 gi_mode = 0
-mesh = SubResource("QuadMesh_3ox52")
+mesh = SubResource("SphereMesh_dl1tn")
 skeleton = NodePath("../..")
 
 [node name="atmosphere" type="Area3D" parent="." index="2"]

@@ -68,8 +68,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.38606, 3.18746)
 cull_mask = 1021
 current = true
 fov = 85.0
-near = 0.02
-far = 400.0
+near = 0.06
+far = 1800.0
 script = ExtResource("3_tyh36")
 
 [node name="grab_cast" type="RayCast3D" parent="cam_rig/cam_pos/cam_yaw/cam_pitch/Camera3D"]
