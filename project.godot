@@ -175,5 +175,5 @@ anti_aliasing/quality/screen_space_aa=1
 
 sun_position={
 "type": "vec3",
-"value": Vector3(0, 0, 0)
+"value": Vector3(0, 10000, 0)
 }

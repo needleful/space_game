@@ -1,16 +1,18 @@
-[gd_scene load_steps=17 format=3 uid="uid://cgf57o8e6dhjj"]
+[gd_scene load_steps=19 format=3 uid="uid://vikllycrom4u"]
 
-[ext_resource type="Script" path="res://player.gd" id="1_l318w"]
-[ext_resource type="Script" path="res://cam_rig.gd" id="2_3hpx8"]
+[ext_resource type="Script" path="res://player/player.gd" id="1_l318w"]
+[ext_resource type="Script" path="res://player/cam_rig.gd" id="2_3hpx8"]
 [ext_resource type="Script" path="res://ui/modal.gd" id="3_kpror"]
 [ext_resource type="Script" path="res://tool_helpers/tractor_beam.gd" id="3_nopqo"]
+[ext_resource type="Script" path="res://player/camera_tracking.gd" id="3_tyh36"]
 [ext_resource type="Script" path="res://tool_helpers/tool.gd" id="3_wep7e"]
 [ext_resource type="Script" path="res://ui/ui_mode.gd" id="4_1xhtu"]
-[ext_resource type="Script" path="res://ui/spawner.gd" id="4_x3gwk"]
 [ext_resource type="Texture2D" uid="uid://bevpj5ww678ek" path="res://ui/crosshair-ref.png" id="4_yr5fy"]
 [ext_resource type="Theme" uid="uid://bntdbgkf7koit" path="res://ui/ui_theme.tres" id="5_jxvnj"]
 [ext_resource type="Script" path="res://ui/tool_options.gd" id="8_0kvrs"]
 [ext_resource type="Script" path="res://ui/debug_console.gd" id="10_kyocl"]
+[ext_resource type="PackedScene" uid="uid://blrrytc8d2j1m" path="res://ui/entities.tscn" id="10_l76aw"]
+[ext_resource type="PackedScene" uid="uid://bm4wljocjky8b" path="res://ui/code_editor.tscn" id="12_rvdh6"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_3ggmr"]
 
@@ -63,10 +65,12 @@ script = ExtResource("2_3hpx8")
 
 [node name="Camera3D" type="Camera3D" parent="cam_rig/cam_pos/cam_yaw/cam_pitch"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.38606, 3.18746)
-cull_mask = 1023
+cull_mask = 1021
+current = true
 fov = 85.0
-near = 0.2
-far = 60000.0
+near = 0.02
+far = 400.0
+script = ExtResource("3_tyh36")
 
 [node name="grab_cast" type="RayCast3D" parent="cam_rig/cam_pos/cam_yaw/cam_pitch/Camera3D"]
 target_position = Vector3(0, 0, -2)
@@ -92,6 +96,9 @@ collision_mask = 13
 [node name="tool_cast" type="RayCast3D" parent="cam_rig/cam_pos/cam_yaw/cam_pitch/Camera3D"]
 target_position = Vector3(0, 0, -40)
 script = ExtResource("3_wep7e")
+
+[node name="code_editor" parent="." instance=ExtResource("12_rvdh6")]
+visible = false
 
 [node name="ui" type="Control" parent="."]
 process_mode = 3
@@ -198,73 +205,29 @@ text = "Prompt"
 metadata/_edit_layout_mode = 1
 
 [node name="spawner" type="TabContainer" parent="ui"]
-visible = false
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.682
-anchor_top = 0.5
 anchor_right = 1.0
-anchor_bottom = 0.5
-offset_left = -7.44006
-offset_top = -455.0
+anchor_bottom = 1.0
+offset_left = -7.664
+offset_top = 19.0
 offset_right = -42.0
-offset_bottom = 455.0
+offset_bottom = -18.0
 grow_horizontal = 0
 grow_vertical = 2
 script = ExtResource("4_1xhtu")
 metadata/_edit_layout_mode = 1
 
-[node name="Entities" type="Panel" parent="ui/spawner"]
+[node name="Entities" parent="ui/spawner" instance=ExtResource("10_l76aw")]
 layout_mode = 2
-script = ExtResource("4_x3gwk")
-metadata/_edit_layout_mode = 1
-metadata/_edit_use_custom_anchors = true
 
-[node name="margin" type="MarginContainer" parent="ui/spawner/Entities"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="scroll" type="ScrollContainer" parent="ui/spawner/Entities/margin"]
-layout_mode = 2
-metadata/_edit_layout_mode = 1
-
-[node name="spawn_list" type="VBoxContainer" parent="ui/spawner/Entities/margin/scroll"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-metadata/_edit_layout_mode = 1
-
-[node name="Tools" type="Panel" parent="ui/spawner"]
+[node name="Tools" parent="ui/spawner" instance=ExtResource("10_l76aw")]
 visible = false
 layout_mode = 2
-script = ExtResource("4_x3gwk")
 directory = "tools"
 expand_folder_depth = 2
 mode = 1
-metadata/_edit_layout_mode = 1
-metadata/_edit_use_custom_anchors = true
-
-[node name="margin" type="MarginContainer" parent="ui/spawner/Tools"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="scroll" type="ScrollContainer" parent="ui/spawner/Tools/margin"]
-layout_mode = 2
-metadata/_edit_layout_mode = 1
-
-[node name="spawn_list" type="VBoxContainer" parent="ui/spawner/Tools/margin/scroll"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-metadata/_edit_layout_mode = 1
 
 [node name="Options" type="Panel" parent="ui/spawner" node_paths=PackedStringArray("tool")]
 visible = false

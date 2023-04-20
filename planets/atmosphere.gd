@@ -33,8 +33,8 @@ func _physics_process(_delta):
 			var u = -b.linear_velocity
 			if u.length_squared() > min_velocity*min_velocity:
 				apply_drag(b, u, d)
-			var t = -b.angular_velocity*min(d*angular_damp_factor*b.mass, 1)
-			b.apply_torque(t)
+			var t = -b.angular_velocity*min(d*angular_damp_factor, 1)
+			b.apply_torque(t*b.mass)
 
 # u: flow velocity
 # p: density

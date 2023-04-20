@@ -1,11 +1,11 @@
-[gd_scene load_steps=30 format=3 uid="uid://dv6ajgv2s0775"]
+[gd_scene load_steps=30 format=3 uid="uid://bcrl0aktmtmyp"]
 
 [ext_resource type="Script" path="res://planets/sun.gd" id="1_du7ao"]
 [ext_resource type="Script" path="res://universe.gd" id="1_umr58"]
 [ext_resource type="Script" path="res://scripts/distant_viewport.gd" id="2_ityni"]
-[ext_resource type="Script" path="res://far_camera.gd" id="2_vx2oy"]
+[ext_resource type="Script" path="res://player/far_camera.gd" id="2_vx2oy"]
 [ext_resource type="Shader" path="res://materials/far_background.gdshader" id="2_y2f2y"]
-[ext_resource type="PackedScene" uid="uid://cgf57o8e6dhjj" path="res://player.tscn" id="3_cy13p"]
+[ext_resource type="PackedScene" uid="uid://vikllycrom4u" path="res://player/player.tscn" id="3_cy13p"]
 [ext_resource type="PackedScene" uid="uid://bk6osrnqt17ck" path="res://planets/earth/earth.tscn" id="4_k1ssn"]
 [ext_resource type="PackedScene" uid="uid://cle4y361jqlsd" path="res://planets/earth/moon_1.tscn" id="5_fy7xb"]
 [ext_resource type="Script" path="res://planets/planet.gd" id="5_i25xt"]
@@ -25,7 +25,7 @@ viewport_path = NodePath("far_viewport")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ripmg"]
 resource_local_to_scene = true
-render_priority = -3
+render_priority = 0
 shader = ExtResource("2_y2f2y")
 shader_parameter/gamma = 2.2
 shader_parameter/background = SubResource("ViewportTexture_jdhdr")
@@ -124,6 +124,9 @@ gi_mode = 0
 mesh = SubResource("SphereMesh_yahx1")
 skeleton = NodePath("dir_light")
 surface_material_override/0 = SubResource("StandardMaterial3D_628ck")
+script = ExtResource("5_i25xt")
+gravitation = 100.0
+surface_radius = 1000.0
 
 [node name="dir_light" type="DirectionalLight3D" parent="sun" node_paths=PackedStringArray("player")]
 transform = Transform3D(0.623566, 0, 0.781771, 0, 1, 0, -0.781771, 0, 0.623566, 0, 0, 0)
@@ -143,10 +146,11 @@ omni_range = 4e+06
 omni_attenuation = 0.000252747
 
 [node name="player" parent="." instance=ExtResource("3_cy13p")]
-transform = Transform3D(0.866025, 0.5, -2.18557e-08, 0, -4.37114e-08, -1, -0.5, 0.866025, -3.78552e-08, -15591.4, 164.803, -23744.1)
+transform = Transform3D(0.339775, 0.621821, -0.705614, -0.800553, 0.584985, 0.130026, 0.493626, 0.520703, 0.696564, -15567, 300.493, -23822.4)
 
-[node name="earth" parent="." instance=ExtResource("4_k1ssn")]
-transform = Transform3D(0.866025, 0.5, -2.18557e-08, 0, -4.37114e-08, -1, -0.5, 0.866025, -3.78552e-08, -15691.9, 164.803, -23918)
+[node name="earth" parent="." node_paths=PackedStringArray("orbit") instance=ExtResource("4_k1ssn")]
+transform = Transform3D(0.866025, -0.163139, 0.472637, 2.98023e-08, 0.945274, 0.326278, -0.5, -0.282565, 0.818631, -15691.9, 164.803, -23918)
+orbit = NodePath("../sun")
 
 [node name="planetoid2" type="Node3D" parent="." node_paths=PackedStringArray("active_only", "orbit")]
 transform = Transform3D(0.866025, 0.5, -2.18557e-08, 0, -4.37114e-08, -1, -0.5, 0.866025, -3.78552e-08, -17320.2, 111.286, -24343.1)
@@ -169,7 +173,7 @@ shape = SubResource("SphereShape3D_tbrwi")
 [node name="moon1" parent="." node_paths=PackedStringArray("orbit") instance=ExtResource("5_fy7xb")]
 transform = Transform3D(0.866025, 0.5, -2.18557e-08, 0, -4.37114e-08, -1, -0.5, 0.866025, -3.78552e-08, -14658.4, 1708.02, -22704.2)
 orbit = NodePath("../earth")
-orbit_period = 15.0
+orbit_period = 30.0
 
 [node name="venus" parent="." node_paths=PackedStringArray("orbit") instance=ExtResource("6_85u24")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8041.48, 0.942139, 2907.58)
@@ -179,22 +183,21 @@ orbit_period = 50.0
 
 [node name="gas_giant" type="MeshInstance3D" parent="." node_paths=PackedStringArray("orbit")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -113694, 0.001, -305955)
-layers = 3
+layers = 7
 mesh = SubResource("SphereMesh_av8mv")
 surface_material_override/0 = SubResource("StandardMaterial3D_yvld4")
 script = ExtResource("5_i25xt")
 gravitation = 40.0
 surface_radius = 300.0
-orbit = NodePath("..")
+orbit = NodePath("../sun")
 spin_period = 30.0
-orbit_period = 380.0
+orbit_period = 600.0
 
 [node name="stars" type="MultiMeshInstance3D" parent="."]
+transform = Transform3D(0.981084, -0.193584, 0, 0.192421, 0.975191, -0.109439, 0.0211857, 0.107369, 0.993993, 0, 0, 0)
 layers = 2
 material_override = SubResource("ShaderMaterial_wo1q8")
 cast_shadow = 0
 lod_bias = 128.0
 multimesh = ExtResource("15_1w72n")
 script = ExtResource("13_y7hry")
-
-[connection signal="origin_translated" from="." to="far_viewport" method="_on_universe_origin_translated"]
