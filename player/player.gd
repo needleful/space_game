@@ -32,6 +32,15 @@ var vehicle: Node = null
 var air_pressure := 0.0
 var gravity := Vector3.ZERO
 
+var enabled := true:
+	set(value):
+		enabled = value
+		set_process(enabled)
+		set_process_input(enabled)
+		cam_rig.set_process_input(enabled)
+	get:
+		return enabled
+
 func _ready():
 	cam_rig.first_person = true
 	grab_cast.user = self
@@ -85,43 +94,44 @@ func _process(_delta):
 			tool_cast.preview_exit()
 
 func _physics_process(delta):
-	var input := Input.get_vector("mv_left", "mv_right", "mv_forward", "mv_back")
-	if input == Vector2.ZERO:
-		physics_material_override.friction = 1.0
-	else:
-		physics_material_override.friction = 0.1
-	var b:Basis = cam_rig.yaw.global_transform.basis
-	if ground and Input.is_action_just_pressed("mv_jump"):
-		var jump_force := mass*VEL_JUMP*b.y
-		apply_central_impulse(jump_force)
-		if ground is RigidBody3D:
-			var pos := Vector3.ZERO
-			if ground.mass > 20.0:
-				pos = ground.global_transform.affine_inverse() * global_transform.origin
-			ground.apply_impulse(
-				-jump_force, pos)
-		ground = null
-	var dir := (b.x*input.x + b.z*input.y)
-	# As speed in the desired direction approaches max_run_speed, reduce the force
-	var mv: Vector3
-	if linear_velocity != Vector3.ZERO:
-		var charge := dir.project(linear_velocity)
-		var steer := dir - charge
-		var speed := charge.dot(linear_velocity)
-		charge = charge*clamp(MAX_RUN_SPEED - speed, 0, 1)
-		mv = (charge + steer)*ACCEL_GROUND*mass
-	else:
-		mv = dir*ACCEL_GROUND*mass
-	apply_central_force(mv)
-	
-	if grab_cast.held_object:
-		grab_cast.update(delta)
+	if is_processing_input():
+		var input := Input.get_vector("mv_left", "mv_right", "mv_forward", "mv_back")
+		if input == Vector2.ZERO:
+			physics_material_override.friction = 1.0
+		else:
+			physics_material_override.friction = 0.1
+		var b:Basis = cam_rig.yaw.global_transform.basis
+		if ground and Input.is_action_just_pressed("mv_jump"):
+			var jump_force := mass*VEL_JUMP*b.y
+			apply_central_impulse(jump_force)
+			if ground is RigidBody3D:
+				var pos := Vector3.ZERO
+				if ground.mass > 20.0:
+					pos = ground.global_transform.affine_inverse() * global_transform.origin
+				ground.apply_impulse(
+					-jump_force, pos)
+			ground = null
+		var dir := (b.x*input.x + b.z*input.y)
+		# As speed in the desired direction approaches max_run_speed, reduce the force
+		var mv: Vector3
+		if linear_velocity != Vector3.ZERO:
+			var charge := dir.project(linear_velocity)
+			var steer := dir - charge
+			var speed := charge.dot(linear_velocity)
+			charge = charge*clamp(MAX_RUN_SPEED - speed, 0, 1)
+			mv = (charge + steer)*ACCEL_GROUND*mass
+		else:
+			mv = dir*ACCEL_GROUND*mass
+		apply_central_force(mv)
+		
+		if grab_cast.held_object:
+			grab_cast.update(delta)
 
-	if interaction_cast.is_colliding():
-		interaction_prompt.text = interaction_cast.get_collider().prompt
-		interaction_prompt.show()
-	else:
-		interaction_prompt.hide()
+		if interaction_cast.is_colliding():
+			interaction_prompt.text = interaction_cast.get_collider().prompt
+			interaction_prompt.show()
+		else:
+			interaction_prompt.hide()
 	if get_tree().current_scene.has_method("get_gravity"):
 		gravity = get_tree().current_scene.get_gravity(self)
 		apply_central_force(gravity)
@@ -154,5 +164,3 @@ func _integrate_forces(state: PhysicsDirectBodyState3D):
 func can_move():
 	return !freeze
 
-func get_gravity():
-	return gravity

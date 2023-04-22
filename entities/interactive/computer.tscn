@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3]
+[gd_scene load_steps=6 format=3 uid="uid://celfkog32t07t"]
 
 [ext_resource type="Script" path="res://entities/interactive/programmable.gd" id="1_6me6d"]
 
@@ -31,10 +31,11 @@ mesh = SubResource("QuadMesh_qxf30")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("BoxShape3D_wf5yk")
 
-[node name="AnimatableBody3D" type="AnimatableBody3D" parent="."]
-collision_layer = 8
+[node name="computer_body" type="CharacterBody3D" parent="."]
+collision_layer = 40
 collision_mask = 0
 script = ExtResource("1_6me6d")
+computer_name = "ScriptMaster 1989"
 
-[node name="CollisionShape3D2" type="CollisionShape3D" parent="AnimatableBody3D"]
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="computer_body"]
 shape = SubResource("BoxShape3D_wf5yk")

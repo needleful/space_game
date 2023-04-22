@@ -20,7 +20,7 @@ func can_fire():
 func cancel():
 	queued_object = null
 
-func _fire(_pos, _normal, object: CollisionObject3D):
+func _fire(_pos, _normal, object):
 	if !queued_object:
 		queued_object = object as RigidBody3D
 		return

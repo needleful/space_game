@@ -1,5 +1,87 @@
-[gd_scene format=3 uid="uid://bm4wljocjky8b"]
+[gd_scene load_steps=3 format=3 uid="uid://bm4wljocjky8b"]
 
-[node name="code_editor" type="Window"]
-initial_position = 1
-size = Vector2i(200, 200)
+[ext_resource type="Script" path="res://ui/code_editor.gd" id="1_b605r"]
+[ext_resource type="Texture2D" uid="uid://m4btlrkyx6y0" path="res://addons/fast_options/assets/node_icon.png" id="2_nkhjd"]
+
+[node name="code_editor" type="Panel"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_b605r")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="MenuBar" type="MenuBar" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+prefer_global_menu = false
+
+[node name="File" type="PopupMenu" parent="MarginContainer/VBoxContainer/HBoxContainer/MenuBar"]
+
+[node name="Edit" type="PopupMenu" parent="MarginContainer/VBoxContainer/HBoxContainer/MenuBar"]
+
+[node name="CurrentFileLabel" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "<New file>"
+horizontal_alignment = 1
+
+[node name="Upload" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Upload"
+icon = ExtResource("2_nkhjd")
+
+[node name="spacer" type="Control" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(75, 0)
+layout_mode = 2
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="CodeEdit" type="CodeEdit" parent="MarginContainer/VBoxContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "saksadksadkl"
+placeholder_text = "type your code here!"
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Messages"
+
+[node name="messages" type="ScrollContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.3
+
+[node name="vbox" type="VBoxContainer" parent="MarginContainer/VBoxContainer/messages"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="FileDialog" type="FileDialog" parent="."]
+size = Vector2i(766, 424)
+access = 1
+root_subfolder = "scripts"
+
+[connection signal="id_pressed" from="MarginContainer/VBoxContainer/HBoxContainer/MenuBar/File" to="." method="_on_file_id_pressed"]
+[connection signal="id_pressed" from="MarginContainer/VBoxContainer/HBoxContainer/MenuBar/Edit" to="." method="_on_edit_id_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer/Upload" to="." method="_on_upload_pressed"]

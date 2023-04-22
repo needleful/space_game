@@ -11,6 +11,9 @@ enum Mode {
 @onready var cam_rig = player.get_node("cam_rig")
 @onready var spawner:TabContainer = $spawner
 @onready var tool_tips: ItemList = $gameing/tool_tips
+@onready var code_window: Window = $"../code_window"
+@onready var code_editor = code_window.get_node("editor")
+
 @onready var tool_prompt: String:
 	get:
 		return $gameing/tool.text
@@ -75,3 +78,8 @@ func _on_entity_spawn(resource: PackedScene):
 func _on_tool_spawn(tool_script: Script):
 	player.tool_cast.set_script(tool_script)
 	player.tool_cast.activate(player)
+
+func _on_code_window_close_requested():
+	code_window.hide()
+	player.enabled = true
+	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED

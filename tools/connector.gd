@@ -1,8 +1,8 @@
 extends Tool
 
-var queued_object: CollisionObject3D
+var queued_object: Object
 var queued_signal: StringName
-var previewing: CollisionObject3D
+var previewing: Object
 
 var wire := load("res://tool_helpers/connector/wire.tscn")
 
@@ -32,26 +32,46 @@ func cancel():
 func can_fire():
 	if !is_colliding():
 		return false
+	
+	var c = get_collider()
+	if c is Programmable and c.brain:
+		return true
+	
 	if !queued_object:
-		return &"signals" in get_collider()
+		return &"signals" in c
 	else:
-		return &"listeners" in get_collider()
+		return &"listeners" in c
 
-func _fire(_pos, _normal, object: CollisionObject3D):
+func _fire(_pos, _normal, target):
+	var object: Object = target
+	if target is Programmable:
+		object = target.brain
 	var selected_item:int = player.ui.tool_tips.get_selected_items()[0]
 	if !queued_object:
 		queued_object = object
-		queued_signal = previewing.signals[selected_item]
+		queued_signal = object.signals[selected_item]
 	else:
-		var listener = previewing.listeners[selected_item]
-		if !queued_object.is_connected(queued_signal, previewing[listener]):
-			var res = queued_object.connect(queued_signal, previewing[listener])
-			if res != OK:
-				print_debug("Failed to connect %s.%s to %s.s: Code %d" % [
-					object.name, queued_signal, queued_object.name, listener, res] )
-			queued_object = null
+		var listener:StringName = object.listeners[selected_item]
+		var fl:Callable = object[listener]
+		
+		if queued_object.is_connected(queued_signal, fl):
+			queued_object.disconnect(queued_signal, fl)
+		
+		var res = queued_object.connect(queued_signal, fl)
+		var obj_name = queued_object.name if queued_object is Node else str(queued_object)
+		if res != OK:
+			print_debug("Failed to connect %s.%s to %s.%s: Code %d" % [
+				target.name, queued_signal, obj_name, listener, res] )
+		print("Connected %s.%s to %s.%s" % [
+			target.name, queued_signal, obj_name, listener
+		])
+		queued_object = null
+		previewing = null
 
-func _preview(_pos, _normal, object:CollisionObject3D):
+func _preview(_pos, _normal, target):
+	var object: Object = target
+	if target is Programmable:
+		object = target.brain
 	player.ui.tool_tips.show()
 	if !queued_object and object != previewing:
 		previewing = object
@@ -67,7 +87,6 @@ func _preview(_pos, _normal, object:CollisionObject3D):
 			if m.name in previewing.listeners:
 				player.ui.tool_tips.add_item(m.name)
 		player.ui.tool_tips.select(0)
-		
 
 func preview_exit():
 	player.ui.tool_tips.hide()
