@@ -126,9 +126,5 @@ func _on_upload_pressed():
 	if !sc.can_instantiate():
 		log_error("Can't instantiate your script!")
 		return
-	if computer.brain:
-		computer.brain.free()
-		computer.brain_script.free()
 	computer.brain_script = sc
 	computer.brain = sc.new()
-	computer.brain.set_script(sc)

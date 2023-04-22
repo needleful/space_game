@@ -75,10 +75,6 @@ func _process(delta):
 	analog_aim *= analog_sns
 	
 	var aim : Vector2 = delta*60*player.sensitivity*(mouse_aim + analog_aim)
-	#if player.invert_x:
-	#	aim.x *= -1
-	#if player.invert_y:
-	#	aim.y *= -1
 	
 	yaw.rotate_y(aim.x)
 	pitch.rotate_x(aim.y)
@@ -88,5 +84,5 @@ func _process(delta):
 		pitch.rotation.x = -PI/2.1
 
 func _on_origin_translated(translation: Vector3):
-	# eventually, in third person the camera may need thisn
-	print("Origin moved: ", translation)
+	# eventually, in third person the camera may need this
+	pos.global_translate(translation)
