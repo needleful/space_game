@@ -4,10 +4,6 @@ extends Node3D
 
 var air_pressure := 0.0
 
-var listeners := [
-	&"launch"
-]
-
 const power := 750.0
 const time := 2.0
 var spent := false

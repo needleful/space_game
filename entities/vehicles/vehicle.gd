@@ -5,10 +5,10 @@ extends Node3D
 var user: RigidBody3D
 var user_collision_layer : int
 
-func can_use(player):
+func _can_use(player):
 	return !user or user == player
 
-func use(_position, player:RigidBody3D):
+func _use(_position, player:RigidBody3D):
 	if user == player:
 		exit()
 		return

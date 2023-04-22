@@ -70,7 +70,7 @@ func _input(event):
 	elif !vehicle and event.is_action_pressed("fire") and tool_cast.can_fire():
 		tool_cast.fire()
 	elif event.is_action_pressed("interact") and interaction_cast.is_colliding():
-		interaction_cast.get_collider().use(interaction_cast.get_collision_point(), self)
+		interaction_cast.get_collider()._use(interaction_cast.get_collision_point(), self)
 	elif event.is_action_pressed("exit") and vehicle:
 		vehicle.exit()
 

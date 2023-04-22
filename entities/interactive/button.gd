@@ -1,13 +1,8 @@
 extends Node3D
 
 signal pressed
-signal released
 
 var original_prompt: String
-
-var signals := [
-	&"pressed"
-]
 
 @export var prompt := "Press"
 var bound_vehicle = null
@@ -17,14 +12,14 @@ func _ready():
 	original_prompt = prompt
 	set_process_input(false)
 
-func use(_point, user: PlayerBody3D):
+func _use(_point, user: PlayerBody3D):
 	if user.vehicle:
 		bound_input = null
 		bound_vehicle = user.vehicle
 		prompt = "Press a button to bind it"
 		call_deferred("set_process_input", true)
 	else:
-		press()
+		_press()
 
 func _input(event):
 	if !bound_vehicle or !bound_vehicle.user:
@@ -39,9 +34,9 @@ func _input(event):
 			bound_input = event
 			prompt = original_prompt
 	elif bound_input.is_match(event) and event.is_pressed():
-		press()
+		_press()
 
-func press():
+func _press():
 	emit_signal("pressed")
 	$AnimationPlayer.stop()
 	$AnimationPlayer.play("Activate")

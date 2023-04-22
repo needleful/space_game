@@ -35,12 +35,21 @@ func can_fire():
 	
 	var c = get_collider()
 	if c is Programmable and c.brain:
-		return true
+		c = c.brain
+	var scr:Script = c.get_script()
+	if !scr:
+		return false
 	
 	if !queued_object:
-		return &"signals" in c
+		for m in scr.get_script_signal_list():
+			if !m.name.begins_with("_"):
+				return true
+		return false
 	else:
-		return &"listeners" in c
+		for m in scr.get_script_method_list():
+			if !m.name.begins_with("_"):
+				return true
+		return false
 
 func _fire(_pos, _normal, target):
 	var object: Object = target
@@ -49,9 +58,9 @@ func _fire(_pos, _normal, target):
 	var selected_item:int = player.ui.tool_tips.get_selected_items()[0]
 	if !queued_object:
 		queued_object = object
-		queued_signal = object.signals[selected_item]
+		queued_signal = signals(object)[selected_item]
 	else:
-		var listener:StringName = object.listeners[selected_item]
+		var listener:StringName = listeners(object)[selected_item]
 		var fl:Callable = object[listener]
 		
 		if queued_object.is_connected(queued_signal, fl):
@@ -66,7 +75,7 @@ func _fire(_pos, _normal, target):
 			target.name, queued_signal, obj_name, listener
 		])
 		queued_object = null
-		previewing = null
+	previewing = null
 
 func _preview(_pos, _normal, target):
 	var object: Object = target
@@ -76,17 +85,29 @@ func _preview(_pos, _normal, target):
 	if !queued_object and object != previewing:
 		previewing = object
 		player.ui.tool_tips.clear()
-		for s in previewing.get_signal_list():
-			if s.name in previewing.signals:
-				player.ui.tool_tips.add_item(s.name)
+		for s in signals(previewing):
+			player.ui.tool_tips.add_item(s)
 		player.ui.tool_tips.select(0)
 	elif queued_object and object != previewing:
 		previewing = object
 		player.ui.tool_tips.clear()
-		for m in previewing.get_method_list():
-			if m.name in previewing.listeners:
-				player.ui.tool_tips.add_item(m.name)
+		for m in listeners(previewing):
+			player.ui.tool_tips.add_item(m)
 		player.ui.tool_tips.select(0)
+
+func signals(object: Object) -> PackedStringArray:
+	var signals := []
+	for c in object.get_script().get_script_signal_list():
+		if !c.name.begins_with("_"):
+			signals.append(c.name)
+	return signals
+
+func listeners(object: Object) -> PackedStringArray:
+	var listeners := []
+	for c in object.get_script().get_script_method_list():
+		if !c.name.begins_with("_"):
+			listeners.append(c.name)
+	return listeners
 
 func preview_exit():
 	player.ui.tool_tips.hide()
