@@ -1,0 +1,47 @@
+[gd_scene load_steps=5 format=3 uid="uid://bhsp2eta4i47n"]
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_bnvvt"]
+points = PackedVector3Array(0.34641, 0.15, 0.2, 0, 0.15, 0.4, 0, -0.15, 0.3, 0.259808, -0.15, 0.149961, 0.259808, -0.15, -0.150039, 0.31752, 0.0499804, -0.183399, 0.346342, 0.15, -0.200078, -0.34641, 0.15, 0.199922, -0.317588, 0.0499804, 0.18332, -0.259875, -0.15, 0.149961, 0, -0.15, -0.300078, 0, 0.0499804, -0.366719, 0, 0.15, -0.4, -0.34641, 0.15, -0.2, -0.317588, 0.0499804, -0.183399, -0.259875, -0.15, -0.150039)
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_f27sv"]
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_1gx7l"]
+radial_segments = 32
+rings = 2
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_7y8ot"]
+top_radius = 0.4
+bottom_radius = 0.3
+height = 0.3
+radial_segments = 6
+rings = 2
+
+[node name="vector_thruster" type="RigidBody3D"]
+collision_layer = 5
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.1154, 0)
+shape = SubResource("ConvexPolygonShape3D_bnvvt")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("CylinderShape3D_f27sv")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="CollisionShape3D"]
+mesh = SubResource("CylinderMesh_1gx7l")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="CollisionShape3D/MeshInstance3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.1154, 0)
+mesh = SubResource("CylinderMesh_7y8ot")
+
+[node name="thruster" type="AnimatableBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
+collision_layer = 8
+collision_mask = 0
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="thruster"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1154, 0)
+shape = SubResource("ConvexPolygonShape3D_bnvvt")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="thruster"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CylinderShape3D_f27sv")

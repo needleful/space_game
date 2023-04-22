@@ -5,8 +5,8 @@ var queued_object: RigidBody3D
 func _init():
 	tool_name = "Weld"
 
-func activate(player):
-	super.activate(player)
+func activate(p_player):
+	super.activate(p_player)
 	queued_object = null
 
 func can_fire():
@@ -20,7 +20,7 @@ func can_fire():
 func cancel():
 	queued_object = null
 
-func fire(_pos, _normal, object: CollisionObject3D):
+func _fire(_pos, _normal, object: CollisionObject3D):
 	if !queued_object:
 		queued_object = object as RigidBody3D
 		return

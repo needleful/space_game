@@ -59,10 +59,7 @@ func _input(event):
 	elif event.is_action_pressed("tool_cancel"):
 		tool_cast.cancel()
 	elif !vehicle and event.is_action_pressed("fire") and tool_cast.can_fire():
-		tool_cast.fire(
-			tool_cast.get_collision_point(),
-			tool_cast.get_collision_normal(),
-			tool_cast.get_collider())
+		tool_cast.fire()
 	elif event.is_action_pressed("interact") and interaction_cast.is_colliding():
 		interaction_cast.get_collider().use(interaction_cast.get_collision_point(), self)
 	elif event.is_action_pressed("exit") and vehicle:
@@ -81,6 +78,11 @@ func _process(_delta):
 	else:
 		grabbing_reticle.visible = false
 		can_grab_reticle.visible = grab_cast.can_fire()
+	if tool_cast.preview_active:
+		if tool_cast.can_fire():
+			tool_cast.preview()
+		else:
+			tool_cast.preview_exit()
 
 func _physics_process(delta):
 	var input := Input.get_vector("mv_left", "mv_right", "mv_forward", "mv_back")

@@ -190,19 +190,38 @@ text = "Tool Goes Here"
 metadata/_edit_layout_mode = 1
 
 [node name="prompt" type="Label" parent="ui/gameing"]
-layout_mode = 0
+layout_mode = 1
+anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = 41.0
-offset_top = -12.0
-offset_right = 259.0
-offset_bottom = 14.0
+offset_left = -109.0
+offset_top = -75.0
+offset_right = 109.0
+offset_bottom = -49.0
 grow_horizontal = 2
 grow_vertical = 2
 text = "Prompt"
+horizontal_alignment = 1
 metadata/_edit_layout_mode = 1
+
+[node name="tool_tips" type="ItemList" parent="ui/gameing"]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 35.0
+offset_top = -2.0
+offset_right = 224.0
+offset_bottom = 6.0
+grow_horizontal = 2
+grow_vertical = 2
+allow_search = false
+auto_height = true
 
 [node name="spawner" type="TabContainer" parent="ui"]
 layout_mode = 1

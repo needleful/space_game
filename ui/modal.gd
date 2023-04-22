@@ -10,6 +10,7 @@ enum Mode {
 @onready var player :Node3D = get_parent()
 @onready var cam_rig = player.get_node("cam_rig")
 @onready var spawner:TabContainer = $spawner
+@onready var tool_tips: ItemList = $gameing/tool_tips
 @onready var tool_prompt: String:
 	get:
 		return $gameing/tool.text
