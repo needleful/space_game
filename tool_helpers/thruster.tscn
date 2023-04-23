@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://cywmftl76ouk0"]
+[gd_scene load_steps=11 format=3 uid="uid://cywmftl76ouk0"]
 
 [ext_resource type="Script" path="res://tool_helpers/thruster_ent.gd" id="1_jj86s"]
 
@@ -6,6 +6,11 @@
 top_radius = 0.1
 bottom_radius = 0.06
 height = 0.2
+radial_segments = 6
+rings = 1
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_lqd8c"]
+points = PackedVector3Array(0, 0.1, 0.1, 0.0866025, 0.1, 0.05, -0.0866025, 0.1, 0.0499804, -0.0692922, 0, 0.0399961, -0.0519649, -0.1, 0.0299922, 0, -0.1, 0.0599843, 0.0865856, 0.1, -0.0500196, 0.051948, -0.1, 0.0299922, 0.0692753, 0, -0.0400157, -0.0866025, 0.1, -0.05, -0.0692922, 0, -0.0400157, -0.0519649, -0.1, -0.0300118, 0, 0.1, -0.1, 0, 0, -0.0800117, 0.051948, -0.1, -0.0300118, 0, -0.1, -0.0600039)
 
 [sub_resource type="Gradient" id="Gradient_wfx6f"]
 colors = PackedColorArray(2, 1.5, 0.7, 1, 0.776471, 0, 0, 1)
@@ -43,12 +48,18 @@ height = 0.8
 radial_segments = 6
 rings = 6
 
-[node name="thruster" type="Node3D"]
+[node name="thruster" type="CharacterBody3D"]
+collision_layer = 32
+collision_mask = 0
 script = ExtResource("1_jj86s")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0898172, 0)
 mesh = SubResource("CylinderMesh_nsn5b")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0898172, 0)
+shape = SubResource("ConvexPolygonShape3D_lqd8c")
 
 [node name="GPUParticles3D" type="GPUParticles3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.20709, 0)

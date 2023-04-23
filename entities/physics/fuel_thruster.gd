@@ -30,13 +30,10 @@ func _physics_process(_delta: float):
 	if throttle == 0:# or fuel == null:
 		particles.emitting = false
 		return
-
+	particles.emitting = true
 	var p = get_parent()
 	if p is RigidBody3D:
-		p.apply_force(global_transform.basis.y*throttle*power, transform.origin)
-	#var max_fuel_burn := fuel_consumption_rate*delta
-	#var input_fuel:float = fuel.call(throttle*max_fuel_burn)
-	
-	#if input_fuel == 0:
-	#	particles.emitting = false
-	#	return
+		var dir := global_transform.basis.y
+		var pdir := particles.global_transform.basis.inverse()*dir
+		particle_material.direction = -pdir
+		p.apply_force(dir*throttle*power, transform.origin)

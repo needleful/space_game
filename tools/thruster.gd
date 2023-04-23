@@ -6,11 +6,15 @@ var thruster_entity: PackedScene = preload("res://tool_helpers/thruster.tscn")
 
 func _init():
 	tool_name = "Thruster"
+	object_mask = 36
 
 func can_fire():
-	return is_colliding() and get_collider() is RigidBody3D
+	return is_colliding()
 
 func _fire(p_position: Vector3, p_normal: Vector3, object):
+	if object is ThrusterEnt:
+		object.power = power
+		return
 	var t = thruster_entity.instantiate()
 	t.power = power
 	object.add_child(t)

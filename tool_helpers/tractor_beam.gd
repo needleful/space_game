@@ -20,6 +20,7 @@ var grabbed_angular_damp: float
 var toggle_grab := false
 var error_accum := Vector3.ZERO
 var held_angular_damp := 0.0
+var recoil := 1.0
 
 var user: RigidBody3D
 
@@ -67,6 +68,8 @@ func update(delta):
 	
 	if object_force.length_squared() > max_force*max_force:
 		object_force = object_force.normalized()*max_force
-	
-	held_object.apply_central_force(object_force)
-	user.apply_central_force(-object_force)
+	if 2*user.mass < held_object.mass:
+		held_object.apply_force(object_force, grab_offset) 
+	else:
+		held_object.apply_central_force(object_force)
+	user.apply_central_force(-recoil*object_force)
