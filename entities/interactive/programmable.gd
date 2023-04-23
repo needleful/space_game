@@ -10,6 +10,10 @@ var prompt: String:
 	get:
 		return computer_name
 
+func _enter_tree():
+	if brain_script and !brain:
+		brain = brain_script.new()
+
 func _use(_point, player):
 	player.ui.code_window.popup_centered()
 	player.ui.code_window.title = computer_name

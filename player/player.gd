@@ -14,7 +14,7 @@ class_name PlayerBody3D
 @onready var can_grab_reticle: Node2D = $ui/gameing/reticle/crosshair_grab
 @onready var grabbing_reticle: Node2D = $ui/gameing/reticle/crosshair_grabbing
 
-@onready var ui := $ui
+@onready var ui:UI = $ui
 
 var sensitivity := Vector2(1.0, 1.0)
 
@@ -31,6 +31,8 @@ var ground : Node = null
 var vehicle: Node = null
 var air_pressure := 0.0
 var gravity := Vector3.ZERO
+
+var using_item : Node
 
 var enabled := true:
 	set(value):
@@ -72,7 +74,8 @@ func _input(event):
 	elif !vehicle and event.is_action_pressed("fire2") and tool_cast.can_fire2():
 		tool_cast.fire2()
 	elif event.is_action_pressed("interact") and interaction_cast.is_colliding():
-		interaction_cast.get_collider()._use(interaction_cast.get_collision_point(), self)
+		if interaction_cast.get_collider().has_method("_use"):
+			interaction_cast.get_collider()._use(interaction_cast.get_collision_point(), self)
 	elif event.is_action_pressed("exit") and vehicle:
 		vehicle.exit()
 
@@ -130,9 +133,24 @@ func _physics_process(delta):
 			grab_cast.update(delta)
 
 		if interaction_cast.is_colliding():
+			var item = interaction_cast.get_collider()
 			interaction_prompt.text = interaction_cast.get_collider().prompt
 			interaction_prompt.show()
+			if using_item != item:
+				if using_item:
+					using_item._end_use(self)
+					using_item = null
+				if Input.is_action_just_pressed("interact") and item.has_method("_start_use"):
+					using_item = item
+					item._start_use(interaction_cast.get_collision_point(), self)
+			elif !Input.is_action_pressed("interact"):
+				if using_item:
+					using_item._end_use(self)
+					using_item = null
 		else:
+			if using_item:
+				using_item._end_use(self)
+				using_item = null
 			interaction_prompt.hide()
 	if get_tree().current_scene.has_method("get_gravity"):
 		gravity = get_tree().current_scene.get_gravity(self)

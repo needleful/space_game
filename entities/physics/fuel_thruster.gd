@@ -26,7 +26,7 @@ func _enter_tree():
 	if vector_control:
 		inputs.append(&"vector_tilt")
 
-func _physics_process(delta: float):
+func _physics_process(_delta: float):
 	if throttle == 0:# or fuel == null:
 		particles.emitting = false
 		return

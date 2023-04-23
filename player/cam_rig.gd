@@ -9,7 +9,7 @@ extends Node
 @onready var cam_pos:Vector3 = camera.transform.origin
 
 var mouse_accum := Vector2.ZERO
-var mouse_sns := 0.5*Vector2(0.01, 0.01)
+var mouse_sns := Vector2(0.01, 0.01)
 var analog_sns := Vector2(-0.1, 0.1)
 var zoom_sns := 0.4
 
@@ -57,7 +57,7 @@ func _input(event):
 	elif event.is_action_pressed("cam_zoom"):
 		zoomed = !zoomed
 
-func _process(delta):
+func _physics_process(delta):
 	var player: Node3D = get_parent()
 	# Global movement
 	pos.global_transform.origin = player.global_transform.origin

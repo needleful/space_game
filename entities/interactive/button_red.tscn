@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://bl7hshbevv4p4"]
+[gd_scene load_steps=12 format=3 uid="uid://bl7hshbevv4p4"]
 
 [ext_resource type="Script" path="res://entities/interactive/button.gd" id="1_wx7dw"]
 
@@ -30,22 +30,6 @@ metallic = 0.36
 roughness = 0.0
 clearcoat_roughness = 0.0
 
-[sub_resource type="Animation" id="Animation_4fdwa"]
-resource_name = "Activate"
-length = 0.6
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("MeshInstance3D2:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.6),
-"transitions": PackedFloat32Array(2, 0.366021, 1),
-"update": 0,
-"values": [Vector3(0, 0.0209178, 0), Vector3(0, -0.00332973, 0), Vector3(0, 0.0209178, 0)]
-}
-
 [sub_resource type="Animation" id="Animation_da586"]
 length = 0.001
 tracks/0/type = "value"
@@ -61,10 +45,43 @@ tracks/0/keys = {
 "values": [Vector3(0, 0.0209178, 0)]
 }
 
+[sub_resource type="Animation" id="Animation_4fdwa"]
+resource_name = "Press"
+length = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("MeshInstance3D2:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(2, 0.366021),
+"update": 0,
+"values": [Vector3(0, 0.0209178, 0), Vector3(0, -0.00332973, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_ebjxb"]
+resource_name = "Release"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("MeshInstance3D2:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(0.466517, 1),
+"update": 0,
+"values": [Vector3(0, -0.00332973, 0), Vector3(0, 0.0209178, 0)]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_bkymb"]
 _data = {
-"Activate": SubResource("Animation_4fdwa"),
-"RESET": SubResource("Animation_da586")
+"Press": SubResource("Animation_4fdwa"),
+"RESET": SubResource("Animation_da586"),
+"Release": SubResource("Animation_ebjxb")
 }
 
 [node name="button_red" type="RigidBody3D"]

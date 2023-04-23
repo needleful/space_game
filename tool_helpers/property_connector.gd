@@ -7,7 +7,7 @@ var out_object: Object
 var in_prop: StringName
 var out_prop: StringName
 
-func _physics_process(delta):
+func _physics_process(_delta):
 	if in_object and out_object:
 		in_object.set(in_prop, out_object.get(out_prop))
 

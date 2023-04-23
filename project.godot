@@ -21,7 +21,7 @@ FileManager="*res://scripts/file_manager.gd"
 
 [display]
 
-window/size/fullscreen=true
+window/size/mode=3
 
 [input]
 
