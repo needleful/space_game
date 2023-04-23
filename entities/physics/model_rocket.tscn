@@ -6,6 +6,42 @@
 radius = 0.075
 height = 1.0
 
+[sub_resource type="Gradient" id="Gradient_ichm3"]
+colors = PackedColorArray(2, 1.5, 0.7, 1, 0.776471, 0, 0, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_k3y34"]
+gradient = SubResource("Gradient_ichm3")
+
+[sub_resource type="Curve" id="Curve_l5b3o"]
+_data = [Vector2(0, 0.854545), 0.0, 0.496104, 0, 0, Vector2(1, 0.0727272), -1.34568, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_8jthj"]
+curve = SubResource("Curve_l5b3o")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_5h3wr"]
+direction = Vector3(0, 1, 0)
+spread = 1.0
+gravity = Vector3(0, 0.1, 0)
+initial_velocity_min = 4.0
+initial_velocity_max = 4.0
+scale_min = 0.4
+scale_max = 0.5
+scale_curve = SubResource("CurveTexture_8jthj")
+color_ramp = SubResource("GradientTexture1D_k3y34")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kv3pb"]
+shading_mode = 0
+specular_mode = 2
+vertex_color_use_as_albedo = true
+
+[sub_resource type="SphereMesh" id="SphereMesh_pmve0"]
+material = SubResource("StandardMaterial3D_kv3pb")
+radius = 0.4
+height = 0.8
+radial_segments = 6
+rings = 6
+
 [sub_resource type="BoxShape3D" id="BoxShape3D_tmxpu"]
 size = Vector3(0.05, 0.4, 0.4)
 
@@ -23,56 +59,26 @@ height = 1.0
 radial_segments = 12
 rings = 3
 
-[sub_resource type="Gradient" id="Gradient_ichm3"]
-colors = PackedColorArray(2, 1.5, 0.7, 1, 0.776471, 0, 0, 1)
-
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_uig8e"]
-gradient = SubResource("Gradient_ichm3")
-
-[sub_resource type="Curve" id="Curve_l5b3o"]
-_data = [Vector2(0, 0.854545), 0.0, 0.496104, 0, 0, Vector2(1, 0.0727272), -1.34568, 0.0, 0, 0]
-point_count = 2
-
-[sub_resource type="CurveTexture" id="CurveTexture_6ex0w"]
-curve = SubResource("Curve_l5b3o")
-
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_5h3wr"]
-direction = Vector3(0, 1, 0)
-spread = 1.0
-gravity = Vector3(0, 0.1, 0)
-initial_velocity_min = 4.0
-initial_velocity_max = 4.0
-scale_min = 0.4
-scale_max = 0.5
-scale_curve = SubResource("CurveTexture_6ex0w")
-color_ramp = SubResource("GradientTexture1D_uig8e")
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_l1lr7"]
-shading_mode = 0
-specular_mode = 2
-vertex_color_use_as_albedo = true
-
-[sub_resource type="SphereMesh" id="SphereMesh_pmve0"]
-material = SubResource("StandardMaterial3D_l1lr7")
-radius = 0.4
-height = 0.8
-radial_segments = 6
-rings = 6
-
 [node name="model_rocket" type="RigidBody3D"]
 collision_layer = 5
 mass = 4.0
 
-[node name="solid_rocket" type="CharacterBody3D" parent="." node_paths=PackedStringArray("particles")]
+[node name="solid_rocket" type="CharacterBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.481148, 0)
 collision_layer = 48
 collision_mask = 0
 script = ExtResource("1_slxnx")
-particles = NodePath("../GPUParticles3D")
 
 [node name="CollisionShape3D3" type="CollisionShape3D" parent="solid_rocket"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0410441, 0)
 shape = SubResource("CapsuleShape3D_klbul")
+
+[node name="GPUParticles3D" type="GPUParticles3D" parent="solid_rocket"]
+transform = Transform3D(1, 0, 0, 0, -1, 8.74228e-08, 0, -8.74228e-08, -1, 0, -0.462241, 0)
+emitting = false
+lifetime = 0.5
+process_material = SubResource("ParticleProcessMaterial_5h3wr")
+draw_pass_1 = SubResource("SphereMesh_pmve0")
 
 [node name="CollisionShape3D2" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.211396, 0)
@@ -97,10 +103,3 @@ shape = SubResource("CapsuleShape3D_klbul")
 [node name="MeshInstance3D" type="MeshInstance3D" parent="CollisionShape3D"]
 mesh = SubResource("CapsuleMesh_xw17r")
 skeleton = NodePath("../..")
-
-[node name="GPUParticles3D" type="GPUParticles3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, -1, 8.74228e-08, 0, -8.74228e-08, -1, 0, 0.0189068, 0)
-emitting = false
-lifetime = 0.5
-process_material = SubResource("ParticleProcessMaterial_5h3wr")
-draw_pass_1 = SubResource("SphereMesh_pmve0")

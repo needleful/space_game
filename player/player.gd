@@ -69,6 +69,8 @@ func _input(event):
 		tool_cast.cancel()
 	elif !vehicle and event.is_action_pressed("fire") and tool_cast.can_fire():
 		tool_cast.fire()
+	elif !vehicle and event.is_action_pressed("fire2") and tool_cast.can_fire2():
+		tool_cast.fire2()
 	elif event.is_action_pressed("interact") and interaction_cast.is_colliding():
 		interaction_cast.get_collider()._use(interaction_cast.get_collision_point(), self)
 	elif event.is_action_pressed("exit") and vehicle:

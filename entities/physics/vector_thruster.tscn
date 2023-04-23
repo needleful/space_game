@@ -1,4 +1,6 @@
-[gd_scene load_steps=5 format=3 uid="uid://bhsp2eta4i47n"]
+[gd_scene load_steps=13 format=3 uid="uid://bhsp2eta4i47n"]
+
+[ext_resource type="Script" path="res://entities/physics/fuel_thruster.gd" id="1_v8d5a"]
 
 [sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_bnvvt"]
 points = PackedVector3Array(0.34641, 0.15, 0.2, 0, 0.15, 0.4, 0, -0.15, 0.3, 0.259808, -0.15, 0.149961, 0.259808, -0.15, -0.150039, 0.31752, 0.0499804, -0.183399, 0.346342, 0.15, -0.200078, -0.34641, 0.15, 0.199922, -0.317588, 0.0499804, 0.18332, -0.259875, -0.15, 0.149961, 0, -0.15, -0.300078, 0, 0.0499804, -0.366719, 0, 0.15, -0.4, -0.34641, 0.15, -0.2, -0.317588, 0.0499804, -0.183399, -0.259875, -0.15, -0.150039)
@@ -15,6 +17,41 @@ bottom_radius = 0.3
 height = 0.3
 radial_segments = 6
 rings = 2
+
+[sub_resource type="Gradient" id="Gradient_dbrwe"]
+colors = PackedColorArray(2, 1.5, 0.7, 1, 0.776471, 0, 0, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_8lx7r"]
+gradient = SubResource("Gradient_dbrwe")
+
+[sub_resource type="Curve" id="Curve_mdqbv"]
+_data = [Vector2(0, 0.854545), 0.0, 0.496104, 0, 0, Vector2(1, 0.0727272), -1.34568, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_22wlv"]
+curve = SubResource("Curve_mdqbv")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_smiva"]
+direction = Vector3(0, 1, 0)
+spread = 1.0
+gravity = Vector3(0, 0.1, 0)
+initial_velocity_min = 4.0
+initial_velocity_max = 4.0
+scale_min = 0.9
+scale_curve = SubResource("CurveTexture_22wlv")
+color_ramp = SubResource("GradientTexture1D_8lx7r")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_a1gpf"]
+shading_mode = 0
+specular_mode = 2
+vertex_color_use_as_albedo = true
+
+[sub_resource type="SphereMesh" id="SphereMesh_pjuys"]
+material = SubResource("StandardMaterial3D_a1gpf")
+radius = 0.4
+height = 0.8
+radial_segments = 6
+rings = 6
 
 [node name="vector_thruster" type="RigidBody3D"]
 collision_layer = 5
@@ -33,10 +70,14 @@ mesh = SubResource("CylinderMesh_1gx7l")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.1154, 0)
 mesh = SubResource("CylinderMesh_7y8ot")
 
-[node name="thruster" type="AnimatableBody3D" parent="."]
+[node name="thruster" type="CharacterBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
-collision_layer = 8
+collision_layer = 32
 collision_mask = 0
+script = ExtResource("1_v8d5a")
+fuel_consumption_rate = 12.0
+vector_control = true
+power = 8000
 
 [node name="CollisionShape3D2" type="CollisionShape3D" parent="thruster"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1154, 0)
@@ -45,3 +86,10 @@ shape = SubResource("ConvexPolygonShape3D_bnvvt")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="thruster"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 shape = SubResource("CylinderShape3D_f27sv")
+
+[node name="particles" type="GPUParticles3D" parent="thruster"]
+transform = Transform3D(1, 0, 0, 0, -1, 8.74228e-08, 0, -8.74228e-08, -1, 0, 0.0189068, 0)
+emitting = false
+lifetime = 0.5
+process_material = SubResource("ParticleProcessMaterial_smiva")
+draw_pass_1 = SubResource("SphereMesh_pjuys")

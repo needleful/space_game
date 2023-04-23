@@ -1,0 +1,35 @@
+[gd_scene load_steps=2 format=3 uid="uid://chmk5704mqw14"]
+
+[ext_resource type="Script" path="res://ui/duplicator_save.gd" id="1_wm0j0"]
+
+[node name="duplicator_save" type="VBoxContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_wm0j0")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 2
+text = "Saving to: <no file>"
+
+[node name="Save" type="Button" parent="."]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Save Creation"
+
+[node name="Load" type="Button" parent="."]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Load Creation"
+
+[node name="FileDialog" type="FileDialog" parent="."]
+position = Vector2i(0, 36)
+size = Vector2i(650, 435)
+access = 1
+root_subfolder = "custom_entities"
+filters = PackedStringArray("*.tscn")
+
+[connection signal="pressed" from="Save" to="." method="_on_save_pressed"]
+[connection signal="pressed" from="Load" to="." method="_on_load_pressed"]

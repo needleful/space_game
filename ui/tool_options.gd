@@ -65,6 +65,8 @@ func create_widget(property:Dictionary)->Control:
 func link_widget(property, widget: Control):
 	widget.set_option_hint(property)
 	widget.set_option_value(tool.get(property.name))
+	if "tool" in widget:
+		widget.tool = tool
 	if tool.has_method("set_option"):
 		var _x = widget.connect("changed", tool.set_option)
 	else:

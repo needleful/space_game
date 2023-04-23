@@ -11,7 +11,6 @@ func _init():
 	# mask 6
 	object_mask = 32
 	preview_active = true
-	scroll_enabled = true
 
 func _input(event):
 	if !previewing:
@@ -66,7 +65,7 @@ func _fire(_pos, _normal, target):
 		if queued_object.is_connected(queued_signal, fl):
 			queued_object.disconnect(queued_signal, fl)
 		
-		var res = queued_object.connect(queued_signal, fl)
+		var res = queued_object.connect(queued_signal, fl, CONNECT_PERSIST)
 		var obj_name = queued_object.name if queued_object is Node else str(queued_object)
 		if res != OK:
 			print_debug("Failed to connect %s.%s to %s.%s: Code %d" % [
@@ -96,18 +95,18 @@ func _preview(_pos, _normal, target):
 		player.ui.tool_tips.select(0)
 
 func signals(object: Object) -> PackedStringArray:
-	var signals := []
+	var s := []
 	for c in object.get_script().get_script_signal_list():
 		if !c.name.begins_with("_"):
-			signals.append(c.name)
-	return signals
+			s.append(c.name)
+	return s
 
 func listeners(object: Object) -> PackedStringArray:
-	var listeners := []
+	var l := []
 	for c in object.get_script().get_script_method_list():
 		if !c.name.begins_with("_"):
-			listeners.append(c.name)
-	return listeners
+			l.append(c.name)
+	return l
 
 func preview_exit():
 	player.ui.tool_tips.hide()

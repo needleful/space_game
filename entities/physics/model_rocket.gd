@@ -1,6 +1,6 @@
 extends Node3D
 
-@export var particles: GPUParticles3D
+@onready var particles := $GPUParticles3D
 
 var air_pressure := 0.0
 

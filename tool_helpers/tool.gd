@@ -4,7 +4,6 @@ class_name Tool
 var tool_name := ""
 var object_mask := 1
 var preview_active := false
-var scroll_enabled := false
 
 var player: PlayerBody3D
 
@@ -23,7 +22,7 @@ func fire():
 	return _fire(get_collision_point(), get_collision_normal(), get_collider())
 
 func fire2():
-	return _fire(get_collision_point(), get_collision_normal(), get_collider())
+	return _fire2(get_collision_point(), get_collision_normal(), get_collider())
 
 func preview():
 	return _preview(get_collision_point(), get_collision_normal(), get_collider())

@@ -15,6 +15,10 @@ run/main_scene="res://universe.tscn"
 config/features=PackedStringArray("4.1")
 config/icon="res://icon.png"
 
+[autoload]
+
+FileManager="*res://scripts/file_manager.gd"
+
 [display]
 
 window/size/fullscreen=true
