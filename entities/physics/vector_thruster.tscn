@@ -55,6 +55,7 @@ rings = 6
 
 [node name="vector_thruster" type="RigidBody3D"]
 collision_layer = 5
+mass = 800.0
 
 [node name="CollisionShape3D2" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.1154, 0)

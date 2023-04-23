@@ -9,7 +9,7 @@ extends Node
 @onready var cam_pos:Vector3 = camera.transform.origin
 
 var mouse_accum := Vector2.ZERO
-var mouse_sns := Vector2(0.01, 0.01)
+var mouse_sns := 0.5*Vector2(0.01, 0.01)
 var analog_sns := Vector2(-0.1, 0.1)
 var zoom_sns := 0.4
 

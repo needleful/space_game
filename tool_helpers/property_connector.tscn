@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://dasxt7ngc0g23"]
+
+[ext_resource type="Script" path="res://tool_helpers/property_connector.gd" id="1_0pyia"]
+
+[node name="property_connector" type="Node"]
+script = ExtResource("1_0pyia")

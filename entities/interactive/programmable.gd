@@ -2,8 +2,8 @@ extends CollisionObject3D
 class_name Programmable
 
 @export var computer_name: String
+@export var brain_script: Script
 
-var brain_script: Script
 var brain: Object
 
 var prompt: String:

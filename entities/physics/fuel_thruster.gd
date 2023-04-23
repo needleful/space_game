@@ -27,13 +27,16 @@ func _enter_tree():
 		inputs.append(&"vector_tilt")
 
 func _physics_process(delta: float):
-	if throttle == 0 or fuel == null:
+	if throttle == 0:# or fuel == null:
 		particles.emitting = false
 		return
 
-	var max_fuel_burn := fuel_consumption_rate*delta
-	var input_fuel:float = fuel.call(throttle*max_fuel_burn)
+	var p = get_parent()
+	if p is RigidBody3D:
+		p.apply_force(global_transform.basis.y*throttle*power, transform.origin)
+	#var max_fuel_burn := fuel_consumption_rate*delta
+	#var input_fuel:float = fuel.call(throttle*max_fuel_burn)
 	
-	if input_fuel == 0:
-		particles.emitting = false
-		return
+	#if input_fuel == 0:
+	#	particles.emitting = false
+	#	return
