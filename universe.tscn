@@ -146,11 +146,10 @@ omni_range = 4e+06
 omni_attenuation = 0.000252747
 
 [node name="player" parent="." instance=ExtResource("3_cy13p")]
-transform = Transform3D(0.339775, 0.621821, -0.705614, -0.800553, 0.584985, 0.130026, 0.493626, 0.520703, 0.696564, -15570.7, 296.983, -23825.5)
+transform = Transform3D(0.339775, 0.621821, -0.705614, -0.800553, 0.584985, 0.130026, 0.493626, 0.520703, 0.696564, -15784.1, 760.783, -24059.5)
 
-[node name="earth" parent="." node_paths=PackedStringArray("orbit") instance=ExtResource("4_k1ssn")]
+[node name="earth" parent="." instance=ExtResource("4_k1ssn")]
 transform = Transform3D(0.866025, -0.163139, 0.472637, 2.98023e-08, 0.945274, 0.326278, -0.5, -0.282565, 0.818631, -15691.9, 164.803, -23918)
-orbit = NodePath("../sun")
 
 [node name="planetoid2" type="Node3D" parent="." node_paths=PackedStringArray("active_only", "orbit")]
 transform = Transform3D(0.866025, 0.167619, 0.471067, 2.98023e-08, 0.942133, -0.335238, -0.5, 0.290324, 0.815912, -16968.7, 111.286, -23224.9)

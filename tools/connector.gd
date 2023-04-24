@@ -193,7 +193,8 @@ func compatible_methods(method: Dictionary, sig: Dictionary):
 	return true
 
 func compatible_properties(input:Dictionary, output:Dictionary):
-	# Maybe someday do objects
+	if output.type == TYPE_BOOL and (input.type == TYPE_INT or input.type == TYPE_FLOAT):
+		return true
 	if input.type == TYPE_NIL or output.type == TYPE_NIL:
 		return true
 	return input.type == output.type

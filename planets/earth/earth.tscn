@@ -1,10 +1,11 @@
-[gd_scene load_steps=10 format=3 uid="uid://bk6osrnqt17ck"]
+[gd_scene load_steps=11 format=3 uid="uid://bk6osrnqt17ck"]
 
 [ext_resource type="PackedScene" uid="uid://db6ptpcriul0a" path="res://_glb/planets/earth.glb" id="1_issvk"]
 [ext_resource type="Script" path="res://planets/planet.gd" id="2_jbtl3"]
 [ext_resource type="Texture2D" uid="uid://cxolb2dcgpaqo" path="res://materials/textures_ambientcg/Asphalt027C_1K_Color.jpg" id="3_uajp8"]
 [ext_resource type="Material" uid="uid://cqun8vjx2veow" path="res://planets/earth/earth_atmosphere.material" id="4_vvpsa"]
 [ext_resource type="Script" path="res://planets/atmosphere.gd" id="5_cq1dl"]
+[ext_resource type="PackedScene" uid="uid://b4w174byjif3w" path="res://planets/earth/garage.tscn" id="6_rkxpt"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fwh5w"]
 albedo_texture = ExtResource("3_uajp8")
@@ -15,16 +16,17 @@ uv1_triplanar = true
 radius = 178.623
 
 [sub_resource type="SphereMesh" id="SphereMesh_dl1tn"]
-radius = 400.0
-height = 800.0
+radius = 900.0
+height = 1800.0
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_f0bv5"]
 custom_solver_bias = 1.0
-radius = 400.0
+radius = 900.0
 
 [node name="earth" node_paths=PackedStringArray("active_only") instance=ExtResource("1_issvk")]
 script = ExtResource("2_jbtl3")
-active_only = [NodePath("earth/StaticBody3D"), NodePath("atmosphere")]
+surface_radius = 600.0
+active_only = [NodePath("earth/StaticBody3D"), NodePath("atmosphere"), NodePath("buildings")]
 
 [node name="earth" parent="." index="0"]
 layers = 3
@@ -50,11 +52,13 @@ gravity_point_center = Vector3(0, 0, 0)
 gravity_direction = Vector3(0, 0, 0)
 gravity = 15.0
 script = ExtResource("5_cq1dl")
+surface_radius = 600.0
+outer_radius = 900.0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="atmosphere" index="0"]
 shape = SubResource("SphereShape3D_f0bv5")
 
-[node name="CSGBox3D" type="CSGBox3D" parent="." index="3"]
-transform = Transform3D(1, 0, 0, 0, 0.934658, 0.355547, 0, -0.355547, 0.934658, 0, 164.305, 88.9387)
-use_collision = true
-size = Vector3(55.5269, 67.636, 62.0835)
+[node name="buildings" type="Node3D" parent="." index="3"]
+
+[node name="garage" parent="buildings" index="0" instance=ExtResource("6_rkxpt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 598.986, 0)
