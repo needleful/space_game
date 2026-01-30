@@ -35,6 +35,10 @@ func _ready():
 				spin_angle.append(0)
 	velocities.resize(planets.size())
 	detect_active_planet()
+	#var s: ShaderMaterial = $WorldEnvironment.environment.sky.sky_material
+	#var vt := ViewportTexture.new()
+	#vt.viewport_path = $far_viewport/far_camera.get_path()
+	#s.set_shader_parameter('background', vt)
 
 func _physics_process(delta):
 	stars.rotate_x(star_rotation*delta)

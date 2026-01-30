@@ -1,0 +1,30 @@
+[gd_resource type="Environment" load_steps=5 format=3 uid="uid://cpi4mra4pwyk6"]
+
+[ext_resource type="Shader" uid="uid://dg8w5m5v3duhg" path="res://materials/far_background.gdshader" id="1_4ou6k"]
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_4ou6k"]
+viewport_path = NodePath("far_viewport")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0nqf7"]
+resource_local_to_scene = true
+shader = ExtResource("1_4ou6k")
+shader_parameter/gamma = 2.2000000253320398
+shader_parameter/background = SubResource("ViewportTexture_4ou6k")
+
+[sub_resource type="Sky" id="Sky_3ukee"]
+resource_local_to_scene = true
+sky_material = SubResource("ShaderMaterial_0nqf7")
+
+[resource]
+resource_local_to_scene = true
+background_mode = 2
+sky = SubResource("Sky_3ukee")
+ambient_light_source = 1
+ambient_light_sky_contribution = 0.73
+ambient_light_energy = 0.0
+reflected_light_source = 1
+sdfgi_enabled = true
+glow_enabled = true
+glow_intensity = 0.56
+glow_strength = 0.84
+glow_blend_mode = 0

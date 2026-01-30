@@ -79,4 +79,5 @@ func _physics_process(_delta):
 		elif bound_input is InputEventMouseButton:
 			should_hold = Input.is_mouse_button_pressed(bound_input.button_index)
 	if should_hold != holding:
-		_press() if should_hold else _release()
+		if should_hold: _press()
+		else: _release()

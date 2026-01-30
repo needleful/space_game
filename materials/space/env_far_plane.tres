@@ -1,0 +1,19 @@
+[gd_resource type="Environment" load_steps=3 format=3 uid="uid://dbovspt5sfahf"]
+
+[ext_resource type="Material" uid="uid://1lul1cafjewn" path="res://materials/space/mat_far_plane.tres" id="1_d0a2q"]
+
+[sub_resource type="Sky" id="Sky_3ukee"]
+sky_material = ExtResource("1_d0a2q")
+
+[resource]
+resource_local_to_scene = true
+background_mode = 1
+sky = SubResource("Sky_3ukee")
+ambient_light_source = 1
+ambient_light_sky_contribution = 0.73
+ambient_light_energy = 0.0
+reflected_light_source = 1
+glow_enabled = true
+glow_intensity = 0.56
+glow_strength = 0.84
+glow_blend_mode = 0

@@ -1,59 +1,20 @@
-[gd_scene load_steps=30 format=3 uid="uid://bcrl0aktmtmyp"]
+[gd_scene load_steps=23 format=3 uid="uid://bcrl0aktmtmyp"]
 
-[ext_resource type="Script" path="res://planets/sun.gd" id="1_du7ao"]
-[ext_resource type="Script" path="res://universe.gd" id="1_umr58"]
-[ext_resource type="Script" path="res://scripts/distant_viewport.gd" id="2_ityni"]
-[ext_resource type="Script" path="res://player/far_camera.gd" id="2_vx2oy"]
-[ext_resource type="Shader" path="res://materials/far_background.gdshader" id="2_y2f2y"]
+[ext_resource type="Script" uid="uid://c0sijd54rx8d8" path="res://planets/sun.gd" id="1_du7ao"]
+[ext_resource type="Script" uid="uid://d1l5a0mqmphht" path="res://universe.gd" id="1_umr58"]
+[ext_resource type="Script" uid="uid://dah2chlrc85o2" path="res://scripts/distant_viewport.gd" id="2_ityni"]
+[ext_resource type="Script" uid="uid://coedapwam4a16" path="res://player/far_camera.gd" id="2_vx2oy"]
+[ext_resource type="Environment" uid="uid://dbovspt5sfahf" path="res://materials/space/env_far_plane.tres" id="3_3ukee"]
 [ext_resource type="PackedScene" uid="uid://vikllycrom4u" path="res://player/player.tscn" id="3_cy13p"]
 [ext_resource type="PackedScene" uid="uid://bk6osrnqt17ck" path="res://planets/earth/earth.tscn" id="4_k1ssn"]
+[ext_resource type="Environment" uid="uid://cpi4mra4pwyk6" path="res://materials/space/env_default.tres" id="5_5q646"]
 [ext_resource type="PackedScene" uid="uid://cle4y361jqlsd" path="res://planets/earth/moon_1.tscn" id="5_fy7xb"]
-[ext_resource type="Script" path="res://planets/planet.gd" id="5_i25xt"]
+[ext_resource type="Script" uid="uid://e0lh8216jm2n" path="res://planets/planet.gd" id="5_i25xt"]
 [ext_resource type="PackedScene" uid="uid://lu2c3p1fat0k" path="res://planets/venus.tscn" id="6_85u24"]
-[ext_resource type="Shader" path="res://materials/distant_buffer.gdshader" id="7_55mmi"]
-[ext_resource type="Shader" path="res://materials/space/stars.gdshader" id="13_e1ak8"]
-[ext_resource type="Script" path="res://scripts/follow_camera.gd" id="13_y7hry"]
+[ext_resource type="Shader" uid="uid://dbsv4wtbqqvgb" path="res://materials/space/stars.gdshader" id="13_e1ak8"]
+[ext_resource type="Script" uid="uid://behm0sc1nex5l" path="res://scripts/follow_camera.gd" id="13_y7hry"]
 [ext_resource type="Texture2D" uid="uid://b1oi3thwk473a" path="res://materials/space/star.png" id="14_ghecb"]
 [ext_resource type="MultiMesh" uid="uid://o6a2se8aornx" path="res://planets/stars.multimesh" id="15_1w72n"]
-
-[sub_resource type="QuadMesh" id="QuadMesh_207s1"]
-resource_local_to_scene = true
-size = Vector2(2, 2)
-
-[sub_resource type="ViewportTexture" id="ViewportTexture_jdhdr"]
-viewport_path = NodePath("far_viewport")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_ripmg"]
-resource_local_to_scene = true
-render_priority = -1
-shader = ExtResource("2_y2f2y")
-shader_parameter/gamma = 2.2
-shader_parameter/background = SubResource("ViewportTexture_jdhdr")
-
-[sub_resource type="ViewportTexture" id="ViewportTexture_0c0hf"]
-viewport_path = NodePath("far_viewport")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_t1s1v"]
-resource_local_to_scene = true
-shader = ExtResource("7_55mmi")
-shader_parameter/distant_screen = SubResource("ViewportTexture_0c0hf")
-
-[sub_resource type="Sky" id="Sky_p7kks"]
-resource_local_to_scene = true
-sky_material = SubResource("ShaderMaterial_t1s1v")
-
-[sub_resource type="Environment" id="Environment_5c71a"]
-resource_local_to_scene = true
-background_mode = 1
-sky = SubResource("Sky_p7kks")
-ambient_light_source = 1
-ambient_light_sky_contribution = 0.73
-ambient_light_energy = 0.0
-reflected_light_source = 1
-glow_enabled = true
-glow_intensity = 0.56
-glow_strength = 0.84
-glow_blend_mode = 0
 
 [sub_resource type="SphereMesh" id="SphereMesh_yahx1"]
 radius = 1000.0
@@ -80,8 +41,8 @@ albedo_color = Color(0, 0.631373, 0.635294, 1)
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_wo1q8"]
 render_priority = 0
 shader = ExtResource("13_e1ak8")
-shader_parameter/strength = 3.0
 shader_parameter/mask = ExtResource("14_ghecb")
+shader_parameter/strength = 3.0
 
 [node name="universe" type="Node3D"]
 script = ExtResource("1_umr58")
@@ -93,29 +54,20 @@ positional_shadow_atlas_quad_0 = 1
 positional_shadow_atlas_quad_1 = 1
 positional_shadow_atlas_quad_2 = 2
 positional_shadow_atlas_quad_3 = 2
-render_target_clear_mode = 1
+render_target_update_mode = 4
 script = ExtResource("2_ityni")
 
 [node name="far_camera" type="Camera3D" parent="far_viewport"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15904.5, 1.38606, -22855.1)
+transform = Transform3D(-0.8660254, 0, 0.50000006, 0, 1, 0, -0.50000006, 0, -0.8660254, -15904.5, 1.38606, -22855.1)
 cull_mask = 2
+environment = ExtResource("3_3ukee")
 fov = 85.0
 near = 10.0
-far = 4e+06
+far = 4000000.0
 script = ExtResource("2_vx2oy")
 
-[node name="far_plane" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.38606, 3.18746)
-visible = false
-cast_shadow = 0
-extra_cull_margin = 16384.0
-ignore_occlusion_culling = true
-mesh = SubResource("QuadMesh_207s1")
-surface_material_override/0 = SubResource("ShaderMaterial_ripmg")
-script = ExtResource("13_y7hry")
-
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource("Environment_5c71a")
+environment = ExtResource("5_5q646")
 
 [node name="sun" type="MeshInstance3D" parent="."]
 layers = 3
@@ -142,7 +94,7 @@ player = NodePath("../../player")
 [node name="omni_light" type="OmniLight3D" parent="sun"]
 layers = 2
 light_cull_mask = 4293918722
-omni_range = 4e+06
+omni_range = 4000000.0
 omni_attenuation = 0.000252747
 
 [node name="player" parent="." instance=ExtResource("3_cy13p")]

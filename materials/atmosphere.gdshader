@@ -8,7 +8,7 @@ uniform float surface_radius = 200.0;
 uniform float ambient_light_strength: hint_range(0.0, 1.0, 0.02);
 uniform sampler2D ambient_light_gradient;
 uniform sampler2D depth_tex : hint_depth_texture;
-uniform sampler2D screen_albedo : hint_normal_roughness_texture;
+//uniform sampler2D screen_albedo : hint_screen_texture;
 
 varying vec3 world_position;
 varying vec3 sun_direction;
@@ -73,7 +73,7 @@ void fragment() {
 		float density = (length(surf_position) - surface_radius)/(outer_radius - surface_radius);
 		ambient_light = clamp(1.0 - density, 0, 1)*ambient_light_strength 
 			* texture(ambient_light_gradient, vec2(s, 0)).rgb
-			* texture(screen_albedo, SCREEN_UV).rgb;
+			* 0.2;//* texture(screen_albedo, SCREEN_UV).rgb;
 	}
 	vec3 scattering = texture(raleigh, vec2(s, 0)).rgb*(pass_through*density);
 	ALBEDO = ambient_light + scattering;

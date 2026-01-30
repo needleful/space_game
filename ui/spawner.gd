@@ -37,6 +37,8 @@ func process_folder(path: String, expand: int, parent: TreeItem):
 	var dir := DirAccess.open(path)
 
 	for file in dir.get_files():
+		if file.ends_with('.uid'):
+			continue
 		var base_name = file
 		var dot_index = base_name.rfind(".")
 		if dot_index > 0:

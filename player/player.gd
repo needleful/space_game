@@ -183,4 +183,3 @@ func _integrate_forces(state: PhysicsDirectBodyState3D):
 
 func can_move():
 	return !freeze
-

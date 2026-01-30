@@ -1,0 +1,12 @@
+[gd_resource type="ShaderMaterial" load_steps=3 format=3 uid="uid://1lul1cafjewn"]
+
+[ext_resource type="Shader" uid="uid://dg8w5m5v3duhg" path="res://materials/far_background.gdshader" id="1_mrn0t"]
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_r5888"]
+viewport_path = NodePath("far_viewport")
+
+[resource]
+resource_local_to_scene = true
+shader = ExtResource("1_mrn0t")
+shader_parameter/gamma = 1.0
+shader_parameter/background = SubResource("ViewportTexture_r5888")
